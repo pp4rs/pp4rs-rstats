@@ -152,7 +152,7 @@ stargazer(iv_1$result, iv_2$result, iv_3$result, iv_4$result,
 ## Adding Statistics to Stargazer
 So far, we have not talked at all about additional test statistics. To look at those for our first specification, we can do this as follows: 
 
-```{r}
+```{r, error=TRUE}
 # generate value of robust f-test
 iv_1_fs = lm_robust(avexpr ~ logem4, ajr_base)
 iv_1_fs_null = lm_robust(avexpr ~ 1, ajr_base)
@@ -160,7 +160,7 @@ f_iv_1 = waldtest(iv_1_fs$result, iv_1_fs_null$result,
                   vcov = vcovHC(iv_1_fs$result, type="HC1"))$F[2]
 ```
 
-```{r, results = 'asis'}
+```{r, results = 'asis', error=TRUE}
 stargazer(iv_1_fs$result,
           se = list(iv_1_fs$rse),
           add.lines = list(c("Robust F", format(round(f_iv_1, 2), nsmall = 2))),
