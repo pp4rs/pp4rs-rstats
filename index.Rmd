@@ -16,6 +16,6 @@ description: "Lecture notes on R for Programming Practices in Research in Econom
 # Prerequisites {-}
 
 If you want to follow along with the code in the book, you will need access to some of the data sets we use. 
-You can download a zip archive of all the data [here]().
+You can download a zip archive of all the data [here](https://github.com/pp4rs/pp4rs-rstats/raw/master/.assets/data.zip).
 Extract the contents of the zip archive and place them in a subdirectory `data`.
 Then the code should work as is.
