@@ -22,6 +22,7 @@ Load it as follows:
 
 ```{r}
 # needs the plm libray ... install.packages("plm")
+library(plm)
 data(Gasoline, package = "plm")
 ```
 
