@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 7 Linear Regression Essentials with R | An Introduction to R for Economics and Business Research</title>
+  <meta name="description" content="Lecture notes on R for Programming Practices in Research in Economics." />
+  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 7 Linear Regression Essentials with R | An Introduction to R for Economics and Business Research" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Lecture notes on R for Programming Practices in Research in Economics." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 7 Linear Regression Essentials with R | An Introduction to R for Economics and Business Research" />
+  
+  <meta name="twitter:description" content="Lecture notes on R for Programming Practices in Research in Economics." />
+  
+
+<meta name="author" content="Julian Langer" />
+<meta name="author" content="Lachlan Deer" />
+<meta name="author" content="Ulrich Bergmann" />
+
+
+<meta name="date" content="2021-09-27" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="working-with-strings.html"/>
+<link rel="next" href="linear-models-with-fixed-effects.html"/>
+<script src="libs/header-attrs-2.9/header-attrs.js"></script>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Introduction to R for Economics and Business </a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Prerequisites</a></li>
+<li class="part"><span><b>I Working with Data</b></span></li>
+<li class="chapter" data-level="1" data-path="basics-of-r.html"><a href="basics-of-r.html"><i class="fa fa-check"></i><b>1</b> Basics of R</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="basics-of-r.html"><a href="basics-of-r.html#the-workspace"><i class="fa fa-check"></i><b>1.1</b> The Workspace</a>
+<ul>
+<li class="chapter" data-level="1.1.1" data-path="basics-of-r.html"><a href="basics-of-r.html#working-directory"><i class="fa fa-check"></i><b>1.1.1</b> Working directory</a></li>
+<li class="chapter" data-level="1.1.2" data-path="basics-of-r.html"><a href="basics-of-r.html#r-projects"><i class="fa fa-check"></i><b>1.1.2</b> R projects</a></li>
+<li class="chapter" data-level="1.1.3" data-path="basics-of-r.html"><a href="basics-of-r.html#removing-and-adding-objects-from-workspace"><i class="fa fa-check"></i><b>1.1.3</b> Removing and adding objects from workspace</a></li>
+<li class="chapter" data-level="1.1.4" data-path="basics-of-r.html"><a href="basics-of-r.html#installing-and-loading-packages"><i class="fa fa-check"></i><b>1.1.4</b> Installing and loading packages</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="basics-of-r.html"><a href="basics-of-r.html#vectors"><i class="fa fa-check"></i><b>1.2</b> Vectors</a>
+<ul>
+<li class="chapter" data-level="1.2.1" data-path="basics-of-r.html"><a href="basics-of-r.html#atomic-vector-types"><i class="fa fa-check"></i><b>1.2.1</b> Atomic vector types</a></li>
+<li class="chapter" data-level="1.2.2" data-path="basics-of-r.html"><a href="basics-of-r.html#vector-coercion"><i class="fa fa-check"></i><b>1.2.2</b> Vector coercion</a></li>
+<li class="chapter" data-level="1.2.3" data-path="basics-of-r.html"><a href="basics-of-r.html#vectors-with-multiple-values"><i class="fa fa-check"></i><b>1.2.3</b> Vectors with multiple values</a></li>
+<li class="chapter" data-level="1.2.4" data-path="basics-of-r.html"><a href="basics-of-r.html#operating-with-vectors-and-recycling"><i class="fa fa-check"></i><b>1.2.4</b> Operating with vectors and recycling</a></li>
+<li class="chapter" data-level="1.2.5" data-path="basics-of-r.html"><a href="basics-of-r.html#names"><i class="fa fa-check"></i><b>1.2.5</b> Names</a></li>
+<li class="chapter" data-level="1.2.6" data-path="basics-of-r.html"><a href="basics-of-r.html#subsetting"><i class="fa fa-check"></i><b>1.2.6</b> Subsetting</a></li>
+<li class="chapter" data-level="1.2.7" data-path="basics-of-r.html"><a href="basics-of-r.html#lists"><i class="fa fa-check"></i><b>1.2.7</b> Lists</a></li>
+</ul></li>
+<li class="chapter" data-level="1.3" data-path="basics-of-r.html"><a href="basics-of-r.html#checking-cases-with-conditionals"><i class="fa fa-check"></i><b>1.3</b> Checking cases with conditionals</a>
+<ul>
+<li class="chapter" data-level="1.3.1" data-path="basics-of-r.html"><a href="basics-of-r.html#if--else"><i class="fa fa-check"></i><b>1.3.1</b> <code>if</code>- <code>else</code></a></li>
+<li class="chapter" data-level="1.3.2" data-path="basics-of-r.html"><a href="basics-of-r.html#if---else-if---else"><i class="fa fa-check"></i><b>1.3.2</b> <code>if</code> - <code>else if</code> - <code>else</code></a></li>
+<li class="chapter" data-level="1.3.3" data-path="basics-of-r.html"><a href="basics-of-r.html#checking-multiple-cases-with-switch"><i class="fa fa-check"></i><b>1.3.3</b> Checking multiple cases with <code>switch</code></a></li>
+<li class="chapter" data-level="1.3.4" data-path="basics-of-r.html"><a href="basics-of-r.html#comparison-and-logical-operators"><i class="fa fa-check"></i><b>1.3.4</b> Comparison and logical operators</a></li>
+</ul></li>
+<li class="chapter" data-level="1.4" data-path="basics-of-r.html"><a href="basics-of-r.html#functions"><i class="fa fa-check"></i><b>1.4</b> Functions</a>
+<ul>
+<li class="chapter" data-level="1.4.1" data-path="basics-of-r.html"><a href="basics-of-r.html#function-definitions"><i class="fa fa-check"></i><b>1.4.1</b> Function definitions</a></li>
+<li class="chapter" data-level="1.4.2" data-path="basics-of-r.html"><a href="basics-of-r.html#function-arguments-and-default-values"><i class="fa fa-check"></i><b>1.4.2</b> Function arguments and default values</a></li>
+<li class="chapter" data-level="1.4.3" data-path="basics-of-r.html"><a href="basics-of-r.html#arbitrary-number-of-arguments"><i class="fa fa-check"></i><b>1.4.3</b> Arbitrary number of arguments</a></li>
+<li class="chapter" data-level="1.4.4" data-path="basics-of-r.html"><a href="basics-of-r.html#function-returns"><i class="fa fa-check"></i><b>1.4.4</b> Function returns</a></li>
+<li class="chapter" data-level="1.4.5" data-path="basics-of-r.html"><a href="basics-of-r.html#pipes"><i class="fa fa-check"></i><b>1.4.5</b> Pipes</a></li>
+</ul></li>
+<li class="chapter" data-level="1.5" data-path="basics-of-r.html"><a href="basics-of-r.html#iterations"><i class="fa fa-check"></i><b>1.5</b> Iterations</a>
+<ul>
+<li class="chapter" data-level="1.5.1" data-path="basics-of-r.html"><a href="basics-of-r.html#for-loops"><i class="fa fa-check"></i><b>1.5.1</b> <code>for</code> loops</a></li>
+<li class="chapter" data-level="1.5.2" data-path="basics-of-r.html"><a href="basics-of-r.html#split-apply-combine-with-map-functions"><i class="fa fa-check"></i><b>1.5.2</b> Split, apply, combine with <code>map</code> functions</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="basics-of-r.html"><a href="basics-of-r.html#sources"><i class="fa fa-check"></i>Sources</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="data-transformations-with-dplyr-and-tidyr.html"><a href="data-transformations-with-dplyr-and-tidyr.html"><i class="fa fa-check"></i><b>2</b> Data Transformations with <code>dplyr</code> and <code>tidyr</code></a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="data-transformations-with-dplyr-and-tidyr.html"><a href="data-transformations-with-dplyr-and-tidyr.html#single-table-verbs"><i class="fa fa-check"></i><b>2.1</b> Single table verbs</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="data-transformations-with-dplyr-and-tidyr.html"><a href="data-transformations-with-dplyr-and-tidyr.html#filter-to-filter-observations"><i class="fa fa-check"></i><b>2.1.1</b> <code>filter</code> to filter observations</a></li>
+<li class="chapter" data-level="2.1.2" data-path="data-transformations-with-dplyr-and-tidyr.html"><a href="data-transformations-with-dplyr-and-tidyr.html#arrange-to-arrange-a-dataframe-according-to-variables"><i class="fa fa-check"></i><b>2.1.2</b> <code>arrange</code> to arrange a dataframe according to variables</a></li>
+<li class="chapter" data-level="2.1.3" data-path="data-transformations-with-dplyr-and-tidyr.html"><a href="data-transformations-with-dplyr-and-tidyr.html#select-to-selectdrop-variables"><i class="fa fa-check"></i><b>2.1.3</b> <code>select</code> to select/drop variables</a></li>
+<li class="chapter" data-level="2.1.4" data-path="data-transformations-with-dplyr-and-tidyr.html"><a href="data-transformations-with-dplyr-and-tidyr.html#mutate-to-create-new-variables"><i class="fa fa-check"></i><b>2.1.4</b> <code>mutate</code> to create new variables</a></li>
+<li class="chapter" data-level="2.1.5" data-path="data-transformations-with-dplyr-and-tidyr.html"><a href="data-transformations-with-dplyr-and-tidyr.html#summarise-to-create-summary-tables"><i class="fa fa-check"></i><b>2.1.5</b> <code>summarise</code> to create summary tables</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="data-transformations-with-dplyr-and-tidyr.html"><a href="data-transformations-with-dplyr-and-tidyr.html#using-functions-in-combination-with-logical-subsetting"><i class="fa fa-check"></i><b>2.2</b> Using functions in combination with logical subsetting</a></li>
+<li class="chapter" data-level="2.3" data-path="data-transformations-with-dplyr-and-tidyr.html"><a href="data-transformations-with-dplyr-and-tidyr.html#the-pipe-operator"><i class="fa fa-check"></i><b>2.3</b> The pipe operator</a></li>
+<li class="chapter" data-level="2.4" data-path="data-transformations-with-dplyr-and-tidyr.html"><a href="data-transformations-with-dplyr-and-tidyr.html#multiple-table-verbs"><i class="fa fa-check"></i><b>2.4</b> Multiple table verbs</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="data-transformations-with-dplyr-and-tidyr.html"><a href="data-transformations-with-dplyr-and-tidyr.html#mutating-joins"><i class="fa fa-check"></i><b>2.4.1</b> Mutating joins</a></li>
+<li class="chapter" data-level="2.4.2" data-path="data-transformations-with-dplyr-and-tidyr.html"><a href="data-transformations-with-dplyr-and-tidyr.html#filtering-joins"><i class="fa fa-check"></i><b>2.4.2</b> Filtering joins</a></li>
+<li class="chapter" data-level="2.4.3" data-path="data-transformations-with-dplyr-and-tidyr.html"><a href="data-transformations-with-dplyr-and-tidyr.html#the-by-argument"><i class="fa fa-check"></i><b>2.4.3</b> The <code>by</code> argument</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="data-transformations-with-dplyr-and-tidyr.html"><a href="data-transformations-with-dplyr-and-tidyr.html#reshaping-data-with-tidyr"><i class="fa fa-check"></i><b>2.5</b> Reshaping data with <code>tidyr</code></a>
+<ul>
+<li class="chapter" data-level="2.5.1" data-path="data-transformations-with-dplyr-and-tidyr.html"><a href="data-transformations-with-dplyr-and-tidyr.html#from-dirty-wide-to-tidy-long"><i class="fa fa-check"></i><b>2.5.1</b> From dirty wide to tidy long</a></li>
+<li class="chapter" data-level="2.5.2" data-path="data-transformations-with-dplyr-and-tidyr.html"><a href="data-transformations-with-dplyr-and-tidyr.html#from-dirty-long-to-tidy-wide"><i class="fa fa-check"></i><b>2.5.2</b> From dirty long to tidy wide</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="data-transformations-with-dplyr-and-tidyr.html"><a href="data-transformations-with-dplyr-and-tidyr.html#sources-1"><i class="fa fa-check"></i>Sources</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html"><i class="fa fa-check"></i><b>3</b> Visualizing data with `ggplot2</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#introduction"><i class="fa fa-check"></i><b>3.1</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#the-dataset"><i class="fa fa-check"></i><b>3.1.1</b> The dataset</a></li>
+<li class="chapter" data-level="3.1.2" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#basic-example-an-ordinary-scatterplot"><i class="fa fa-check"></i><b>3.1.2</b> Basic example: an ordinary scatterplot</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#aesthetics"><i class="fa fa-check"></i><b>3.2</b> Aesthetics</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#aesthetic-mappings"><i class="fa fa-check"></i><b>3.2.1</b> Aesthetic mappings</a></li>
+<li class="chapter" data-level="3.2.2" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#manually-fixing-aesthetics"><i class="fa fa-check"></i><b>3.2.2</b> Manually fixing aesthetics</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#facets-subplots-for-different-variable-values"><i class="fa fa-check"></i><b>3.3</b> Facets: Subplots for different variable values</a></li>
+<li class="chapter" data-level="3.4" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#geoms"><i class="fa fa-check"></i><b>3.4</b> Geoms</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#what-kind-of-plot-do-you-have-in-mind-the-use-of-geoms."><i class="fa fa-check"></i><b>3.4.1</b> What kind of plot do you have in mind? The use of geoms.</a></li>
+<li class="chapter" data-level="3.4.2" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#multiple-geoms-in-one-plot"><i class="fa fa-check"></i><b>3.4.2</b> Multiple geoms in one plot</a></li>
+</ul></li>
+<li class="chapter" data-level="3.5" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#statistical-tranformations-with-stats"><i class="fa fa-check"></i><b>3.5</b> Statistical tranformations with <code>stats</code></a></li>
+<li class="chapter" data-level="3.6" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#positions"><i class="fa fa-check"></i><b>3.6</b> Positions</a></li>
+<li class="chapter" data-level="3.7" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#coordinate-systems"><i class="fa fa-check"></i><b>3.7</b> Coordinate systems</a></li>
+<li class="chapter" data-level="3.8" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#labeling"><i class="fa fa-check"></i><b>3.8</b> Labeling</a></li>
+<li class="chapter" data-level="3.9" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#scales"><i class="fa fa-check"></i><b>3.9</b> Scales</a></li>
+<li class="chapter" data-level="3.10" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#themes"><i class="fa fa-check"></i><b>3.10</b> Themes</a></li>
+<li class="chapter" data-level="3.11" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#saving-graphs"><i class="fa fa-check"></i><b>3.11</b> Saving graphs</a></li>
+<li class="chapter" data-level="" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#sources-2"><i class="fa fa-check"></i>Sources</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="factor-variables.html"><a href="factor-variables.html"><i class="fa fa-check"></i><b>4</b> Factor Variables</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="factor-variables.html"><a href="factor-variables.html#creating-factors"><i class="fa fa-check"></i><b>4.1</b> Creating Factors</a></li>
+<li class="chapter" data-level="4.2" data-path="factor-variables.html"><a href="factor-variables.html#some-other-useful-functions-from-forcats"><i class="fa fa-check"></i><b>4.2</b> Some other useful functions from forcats</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="factor-variables.html"><a href="factor-variables.html#modify-factor-levels"><i class="fa fa-check"></i><b>4.2.1</b> Modify factor levels</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="reading-and-writing-data.html"><a href="reading-and-writing-data.html"><i class="fa fa-check"></i><b>5</b> Reading and Writing Data</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="reading-and-writing-data.html"><a href="reading-and-writing-data.html#reading-csv-files-with-readr"><i class="fa fa-check"></i><b>5.1</b> Reading <code>csv</code> files with <code>readr</code></a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="reading-and-writing-data.html"><a href="reading-and-writing-data.html#reading-in--delimited-data"><i class="fa fa-check"></i><b>5.1.1</b> Reading in *-delimited data</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="reading-and-writing-data.html"><a href="reading-and-writing-data.html#parsing-data-correctly-with-the-parse-functions"><i class="fa fa-check"></i><b>5.2</b> Parsing data correctly with the <code>parse</code> functions</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="reading-and-writing-data.html"><a href="reading-and-writing-data.html#parsing-numbers"><i class="fa fa-check"></i><b>5.2.1</b> Parsing numbers</a></li>
+<li class="chapter" data-level="5.2.2" data-path="reading-and-writing-data.html"><a href="reading-and-writing-data.html#parsing-characters"><i class="fa fa-check"></i><b>5.2.2</b> Parsing characters</a></li>
+<li class="chapter" data-level="5.2.3" data-path="reading-and-writing-data.html"><a href="reading-and-writing-data.html#parsing-dates"><i class="fa fa-check"></i><b>5.2.3</b> Parsing dates</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="reading-and-writing-data.html"><a href="reading-and-writing-data.html#parsing-and-reading-at-the-same-time"><i class="fa fa-check"></i><b>5.3</b> Parsing and reading at the same time</a></li>
+<li class="chapter" data-level="5.4" data-path="reading-and-writing-data.html"><a href="reading-and-writing-data.html#writing-csv-files"><i class="fa fa-check"></i><b>5.4</b> Writing <code>csv</code> files</a></li>
+<li class="chapter" data-level="5.5" data-path="reading-and-writing-data.html"><a href="reading-and-writing-data.html#write-and-read-rds-files-with-readr"><i class="fa fa-check"></i><b>5.5</b> Write and read <code>RDS</code> files with <code>readr</code></a></li>
+<li class="chapter" data-level="5.6" data-path="reading-and-writing-data.html"><a href="reading-and-writing-data.html#reading-in-excel-sheets-and-stata-data-with-readxl-and-haven"><i class="fa fa-check"></i><b>5.6</b> Reading in Excel sheets and Stata data with <code>readxl</code> and <code>haven</code></a></li>
+<li class="chapter" data-level="" data-path="reading-and-writing-data.html"><a href="reading-and-writing-data.html#sources-3"><i class="fa fa-check"></i>Sources</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="working-with-strings.html"><a href="working-with-strings.html"><i class="fa fa-check"></i><b>6</b> Working with Strings</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="working-with-strings.html"><a href="working-with-strings.html#string-combine-with-str_c"><i class="fa fa-check"></i><b>6.1</b> String combine with <code>str_c</code></a></li>
+<li class="chapter" data-level="6.2" data-path="working-with-strings.html"><a href="working-with-strings.html#substrings-with-str_sub"><i class="fa fa-check"></i><b>6.2</b> Substrings with <code>str_sub</code></a></li>
+<li class="chapter" data-level="6.3" data-path="working-with-strings.html"><a href="working-with-strings.html#capitalize-or-not"><i class="fa fa-check"></i><b>6.3</b> Capitalize or not</a></li>
+<li class="chapter" data-level="6.4" data-path="working-with-strings.html"><a href="working-with-strings.html#string-sort"><i class="fa fa-check"></i><b>6.4</b> String sort</a></li>
+<li class="chapter" data-level="6.5" data-path="working-with-strings.html"><a href="working-with-strings.html#handling-nas"><i class="fa fa-check"></i><b>6.5</b> Handling NAs</a></li>
+</ul></li>
+<li class="part"><span><b>II Regression Modelling with R</b></span></li>
+<li class="chapter" data-level="7" data-path="linear-regression-essentials-with-r.html"><a href="linear-regression-essentials-with-r.html"><i class="fa fa-check"></i><b>7</b> Linear Regression Essentials with <code>R</code></a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="linear-regression-essentials-with-r.html"><a href="linear-regression-essentials-with-r.html#libraries"><i class="fa fa-check"></i><b>7.1</b> Libraries</a></li>
+<li class="chapter" data-level="7.2" data-path="linear-regression-essentials-with-r.html"><a href="linear-regression-essentials-with-r.html#loading-the-data"><i class="fa fa-check"></i><b>7.2</b> Loading the data</a></li>
+<li class="chapter" data-level="7.3" data-path="linear-regression-essentials-with-r.html"><a href="linear-regression-essentials-with-r.html#meaningful-names"><i class="fa fa-check"></i><b>7.3</b> Meaningful names</a></li>
+<li class="chapter" data-level="7.4" data-path="linear-regression-essentials-with-r.html"><a href="linear-regression-essentials-with-r.html#create-variables-for-estimation"><i class="fa fa-check"></i><b>7.4</b> Create variables for estimation</a></li>
+<li class="chapter" data-level="7.5" data-path="linear-regression-essentials-with-r.html"><a href="linear-regression-essentials-with-r.html#summary-statistics"><i class="fa fa-check"></i><b>7.5</b> Summary statistics</a></li>
+<li class="chapter" data-level="7.6" data-path="linear-regression-essentials-with-r.html"><a href="linear-regression-essentials-with-r.html#create-three-samples"><i class="fa fa-check"></i><b>7.6</b> Create three samples</a></li>
+<li class="chapter" data-level="7.7" data-path="linear-regression-essentials-with-r.html"><a href="linear-regression-essentials-with-r.html#run-the-estimation-for-table-1-in-mrw-1992"><i class="fa fa-check"></i><b>7.7</b> Run the estimation for Table 1 in MRW (1992)</a></li>
+<li class="chapter" data-level="7.8" data-path="linear-regression-essentials-with-r.html"><a href="linear-regression-essentials-with-r.html#show-the-results-in-a-table"><i class="fa fa-check"></i><b>7.8</b> Show the results in a table</a></li>
+<li class="chapter" data-level="7.9" data-path="linear-regression-essentials-with-r.html"><a href="linear-regression-essentials-with-r.html#robust-standard-errors"><i class="fa fa-check"></i><b>7.9</b> Robust standard errors</a></li>
+<li class="chapter" data-level="7.10" data-path="linear-regression-essentials-with-r.html"><a href="linear-regression-essentials-with-r.html#some-graphs"><i class="fa fa-check"></i><b>7.10</b> Some Graphs</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="linear-models-with-fixed-effects.html"><a href="linear-models-with-fixed-effects.html"><i class="fa fa-check"></i><b>8</b> Linear Models with Fixed Effects</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="linear-models-with-fixed-effects.html"><a href="linear-models-with-fixed-effects.html#libraries-1"><i class="fa fa-check"></i><b>8.1</b> Libraries</a></li>
+<li class="chapter" data-level="8.2" data-path="linear-models-with-fixed-effects.html"><a href="linear-models-with-fixed-effects.html#review-of-plotting-recreating-figure-1"><i class="fa fa-check"></i><b>8.2</b> Review of Plotting: Recreating Figure 1</a></li>
+<li class="chapter" data-level="8.3" data-path="linear-models-with-fixed-effects.html"><a href="linear-models-with-fixed-effects.html#review-of-plotting-recreating-figure-2"><i class="fa fa-check"></i><b>8.3</b> Review of Plotting: Recreating Figure 2</a></li>
+<li class="chapter" data-level="8.4" data-path="linear-models-with-fixed-effects.html"><a href="linear-models-with-fixed-effects.html#loading-the-data-for-estimation"><i class="fa fa-check"></i><b>8.4</b> Loading the data for estimation</a></li>
+<li class="chapter" data-level="8.5" data-path="linear-models-with-fixed-effects.html"><a href="linear-models-with-fixed-effects.html#pooled-ols-with-time-effects"><i class="fa fa-check"></i><b>8.5</b> Pooled OLS with Time Effects</a></li>
+<li class="chapter" data-level="8.6" data-path="linear-models-with-fixed-effects.html"><a href="linear-models-with-fixed-effects.html#fixed-effects-with-the-lm-function"><i class="fa fa-check"></i><b>8.6</b> Fixed Effects with the <code>lm</code> function</a></li>
+<li class="chapter" data-level="8.7" data-path="linear-models-with-fixed-effects.html"><a href="linear-models-with-fixed-effects.html#pooled-ols-and-fe-with-the-lfe-package"><i class="fa fa-check"></i><b>8.7</b> Pooled OLS and FE with the <code>lfe</code> package</a></li>
+<li class="chapter" data-level="8.8" data-path="linear-models-with-fixed-effects.html"><a href="linear-models-with-fixed-effects.html#review-of-iv"><i class="fa fa-check"></i><b>8.8</b> Review of IV</a></li>
+<li class="chapter" data-level="8.9" data-path="linear-models-with-fixed-effects.html"><a href="linear-models-with-fixed-effects.html#iv-with-felm"><i class="fa fa-check"></i><b>8.9</b> IV with <code>felm</code></a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="instrumental-variables.html"><a href="instrumental-variables.html"><i class="fa fa-check"></i><b>9</b> Instrumental Variables</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="instrumental-variables.html"><a href="instrumental-variables.html#libraries-2"><i class="fa fa-check"></i><b>9.1</b> Libraries</a></li>
+<li class="chapter" data-level="9.2" data-path="instrumental-variables.html"><a href="instrumental-variables.html#functions-we-might-want-to-have"><i class="fa fa-check"></i><b>9.2</b> Functions We Might Want to Have</a></li>
+<li class="chapter" data-level="9.3" data-path="instrumental-variables.html"><a href="instrumental-variables.html#a-brief-review-of-ols-replicating-table-2"><i class="fa fa-check"></i><b>9.3</b> A Brief Review of OLS: Replicating Table 2</a></li>
+<li class="chapter" data-level="9.4" data-path="instrumental-variables.html"><a href="instrumental-variables.html#a-brief-review-of-making-figures-replicating-figure-2"><i class="fa fa-check"></i><b>9.4</b> A Brief Review of Making Figures: Replicating Figure 2</a></li>
+<li class="chapter" data-level="9.5" data-path="instrumental-variables.html"><a href="instrumental-variables.html#iv-replicating-table-4"><i class="fa fa-check"></i><b>9.5</b> IV: Replicating Table 4</a>
+<ul>
+<li class="chapter" data-level="9.5.1" data-path="instrumental-variables.html"><a href="instrumental-variables.html#loading-the-data-1"><i class="fa fa-check"></i><b>9.5.1</b> Loading the data</a></li>
+<li class="chapter" data-level="9.5.2" data-path="instrumental-variables.html"><a href="instrumental-variables.html#doing-it-by-hand"><i class="fa fa-check"></i><b>9.5.2</b> Doing it by hand…</a></li>
+<li class="chapter" data-level="9.5.3" data-path="instrumental-variables.html"><a href="instrumental-variables.html#the-ivreg-command"><i class="fa fa-check"></i><b>9.5.3</b> The <code>ivreg</code> Command</a></li>
+</ul></li>
+<li class="chapter" data-level="9.6" data-path="instrumental-variables.html"><a href="instrumental-variables.html#adding-statistics-to-stargazer"><i class="fa fa-check"></i><b>9.6</b> Adding Statistics to Stargazer</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="difference-in-differences.html"><a href="difference-in-differences.html"><i class="fa fa-check"></i><b>10</b> Difference in Differences</a></li>
+<li class="chapter" data-level="11" data-path="regression-discontinuity-designs-rdd.html"><a href="regression-discontinuity-designs-rdd.html"><i class="fa fa-check"></i><b>11</b> Regression Discontinuity Designs (RDD)</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="regression-discontinuity-designs-rdd.html"><a href="regression-discontinuity-designs-rdd.html#libraries-3"><i class="fa fa-check"></i><b>11.1</b> Libraries</a></li>
+<li class="chapter" data-level="11.2" data-path="regression-discontinuity-designs-rdd.html"><a href="regression-discontinuity-designs-rdd.html#what-is-the-paper-about"><i class="fa fa-check"></i><b>11.2</b> What is the paper about?</a></li>
+<li class="chapter" data-level="11.3" data-path="regression-discontinuity-designs-rdd.html"><a href="regression-discontinuity-designs-rdd.html#lets-load-the-data."><i class="fa fa-check"></i><b>11.3</b> Let’s load the data.</a></li>
+<li class="chapter" data-level="11.4" data-path="regression-discontinuity-designs-rdd.html"><a href="regression-discontinuity-designs-rdd.html#select-and-rename-variables"><i class="fa fa-check"></i><b>11.4</b> Select and rename variables</a></li>
+<li class="chapter" data-level="11.5" data-path="regression-discontinuity-designs-rdd.html"><a href="regression-discontinuity-designs-rdd.html#create-sample"><i class="fa fa-check"></i><b>11.5</b> Create Sample</a></li>
+<li class="chapter" data-level="11.6" data-path="regression-discontinuity-designs-rdd.html"><a href="regression-discontinuity-designs-rdd.html#create-vector-of-control-variables"><i class="fa fa-check"></i><b>11.6</b> Create Vector of Control Variables</a></li>
+<li class="chapter" data-level="11.7" data-path="regression-discontinuity-designs-rdd.html"><a href="regression-discontinuity-designs-rdd.html#summary-statistics-1"><i class="fa fa-check"></i><b>11.7</b> Summary Statistics</a></li>
+<li class="chapter" data-level="11.8" data-path="regression-discontinuity-designs-rdd.html"><a href="regression-discontinuity-designs-rdd.html#histogram-of-islamic-win-margin"><i class="fa fa-check"></i><b>11.8</b> Histogram of Islamic Win Margin</a></li>
+<li class="chapter" data-level="11.9" data-path="regression-discontinuity-designs-rdd.html"><a href="regression-discontinuity-designs-rdd.html#doing-rdd-by-hand"><i class="fa fa-check"></i><b>11.9</b> Doing RDD by Hand</a></li>
+<li class="chapter" data-level="11.10" data-path="regression-discontinuity-designs-rdd.html"><a href="regression-discontinuity-designs-rdd.html#rdrobust-package"><i class="fa fa-check"></i><b>11.10</b> <code>rdrobust</code> Package</a>
+<ul>
+<li class="chapter" data-level="11.10.1" data-path="regression-discontinuity-designs-rdd.html"><a href="regression-discontinuity-designs-rdd.html#rdd-with-and-without-controls"><i class="fa fa-check"></i><b>11.10.1</b> RDD with and without controls</a></li>
+<li class="chapter" data-level="11.10.2" data-path="regression-discontinuity-designs-rdd.html"><a href="regression-discontinuity-designs-rdd.html#different-bandwidths"><i class="fa fa-check"></i><b>11.10.2</b> Different bandwidths</a></li>
+<li class="chapter" data-level="11.10.3" data-path="regression-discontinuity-designs-rdd.html"><a href="regression-discontinuity-designs-rdd.html#different-control-functions"><i class="fa fa-check"></i><b>11.10.3</b> Different control functions</a></li>
+</ul></li>
+<li class="chapter" data-level="11.11" data-path="regression-discontinuity-designs-rdd.html"><a href="regression-discontinuity-designs-rdd.html#rdd-plots"><i class="fa fa-check"></i><b>11.11</b> RDD Plots</a>
+<ul>
+<li class="chapter" data-level="11.11.1" data-path="regression-discontinuity-designs-rdd.html"><a href="regression-discontinuity-designs-rdd.html#main-outcomes-women"><i class="fa fa-check"></i><b>11.11.1</b> Main Outcomes: Women</a></li>
+<li class="chapter" data-level="11.11.2" data-path="regression-discontinuity-designs-rdd.html"><a href="regression-discontinuity-designs-rdd.html#main-outcomes-men"><i class="fa fa-check"></i><b>11.11.2</b> Main Outcomes: Men</a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>III Extended Exercises</b></span></li>
+<li class="chapter" data-level="12" data-path="data-wrangling-with-dplyr.html"><a href="data-wrangling-with-dplyr.html"><i class="fa fa-check"></i><b>12</b> Data Wrangling with <code>dplyr</code></a></li>
+<li class="chapter" data-level="13" data-path="plotting-with-ggplot.html"><a href="plotting-with-ggplot.html"><i class="fa fa-check"></i><b>13</b> Plotting with <code>ggplot</code></a>
+<ul>
+<li class="chapter" data-level="13.1" data-path="plotting-with-ggplot.html"><a href="plotting-with-ggplot.html#load-data-and-clean-variable-names"><i class="fa fa-check"></i><b>13.1</b> Load Data and Clean variable names</a></li>
+<li class="chapter" data-level="13.2" data-path="plotting-with-ggplot.html"><a href="plotting-with-ggplot.html#one-variable-graphs"><i class="fa fa-check"></i><b>13.2</b> One Variable Graphs</a></li>
+<li class="chapter" data-level="13.3" data-path="plotting-with-ggplot.html"><a href="plotting-with-ggplot.html#two-variable-graphs"><i class="fa fa-check"></i><b>13.3</b> Two Variable Graphs</a></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="replicating-adh.html"><a href="replicating-adh.html"><i class="fa fa-check"></i><b>14</b> Replicating ADH</a>
+<ul>
+<li class="chapter" data-level="14.1" data-path="replicating-adh.html"><a href="replicating-adh.html#motivation"><i class="fa fa-check"></i><b>14.1</b> Motivation</a></li>
+<li class="chapter" data-level="14.2" data-path="replicating-adh.html"><a href="replicating-adh.html#us-aggregate-data"><i class="fa fa-check"></i><b>14.2</b> US Aggregate Data</a>
+<ul>
+<li class="chapter" data-level="14.2.1" data-path="replicating-adh.html"><a href="replicating-adh.html#load-necessary-packages"><i class="fa fa-check"></i><b>14.2.1</b> Load Necessary Packages</a></li>
+<li class="chapter" data-level="14.2.2" data-path="replicating-adh.html"><a href="replicating-adh.html#get-data-from-federal-reserve"><i class="fa fa-check"></i><b>14.2.2</b> Get Data from Federal Reserve</a></li>
+<li class="chapter" data-level="14.2.3" data-path="replicating-adh.html"><a href="replicating-adh.html#data-transformations"><i class="fa fa-check"></i><b>14.2.3</b> Data Transformations</a></li>
+<li class="chapter" data-level="14.2.4" data-path="replicating-adh.html"><a href="replicating-adh.html#data-grouping"><i class="fa fa-check"></i><b>14.2.4</b> Data Grouping</a></li>
+<li class="chapter" data-level="14.2.5" data-path="replicating-adh.html"><a href="replicating-adh.html#fact-1-increase-of-imports-from-china-and-the-rest-of-the-world"><i class="fa fa-check"></i><b>14.2.5</b> Fact 1: Increase of Imports from China and the Rest of the World</a></li>
+<li class="chapter" data-level="14.2.6" data-path="replicating-adh.html"><a href="replicating-adh.html#fact-2-increasing-trade-deficit-of-the-us"><i class="fa fa-check"></i><b>14.2.6</b> Fact 2: Increasing trade-deficit of the US</a></li>
+<li class="chapter" data-level="14.2.7" data-path="replicating-adh.html"><a href="replicating-adh.html#fact-3-400-basis-point-fall-in-real-interest-rates-leading-into-china-expansion"><i class="fa fa-check"></i><b>14.2.7</b> Fact 3: 400 basis point fall in real Interest rates leading into China Expansion</a></li>
+</ul></li>
+<li class="chapter" data-level="14.3" data-path="replicating-adh.html"><a href="replicating-adh.html#descriptive-stats-in-adh-using-weighted-statistics"><i class="fa fa-check"></i><b>14.3</b> Descriptive Stats in ADH using Weighted Statistics</a>
+<ul>
+<li class="chapter" data-level="14.3.1" data-path="replicating-adh.html"><a href="replicating-adh.html#details-about-timing-is-as-follows."><i class="fa fa-check"></i><b>14.3.1</b> Details about timing is as follows.</a></li>
+<li class="chapter" data-level="14.3.2" data-path="replicating-adh.html"><a href="replicating-adh.html#understanding-the-essence-of-the-paper-and-what-comes-next."><i class="fa fa-check"></i><b>14.3.2</b> Understanding the Essence of the Paper and What Comes Next.</a></li>
+<li class="chapter" data-level="14.3.3" data-path="replicating-adh.html"><a href="replicating-adh.html#load-necessary-packages-1"><i class="fa fa-check"></i><b>14.3.3</b> Load Necessary Packages</a></li>
+<li class="chapter" data-level="14.3.4" data-path="replicating-adh.html"><a href="replicating-adh.html#load-data"><i class="fa fa-check"></i><b>14.3.4</b> Load Data</a></li>
+<li class="chapter" data-level="14.3.5" data-path="replicating-adh.html"><a href="replicating-adh.html#compute-simple-grouped-mean"><i class="fa fa-check"></i><b>14.3.5</b> Compute Simple Grouped Mean</a></li>
+<li class="chapter" data-level="14.3.6" data-path="replicating-adh.html"><a href="replicating-adh.html#computed-weighted-group-means-and-standard-deviations"><i class="fa fa-check"></i><b>14.3.6</b> Computed Weighted Group Means and Standard Deviations</a></li>
+</ul></li>
+<li class="chapter" data-level="14.4" data-path="replicating-adh.html"><a href="replicating-adh.html#regression-analysis"><i class="fa fa-check"></i><b>14.4</b> Regression Analysis</a>
+<ul>
+<li class="chapter" data-level="14.4.1" data-path="replicating-adh.html"><a href="replicating-adh.html#ols-regression"><i class="fa fa-check"></i><b>14.4.1</b> OLS regression</a></li>
+<li class="chapter" data-level="14.4.2" data-path="replicating-adh.html"><a href="replicating-adh.html#clustering"><i class="fa fa-check"></i><b>14.4.2</b> Clustering</a></li>
+<li class="chapter" data-level="14.4.3" data-path="replicating-adh.html"><a href="replicating-adh.html#instrument-variables"><i class="fa fa-check"></i><b>14.4.3</b> Instrument Variables</a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>IV Solutions to Extended Exercises</b></span></li>
+<li class="chapter" data-level="15" data-path="dplyr-solution.html"><a href="dplyr-solution.html"><i class="fa fa-check"></i><b>15</b> <code>dplyr</code> solution</a></li>
+<li class="chapter" data-level="16" data-path="ggplot-solution.html"><a href="ggplot-solution.html"><i class="fa fa-check"></i><b>16</b> <code>ggplot</code> solution</a>
+<ul>
+<li class="chapter" data-level="16.1" data-path="ggplot-solution.html"><a href="ggplot-solution.html#load-data-and-clean-variable-names-1"><i class="fa fa-check"></i><b>16.1</b> Load Data and Clean variable names</a>
+<ul>
+<li class="chapter" data-level="16.1.1" data-path="ggplot-solution.html"><a href="ggplot-solution.html#load-the-data-from-the-file-dataeconomistdata.csv."><i class="fa fa-check"></i><b>16.1.1</b> 1. Load the data from the file <code>data/EconomistData.csv</code>.</a></li>
+<li class="chapter" data-level="16.1.2" data-path="ggplot-solution.html"><a href="ggplot-solution.html#convert-all-columns-names-to-snakecase-i.e.-my_variable"><i class="fa fa-check"></i><b>16.1.2</b> 2. Convert all columns names to snakecase (i.e. <code>my_variable</code>)</a></li>
+</ul></li>
+<li class="chapter" data-level="16.2" data-path="ggplot-solution.html"><a href="ggplot-solution.html#one-variable-graphs-1"><i class="fa fa-check"></i><b>16.2</b> One Variable Graphs</a>
+<ul>
+<li class="chapter" data-level="16.2.1" data-path="ggplot-solution.html"><a href="ggplot-solution.html#create-a-histogram-of-the-human-development-index.-customize-the-number-of-bins-to-make-the-plot-look-nicer-than-the-default."><i class="fa fa-check"></i><b>16.2.1</b> 1. Create a histogram of the human development index. Customize the number of bins to make the plot look nicer than the default.</a></li>
+<li class="chapter" data-level="16.2.2" data-path="ggplot-solution.html"><a href="ggplot-solution.html#instead-of-a-histogram-create-a-density-plot-of-the-hdi.-extend-your-plot-by"><i class="fa fa-check"></i><b>16.2.2</b> 2. Instead of a histogram, create a density plot of the HDI. Extend your plot by:</a></li>
+<li class="chapter" data-level="16.2.3" data-path="ggplot-solution.html"><a href="ggplot-solution.html#a-in-one-graph-plotting-the-densities-by-region."><i class="fa fa-check"></i><b>16.2.3</b> (a) In one graph plotting the densities by region.</a></li>
+<li class="chapter" data-level="16.2.4" data-path="ggplot-solution.html"><a href="ggplot-solution.html#b-creating-separate-plots-per-region-with-the-area-under-the-density-to-be-coloured-blue."><i class="fa fa-check"></i><b>16.2.4</b> (b) Creating separate plots per region, with the area under the density to be coloured blue.</a></li>
+<li class="chapter" data-level="16.2.5" data-path="ggplot-solution.html"><a href="ggplot-solution.html#c-repeat-1-and-2-for-the-corruption-perception-index."><i class="fa fa-check"></i><b>16.2.5</b> (c) Repeat (1) and (2) for the corruption perception index.</a></li>
+</ul></li>
+<li class="chapter" data-level="16.3" data-path="ggplot-solution.html"><a href="ggplot-solution.html#two-variable-graphs-1"><i class="fa fa-check"></i><b>16.3</b> Two Variable Graphs</a>
+<ul>
+<li class="chapter" data-level="16.3.1" data-path="ggplot-solution.html"><a href="ggplot-solution.html#create-the-simple-scatter-plot"><i class="fa fa-check"></i><b>16.3.1</b> 1. Create the simple scatter plot</a></li>
+<li class="chapter" data-level="16.3.2" data-path="ggplot-solution.html"><a href="ggplot-solution.html#lets-extend-the-plot-in-different-ways.-modify-the-plot-to-each-point-should-be-a-different-plot"><i class="fa fa-check"></i><b>16.3.2</b> 2. Let’s extend the plot in different ways. Modify the plot to (each point should be a different plot)</a></li>
+<li class="chapter" data-level="16.3.3" data-path="ggplot-solution.html"><a href="ggplot-solution.html#a.-make-the-points-blue"><i class="fa fa-check"></i><b>16.3.3</b> a. Make the points blue</a></li>
+<li class="chapter" data-level="16.3.4" data-path="ggplot-solution.html"><a href="ggplot-solution.html#b.-color-the-points-by-region"><i class="fa fa-check"></i><b>16.3.4</b> b. Color the points by region</a></li>
+<li class="chapter" data-level="16.3.5" data-path="ggplot-solution.html"><a href="ggplot-solution.html#c.-color-the-points-by-region-and-make-the-size-of-the-point-vary-by-hdi."><i class="fa fa-check"></i><b>16.3.5</b> c. Color the points by region and make the size of the point vary by HDI.</a></li>
+<li class="chapter" data-level="16.3.6" data-path="ggplot-solution.html"><a href="ggplot-solution.html#lets-extend-the-plot-in-1-by-adding-some-summary-functions-to-it."><i class="fa fa-check"></i><b>16.3.6</b> 3. Let’s extend the plot in (1) by adding some summary functions to it.</a></li>
+<li class="chapter" data-level="16.3.7" data-path="ggplot-solution.html"><a href="ggplot-solution.html#a.-add-a-loess-smoother"><i class="fa fa-check"></i><b>16.3.7</b> a. Add a loess smoother</a></li>
+<li class="chapter" data-level="16.3.8" data-path="ggplot-solution.html"><a href="ggplot-solution.html#b.-add-a-linear-smoother-without-the-confidence-interval.-color-the-line-red."><i class="fa fa-check"></i><b>16.3.8</b> b. Add a linear smoother, without the confidence interval. Color the line red.</a></li>
+<li class="chapter" data-level="16.3.9" data-path="ggplot-solution.html"><a href="ggplot-solution.html#c.-add-the-line-y-x-logx-without-the-confidence-interval.-color-the-line-red."><i class="fa fa-check"></i><b>16.3.9</b> c. Add the line <code>y ~ x + log(x)</code>, without the confidence interval. Color the line red.</a></li>
+<li class="chapter" data-level="16.3.10" data-path="ggplot-solution.html"><a href="ggplot-solution.html#now-we-will-add-the-country-names-to-the-plot-from-1."><i class="fa fa-check"></i><b>16.3.10</b> 4. Now we will add the country names to the plot from (1).</a></li>
+<li class="chapter" data-level="16.3.11" data-path="ggplot-solution.html"><a href="ggplot-solution.html#a.-use-geom_text-to-add-country-names-to-our-plot."><i class="fa fa-check"></i><b>16.3.11</b> a. Use <code>geom_text()</code> to add country names to our plot.</a></li>
+<li class="chapter" data-level="16.3.12" data-path="ggplot-solution.html"><a href="ggplot-solution.html#b.-we-might-not-want-all-the-points-labelled.-create-the-vector"><i class="fa fa-check"></i><b>16.3.12</b> b. We might not want <em>all</em> the points labelled. Create the vector</a></li>
+<li class="chapter" data-level="16.3.13" data-path="ggplot-solution.html"><a href="ggplot-solution.html#now-lets-combine-what-we-learned-above-and-from-the-class-notes-to-build-up-a-presentable-notes.-proceed-as-follows"><i class="fa fa-check"></i><b>16.3.13</b> 5. Now let’s combine what we learned above, and from the class notes to build up a presentable notes. Proceed as follows:</a></li>
+<li class="chapter" data-level="16.3.14" data-path="ggplot-solution.html"><a href="ggplot-solution.html#a.-create-the-simple-scatter-plot"><i class="fa fa-check"></i><b>16.3.14</b> a. Create the simple scatter plot</a></li>
+<li class="chapter" data-level="16.3.15" data-path="ggplot-solution.html"><a href="ggplot-solution.html#b.-make-the-points-hollow-and-colored-by-region.-adjust-the-size-of-the-dots-to-make-them-easier-to-see."><i class="fa fa-check"></i><b>16.3.15</b> b. Make the points hollow, and colored by region. Adjust the size of the dots to make them easier to see.</a></li>
+<li class="chapter" data-level="16.3.16" data-path="ggplot-solution.html"><a href="ggplot-solution.html#c.-add-the-line-y-x-logx-without-the-confidence-interval.-color-the-line-red.-1"><i class="fa fa-check"></i><b>16.3.16</b> c. Add the line <code>y ~ x + log(x)</code>, without the confidence interval. Color the line red.</a></li>
+<li class="chapter" data-level="16.3.17" data-path="ggplot-solution.html"><a href="ggplot-solution.html#d.-change-the-color-of-the-dots-to-be-less-ugly.-i-used-scale_color_manual-but-you-dont-need-to."><i class="fa fa-check"></i><b>16.3.17</b> d. Change the color of the dots to be less ugly. I used <code>scale_color_manual()</code> but you don’t need to.</a></li>
+<li class="chapter" data-level="16.3.18" data-path="ggplot-solution.html"><a href="ggplot-solution.html#e.-add-meaningful-x-and-y-labels.-and-a-title-which-is-centered.-can-you-add-a-note-near-the-bottom-of-the-figure-to-say-that-the-data-comes-from-transparency-international-and-un-human-development-report"><i class="fa fa-check"></i><b>16.3.18</b> e. Add meaningful x and y labels. And a title (which is centered). Can you add a note near the bottom of the figure to say that the data comes from “Transparency International and UN Human Development Report”?</a></li>
+<li class="chapter" data-level="16.3.19" data-path="ggplot-solution.html"><a href="ggplot-solution.html#f.-label-the-points-from-points_to_label-in-4b."><i class="fa fa-check"></i><b>16.3.19</b> f. Label the points from <code>points_to_label</code> in 4b.</a></li>
+<li class="chapter" data-level="16.3.20" data-path="ggplot-solution.html"><a href="ggplot-solution.html#g.-adjust-the-x-and-y-axes-to-have-a-better-range-and-set-of-axis-ticks.-you-are-free-to-choose-what-you-like."><i class="fa fa-check"></i><b>16.3.20</b> g. Adjust the x and y axes to have a better range, and set of axis ticks. You are free to choose what you like.</a></li>
+<li class="chapter" data-level="16.3.21" data-path="ggplot-solution.html"><a href="ggplot-solution.html#h.-move-the-legend-to-the-bottom-of-the-plot.-adjust-the-legend-names-so-that-they-are-easier-to-read-and-more-meaningful.-the-easiest-way-to-do-this-is-to-use-dplyr-to-recode-the-region-variable-as-a-factor-and-give-it-appropriate-labels.-using-the-help-menu-for-factor-should-help-you-here."><i class="fa fa-check"></i><b>16.3.21</b> h. Move the legend to the bottom of the plot. Adjust the legend names so that they are easier to read and more meaningful. The easiest way to do this is to use <code>dplyr</code> to recode the region variable as a factor, and give it appropriate labels. Using the help menu for <code>factor</code> should help you here.</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="17" data-path="replicating-adh-1.html"><a href="replicating-adh-1.html"><i class="fa fa-check"></i><b>17</b> Replicating ADH</a>
+<ul>
+<li class="chapter" data-level="17.1" data-path="replicating-adh-1.html"><a href="replicating-adh-1.html#aggregate-facts"><i class="fa fa-check"></i><b>17.1</b> Aggregate Facts</a></li>
+<li class="chapter" data-level="17.2" data-path="replicating-adh-1.html"><a href="replicating-adh-1.html#descriptive-stats"><i class="fa fa-check"></i><b>17.2</b> Descriptive Stats</a>
+<ul>
+<li class="chapter" data-level="17.2.1" data-path="replicating-adh-1.html"><a href="replicating-adh-1.html#load-data-1"><i class="fa fa-check"></i><b>17.2.1</b> Load Data</a></li>
+<li class="chapter" data-level="17.2.2" data-path="replicating-adh-1.html"><a href="replicating-adh-1.html#compute-simple-grouped-mean-1"><i class="fa fa-check"></i><b>17.2.2</b> Compute Simple Grouped Mean</a></li>
+<li class="chapter" data-level="17.2.3" data-path="replicating-adh-1.html"><a href="replicating-adh-1.html#computed-weighted-group-means-and-standard-deviations-1"><i class="fa fa-check"></i><b>17.2.3</b> Computed Weighted Group Means and Standard Deviations</a></li>
+</ul></li>
+<li class="chapter" data-level="17.3" data-path="replicating-adh-1.html"><a href="replicating-adh-1.html#regression"><i class="fa fa-check"></i><b>17.3</b> Regression</a>
+<ul>
+<li class="chapter" data-level="17.3.1" data-path="replicating-adh-1.html"><a href="replicating-adh-1.html#ols-regression-1"><i class="fa fa-check"></i><b>17.3.1</b> OLS regression</a></li>
+<li class="chapter" data-level="17.3.2" data-path="replicating-adh-1.html"><a href="replicating-adh-1.html#clustering-1"><i class="fa fa-check"></i><b>17.3.2</b> Clustering</a></li>
+<li class="chapter" data-level="17.3.3" data-path="replicating-adh-1.html"><a href="replicating-adh-1.html#instrument-variables-1"><i class="fa fa-check"></i><b>17.3.3</b> Instrument Variables</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">An Introduction to R for Economics and Business Research</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="linear-regression-essentials-with-r" class="section level1" number="7">
+<h1><span class="header-section-number">Chapter 7</span> Linear Regression Essentials with <code>R</code></h1>
+<div id="libraries" class="section level2" number="7.1">
+<h2><span class="header-section-number">7.1</span> Libraries</h2>
+<div class="sourceCode" id="cb414"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb414-1"><a href="linear-regression-essentials-with-r.html#cb414-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven)      <span class="co"># reading stata data</span></span>
+<span id="cb414-2"><a href="linear-regression-essentials-with-r.html#cb414-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)      <span class="co"># data manipulation</span></span>
+<span id="cb414-3"><a href="linear-regression-essentials-with-r.html#cb414-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tibble)     <span class="co"># nicer dataframes</span></span>
+<span id="cb414-4"><a href="linear-regression-essentials-with-r.html#cb414-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stargazer)  <span class="co"># tables</span></span>
+<span id="cb414-5"><a href="linear-regression-essentials-with-r.html#cb414-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)    <span class="co"># graphs</span></span></code></pre></div>
+</div>
+<div id="loading-the-data" class="section level2" number="7.2">
+<h2><span class="header-section-number">7.2</span> Loading the data</h2>
+<div class="sourceCode" id="cb415"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb415-1"><a href="linear-regression-essentials-with-r.html#cb415-1" aria-hidden="true" tabindex="-1"></a>mrw_df <span class="ot">=</span> <span class="fu">read_dta</span>(<span class="st">&#39;data/mrw.dta&#39;</span>)</span>
+<span id="cb415-2"><a href="linear-regression-essentials-with-r.html#cb415-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(mrw_df)</span></code></pre></div>
+<pre><code>## # A tibble: 6 × 11
+##   number country         n     i     o rgdpw60 rgdpw85 gdpgrowth popgrowth   i_y
+##    &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt;
+## 1      1 Algeria         1     1     0    2485    4371     4.80      2.60  24.1 
+## 2      2 Angola          1     0     0    1588    1171     0.800     2.10   5.80
+## 3      3 Benin           1     0     0    1116    1071     2.20      2.40  10.8 
+## 4      4 Botswana        1     1     0     959    3671     8.60      3.20  28.3 
+## 5      5 Burkina Fa…     1     0     0     529     857     2.90      0.900 12.7 
+## 6      6 Burundi         1     0     0     755     663     1.20      1.70   5.10
+## # … with 1 more variable: school &lt;dbl&gt;</code></pre>
+<p>We can cutify the output a little by using the <code>kable</code> function.</p>
+<div class="sourceCode" id="cb417"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb417-1"><a href="linear-regression-essentials-with-r.html#cb417-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">head</span>(mrw_df))</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="right">number</th>
+<th align="left">country</th>
+<th align="right">n</th>
+<th align="right">i</th>
+<th align="right">o</th>
+<th align="right">rgdpw60</th>
+<th align="right">rgdpw85</th>
+<th align="right">gdpgrowth</th>
+<th align="right">popgrowth</th>
+<th align="right">i_y</th>
+<th align="right">school</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="left">Algeria</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">2485</td>
+<td align="right">4371</td>
+<td align="right">4.8</td>
+<td align="right">2.6</td>
+<td align="right">24.1</td>
+<td align="right">4.5</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="left">Angola</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1588</td>
+<td align="right">1171</td>
+<td align="right">0.8</td>
+<td align="right">2.1</td>
+<td align="right">5.8</td>
+<td align="right">1.8</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="left">Benin</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1116</td>
+<td align="right">1071</td>
+<td align="right">2.2</td>
+<td align="right">2.4</td>
+<td align="right">10.8</td>
+<td align="right">1.8</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="left">Botswana</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">959</td>
+<td align="right">3671</td>
+<td align="right">8.6</td>
+<td align="right">3.2</td>
+<td align="right">28.3</td>
+<td align="right">2.9</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="left">Burkina Faso</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">529</td>
+<td align="right">857</td>
+<td align="right">2.9</td>
+<td align="right">0.9</td>
+<td align="right">12.7</td>
+<td align="right">0.4</td>
+</tr>
+<tr class="even">
+<td align="right">6</td>
+<td align="left">Burundi</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">755</td>
+<td align="right">663</td>
+<td align="right">1.2</td>
+<td align="right">1.7</td>
+<td align="right">5.1</td>
+<td align="right">0.4</td>
+</tr>
+</tbody>
+</table>
+<p>As you can see, we have 11 variables and 121 observations.</p>
+<p>We have the following variables:</p>
+<ul>
+<li><strong>number</strong>: a country identifier between 1 and 121 country country name (a string variable)</li>
+<li><strong>country</strong>: the name of the country</li>
+<li><strong>n</strong>: a dummy variable equal to one if the country is included in the non-oil sample</li>
+<li><strong>i</strong>: a dummy variable equal to one if the country is included in the intermediate sample</li>
+<li><strong>o</strong>: a dummy variable equal to one if the country is included in the oecd sample</li>
+<li><strong>rgdpw60</strong>: real GDP per working age population in 1960</li>
+<li><strong>rgdpw85</strong>: real GDP per working age population in 1985</li>
+<li><strong>gdpgrowth</strong>: average annual growth rate of real GDP per working age population between 1960 and 1985</li>
+<li><strong>popgrowth</strong>: average annual growth rate of the working age population
+between 1960 and 1985</li>
+<li><strong>i_y</strong>: real investment as a share of real GDP, averaged over the period 1960-85</li>
+<li><strong>school</strong>: % of working age population in secondary school</li>
+</ul>
+</div>
+<div id="meaningful-names" class="section level2" number="7.3">
+<h2><span class="header-section-number">7.3</span> Meaningful names</h2>
+<p>The first thing we should do is probably to give these variables more meaningful names in order to escape the 90s charme conveyed by them.</p>
+<div class="sourceCode" id="cb418"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb418-1"><a href="linear-regression-essentials-with-r.html#cb418-1" aria-hidden="true" tabindex="-1"></a>mrw_df <span class="ot">=</span> mrw_df <span class="sc">%&gt;%</span> </span>
+<span id="cb418-2"><a href="linear-regression-essentials-with-r.html#cb418-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">non_oil =</span> n, </span>
+<span id="cb418-3"><a href="linear-regression-essentials-with-r.html#cb418-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">oecd =</span> o,</span>
+<span id="cb418-4"><a href="linear-regression-essentials-with-r.html#cb418-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">intermediate =</span> i,</span>
+<span id="cb418-5"><a href="linear-regression-essentials-with-r.html#cb418-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">gdp_60 =</span> rgdpw60,</span>
+<span id="cb418-6"><a href="linear-regression-essentials-with-r.html#cb418-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">gdp_85 =</span> rgdpw85,</span>
+<span id="cb418-7"><a href="linear-regression-essentials-with-r.html#cb418-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">gdp_growth_60_85 =</span> gdpgrowth,</span>
+<span id="cb418-8"><a href="linear-regression-essentials-with-r.html#cb418-8" aria-hidden="true" tabindex="-1"></a>         <span class="at">pop_growth_60_85 =</span> popgrowth,</span>
+<span id="cb418-9"><a href="linear-regression-essentials-with-r.html#cb418-9" aria-hidden="true" tabindex="-1"></a>         <span class="at">inv_gdp =</span> i_y,</span>
+<span id="cb418-10"><a href="linear-regression-essentials-with-r.html#cb418-10" aria-hidden="true" tabindex="-1"></a>         <span class="at">school =</span> school)</span></code></pre></div>
+</div>
+<div id="create-variables-for-estimation" class="section level2" number="7.4">
+<h2><span class="header-section-number">7.4</span> Create variables for estimation</h2>
+<p>In order to follow the estimation, we will need to create some additional variables:</p>
+<ul>
+<li>The logs of the GDP per working age pop. in 1985 and 1960.</li>
+<li>The investment to GDP ratio has to be converted to lie between 0 and 1. Also we need the log of it.</li>
+<li>We have to create the <code>ndg</code> variable which is assumed to be population growth (0 - 1) + 0.05. Again, we need the log of it.</li>
+<li>We want to use the log of the schooling rate (again first divided by 100).</li>
+<li>Finally, and just for consistency, we should convert our sample dummies to factors.</li>
+</ul>
+<div class="sourceCode" id="cb419"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb419-1"><a href="linear-regression-essentials-with-r.html#cb419-1" aria-hidden="true" tabindex="-1"></a><span class="co"># log gdp </span></span>
+<span id="cb419-2"><a href="linear-regression-essentials-with-r.html#cb419-2" aria-hidden="true" tabindex="-1"></a>mrw_df <span class="ot">=</span> mrw_df <span class="sc">%&gt;%</span> </span>
+<span id="cb419-3"><a href="linear-regression-essentials-with-r.html#cb419-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">ln_gdp_85 =</span> <span class="fu">log</span>(gdp_85),</span>
+<span id="cb419-4"><a href="linear-regression-essentials-with-r.html#cb419-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">ln_gdp_60 =</span> <span class="fu">log</span>(gdp_60),</span>
+<span id="cb419-5"><a href="linear-regression-essentials-with-r.html#cb419-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">ln_inv_gdp =</span> <span class="fu">log</span>(inv_gdp<span class="sc">/</span><span class="dv">100</span>),</span>
+<span id="cb419-6"><a href="linear-regression-essentials-with-r.html#cb419-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">non_oil =</span> <span class="fu">factor</span>(non_oil),</span>
+<span id="cb419-7"><a href="linear-regression-essentials-with-r.html#cb419-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">intermediate =</span> <span class="fu">factor</span>(intermediate),</span>
+<span id="cb419-8"><a href="linear-regression-essentials-with-r.html#cb419-8" aria-hidden="true" tabindex="-1"></a>         <span class="at">oecd =</span> <span class="fu">factor</span>(oecd),</span>
+<span id="cb419-9"><a href="linear-regression-essentials-with-r.html#cb419-9" aria-hidden="true" tabindex="-1"></a>         <span class="at">ln_ndg =</span> <span class="fu">log</span>(pop_growth_60_85<span class="sc">/</span><span class="dv">100</span> <span class="sc">+</span> <span class="fl">0.05</span>),</span>
+<span id="cb419-10"><a href="linear-regression-essentials-with-r.html#cb419-10" aria-hidden="true" tabindex="-1"></a>         <span class="at">ln_school =</span> <span class="fu">log</span>(school<span class="sc">/</span><span class="dv">100</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb419-11"><a href="linear-regression-essentials-with-r.html#cb419-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(country, ln_gdp_85, ln_gdp_60, ln_inv_gdp, </span>
+<span id="cb419-12"><a href="linear-regression-essentials-with-r.html#cb419-12" aria-hidden="true" tabindex="-1"></a>         non_oil, intermediate, oecd,</span>
+<span id="cb419-13"><a href="linear-regression-essentials-with-r.html#cb419-13" aria-hidden="true" tabindex="-1"></a>         ln_ndg, ln_school, gdp_growth_60_85)</span>
+<span id="cb419-14"><a href="linear-regression-essentials-with-r.html#cb419-14" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(mrw_df)</span></code></pre></div>
+<pre><code>## # A tibble: 6 × 10
+##   country      ln_gdp_85 ln_gdp_60 ln_inv_gdp non_oil intermediate oecd  ln_ndg
+##   &lt;chr&gt;            &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt; &lt;fct&gt;   &lt;fct&gt;        &lt;fct&gt;  &lt;dbl&gt;
+## 1 Algeria           8.38      7.82      -1.42 1       1            0      -2.58
+## 2 Angola            7.07      7.37      -2.85 1       0            0      -2.65
+## 3 Benin             6.98      7.02      -2.23 1       0            0      -2.60
+## 4 Botswana          8.21      6.87      -1.26 1       1            0      -2.50
+## 5 Burkina Faso      6.75      6.27      -2.06 1       0            0      -2.83
+## 6 Burundi           6.50      6.63      -2.98 1       0            0      -2.70
+## # … with 2 more variables: ln_school &lt;dbl&gt;, gdp_growth_60_85 &lt;dbl&gt;</code></pre>
+</div>
+<div id="summary-statistics" class="section level2" number="7.5">
+<h2><span class="header-section-number">7.5</span> Summary statistics</h2>
+<p>Maybe, we would like to have summary statistics for our dataframe. For that, we need <code>summary</code>.</p>
+<div class="sourceCode" id="cb421"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb421-1"><a href="linear-regression-essentials-with-r.html#cb421-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mrw_df)</span></code></pre></div>
+<pre><code>##    country            ln_gdp_85        ln_gdp_60        ln_inv_gdp     non_oil
+##  Length:121         Min.   : 6.021   Min.   : 5.948   Min.   :-3.194   0:23   
+##  Class :character   1st Qu.: 7.098   1st Qu.: 6.881   1st Qu.:-2.120   1:98   
+##  Mode  :character   Median : 8.155   Median : 7.582   Median :-1.732          
+##                     Mean   : 8.106   Mean   : 7.654   Mean   :-1.815          
+##                     3rd Qu.: 8.949   3rd Qu.: 8.360   3rd Qu.:-1.423          
+##                     Max.   :10.152   Max.   :11.263   Max.   :-0.997          
+##                     NA&#39;s   :13       NA&#39;s   :5                                
+##  intermediate oecd       ln_ndg         ln_school      gdp_growth_60_85
+##  0:46         0:99   Min.   :-2.937   Min.   :-5.521   Min.   :-0.900  
+##  1:75         1:22   1st Qu.:-2.703   1st Qu.:-3.730   1st Qu.: 2.800  
+##                      Median :-2.604   Median :-3.006   Median : 3.900  
+##                      Mean   :-2.629   Mean   :-3.204   Mean   : 4.094  
+##                      3rd Qu.:-2.538   3rd Qu.:-2.504   3rd Qu.: 5.300  
+##                      Max.   :-2.137   Max.   :-2.112   Max.   : 9.200  
+##                      NA&#39;s   :14       NA&#39;s   :3        NA&#39;s   :4</code></pre>
+</div>
+<div id="create-three-samples" class="section level2" number="7.6">
+<h2><span class="header-section-number">7.6</span> Create three samples</h2>
+<div class="sourceCode" id="cb423"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb423-1"><a href="linear-regression-essentials-with-r.html#cb423-1" aria-hidden="true" tabindex="-1"></a>mrw_oecd <span class="ot">=</span> mrw_df <span class="sc">%&gt;%</span> <span class="fu">filter</span>(oecd <span class="sc">==</span> <span class="dv">1</span>)</span>
+<span id="cb423-2"><a href="linear-regression-essentials-with-r.html#cb423-2" aria-hidden="true" tabindex="-1"></a>mrw_int <span class="ot">=</span> mrw_df <span class="sc">%&gt;%</span> <span class="fu">filter</span>(intermediate <span class="sc">==</span> <span class="dv">1</span>)</span>
+<span id="cb423-3"><a href="linear-regression-essentials-with-r.html#cb423-3" aria-hidden="true" tabindex="-1"></a>mrw_non_oil <span class="ot">=</span> mrw_df <span class="sc">%&gt;%</span> <span class="fu">filter</span>(non_oil <span class="sc">==</span> <span class="dv">1</span>)</span></code></pre></div>
+</div>
+<div id="run-the-estimation-for-table-1-in-mrw-1992" class="section level2" number="7.7">
+<h2><span class="header-section-number">7.7</span> Run the estimation for Table 1 in MRW (1992)</h2>
+<p>To run a linear model we need the <code>lm</code> command.</p>
+<div class="sourceCode" id="cb424"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb424-1"><a href="linear-regression-essentials-with-r.html#cb424-1" aria-hidden="true" tabindex="-1"></a>m_non_oil <span class="ot">=</span> <span class="fu">lm</span>(ln_gdp_85 <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> ln_inv_gdp <span class="sc">+</span> ln_ndg, <span class="at">data =</span> mrw_non_oil)</span>
+<span id="cb424-2"><a href="linear-regression-essentials-with-r.html#cb424-2" aria-hidden="true" tabindex="-1"></a>m_int <span class="ot">=</span> <span class="fu">lm</span>(ln_gdp_85 <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> ln_inv_gdp <span class="sc">+</span> ln_ndg, <span class="at">data =</span> mrw_int)</span>
+<span id="cb424-3"><a href="linear-regression-essentials-with-r.html#cb424-3" aria-hidden="true" tabindex="-1"></a>m_oecd <span class="ot">=</span> <span class="fu">lm</span>(ln_gdp_85 <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> ln_inv_gdp <span class="sc">+</span> ln_ndg, <span class="at">data =</span> mrw_oecd)</span></code></pre></div>
+<p>To get nicely formatted results, we can use the <code>summary</code> command:</p>
+<div class="sourceCode" id="cb425"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb425-1"><a href="linear-regression-essentials-with-r.html#cb425-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(m_non_oil)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = ln_gdp_85 ~ 1 + ln_inv_gdp + ln_ndg, data = mrw_non_oil)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -1.79144 -0.39367  0.04124  0.43368  1.58046 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)   5.4299     1.5839   3.428 0.000900 ***
+## ln_inv_gdp    1.4240     0.1431   9.951  &lt; 2e-16 ***
+## ln_ndg       -1.9898     0.5634  -3.532 0.000639 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.6891 on 95 degrees of freedom
+## Multiple R-squared:  0.6009, Adjusted R-squared:  0.5925 
+## F-statistic: 71.51 on 2 and 95 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+<div id="show-the-results-in-a-table" class="section level2" number="7.8">
+<h2><span class="header-section-number">7.8</span> Show the results in a table</h2>
+<div class="sourceCode" id="cb427"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb427-1"><a href="linear-regression-essentials-with-r.html#cb427-1" aria-hidden="true" tabindex="-1"></a><span class="fu">stargazer</span>(m_non_oil, m_int, m_oecd, <span class="at">type =</span> <span class="st">&quot;latex&quot;</span>)</span></code></pre></div>
+% Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu
+% Date and time: Mon, Sep 27, 2021 - 17:19:30
+<div class="sourceCode" id="cb428"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb428-1"><a href="linear-regression-essentials-with-r.html#cb428-1" aria-hidden="true" tabindex="-1"></a><span class="fu">stargazer</span>(m_non_oil, m_int, m_oecd, <span class="at">type =</span> <span class="st">&quot;latex&quot;</span>,</span>
+<span id="cb428-2"><a href="linear-regression-essentials-with-r.html#cb428-2" aria-hidden="true" tabindex="-1"></a>          <span class="at">column.labels =</span> <span class="fu">c</span>(<span class="st">&quot;Non-Oil&quot;</span>, </span>
+<span id="cb428-3"><a href="linear-regression-essentials-with-r.html#cb428-3" aria-hidden="true" tabindex="-1"></a>                            <span class="st">&quot;Intermediate&quot;</span>, </span>
+<span id="cb428-4"><a href="linear-regression-essentials-with-r.html#cb428-4" aria-hidden="true" tabindex="-1"></a>                            <span class="st">&quot;OECD&quot;</span>),</span>
+<span id="cb428-5"><a href="linear-regression-essentials-with-r.html#cb428-5" aria-hidden="true" tabindex="-1"></a>          <span class="at">covariate.labels =</span> <span class="fu">c</span>(<span class="st">&quot;$</span><span class="sc">\\</span><span class="st">log(</span><span class="sc">\\</span><span class="st">frac{I}{GDP})$&quot;</span>, </span>
+<span id="cb428-6"><a href="linear-regression-essentials-with-r.html#cb428-6" aria-hidden="true" tabindex="-1"></a>                               <span class="st">&quot;$</span><span class="sc">\\</span><span class="st">log(n+</span><span class="sc">\\</span><span class="st">delta+g)$&quot;</span>, </span>
+<span id="cb428-7"><a href="linear-regression-essentials-with-r.html#cb428-7" aria-hidden="true" tabindex="-1"></a>                               <span class="st">&quot;Constant&quot;</span>), </span>
+<span id="cb428-8"><a href="linear-regression-essentials-with-r.html#cb428-8" aria-hidden="true" tabindex="-1"></a>          <span class="at">dep.var.labels =</span> <span class="st">&quot;Log(GDP) 1985&quot;</span>,</span>
+<span id="cb428-9"><a href="linear-regression-essentials-with-r.html#cb428-9" aria-hidden="true" tabindex="-1"></a>          <span class="at">omit.stat =</span> <span class="fu">c</span>(<span class="st">&quot;f&quot;</span>, </span>
+<span id="cb428-10"><a href="linear-regression-essentials-with-r.html#cb428-10" aria-hidden="true" tabindex="-1"></a>                        <span class="st">&quot;rsq&quot;</span>, </span>
+<span id="cb428-11"><a href="linear-regression-essentials-with-r.html#cb428-11" aria-hidden="true" tabindex="-1"></a>                        <span class="st">&quot;ser&quot;</span>),</span>
+<span id="cb428-12"><a href="linear-regression-essentials-with-r.html#cb428-12" aria-hidden="true" tabindex="-1"></a>          <span class="at">title =</span> <span class="st">&quot;Replication of (part of) Table 1 in Mankiw, Romer, and Weil (1992)&quot;</span>,</span>
+<span id="cb428-13"><a href="linear-regression-essentials-with-r.html#cb428-13" aria-hidden="true" tabindex="-1"></a>          <span class="at">style =</span> <span class="st">&quot;qje&quot;</span>)</span></code></pre></div>
+% Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu
+% Date and time: Mon, Sep 27, 2021 - 17:19:30
+</div>
+<div id="robust-standard-errors" class="section level2" number="7.9">
+<h2><span class="header-section-number">7.9</span> Robust standard errors</h2>
+<p>In economics, we often would like to have robust standard errors. To look at how we see them. Let’s go back to an example.</p>
+<div class="sourceCode" id="cb429"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb429-1"><a href="linear-regression-essentials-with-r.html#cb429-1" aria-hidden="true" tabindex="-1"></a>lm_example <span class="ot">=</span> <span class="fu">lm</span>(ln_gdp_85 <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> ln_inv_gdp <span class="sc">+</span> ln_ndg, <span class="at">data =</span> mrw_non_oil)</span></code></pre></div>
+<div class="sourceCode" id="cb430"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb430-1"><a href="linear-regression-essentials-with-r.html#cb430-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sandwich) <span class="co"># for robust standard errors</span></span>
+<span id="cb430-2"><a href="linear-regression-essentials-with-r.html#cb430-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lmtest)   <span class="co"># to nicely summarize the results</span></span></code></pre></div>
+<pre><code>## Loading required package: zoo</code></pre>
+<pre><code>## 
+## Attaching package: &#39;zoo&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     as.Date, as.Date.numeric</code></pre>
+<div class="sourceCode" id="cb434"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb434-1"><a href="linear-regression-essentials-with-r.html#cb434-1" aria-hidden="true" tabindex="-1"></a>lm_robust <span class="ot">=</span> <span class="fu">coeftest</span>(lm_example, <span class="at">vcov =</span> <span class="fu">vcovHC</span>(lm_example, <span class="st">&quot;HC1&quot;</span>))</span>
+<span id="cb434-2"><a href="linear-regression-essentials-with-r.html#cb434-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(lm_robust)</span></code></pre></div>
+<pre><code>## 
+## t test of coefficients:
+## 
+##             Estimate Std. Error t value  Pr(&gt;|t|)    
+## (Intercept)  5.42988    1.58558  3.4246 0.0009108 ***
+## ln_inv_gdp   1.42401    0.13196 10.7911 &lt; 2.2e-16 ***
+## ln_ndg      -1.98977    0.54524 -3.6493 0.0004297 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>Since we do not want to type this every time. We should write a short function that takes a linear model and returns the robust summary of it.</p>
+<div class="sourceCode" id="cb436"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb436-1"><a href="linear-regression-essentials-with-r.html#cb436-1" aria-hidden="true" tabindex="-1"></a><span class="co"># needs sandwich and lmtest</span></span>
+<span id="cb436-2"><a href="linear-regression-essentials-with-r.html#cb436-2" aria-hidden="true" tabindex="-1"></a>print_robust <span class="ot">=</span> <span class="cf">function</span>(lm_model) {</span>
+<span id="cb436-3"><a href="linear-regression-essentials-with-r.html#cb436-3" aria-hidden="true" tabindex="-1"></a>  results_robust <span class="ot">=</span> <span class="fu">coeftest</span>(lm_model, <span class="at">vcov =</span> <span class="fu">vcovHC</span>(lm_model, <span class="st">&quot;HC1&quot;</span>))</span>
+<span id="cb436-4"><a href="linear-regression-essentials-with-r.html#cb436-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(results_robust)</span>
+<span id="cb436-5"><a href="linear-regression-essentials-with-r.html#cb436-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb436-6"><a href="linear-regression-essentials-with-r.html#cb436-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb436-7"><a href="linear-regression-essentials-with-r.html#cb436-7" aria-hidden="true" tabindex="-1"></a><span class="fu">print_robust</span>(lm_example)</span></code></pre></div>
+<pre><code>## 
+## t test of coefficients:
+## 
+##             Estimate Std. Error t value  Pr(&gt;|t|)    
+## (Intercept)  5.42988    1.58558  3.4246 0.0009108 ***
+## ln_inv_gdp   1.42401    0.13196 10.7911 &lt; 2.2e-16 ***
+## ln_ndg      -1.98977    0.54524 -3.6493 0.0004297 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>Now, unfortunately the <code>coeftest</code> function does not return an object that is easily transferred to a stargazer table. Thus, we will have to write another function.</p>
+<div class="sourceCode" id="cb438"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb438-1"><a href="linear-regression-essentials-with-r.html#cb438-1" aria-hidden="true" tabindex="-1"></a><span class="co"># needs sandwich</span></span>
+<span id="cb438-2"><a href="linear-regression-essentials-with-r.html#cb438-2" aria-hidden="true" tabindex="-1"></a>compute_rob_se <span class="ot">=</span> <span class="cf">function</span>(lm_model) {</span>
+<span id="cb438-3"><a href="linear-regression-essentials-with-r.html#cb438-3" aria-hidden="true" tabindex="-1"></a>  vcov <span class="ot">=</span> <span class="fu">vcovHC</span>(lm_example, <span class="st">&quot;HC1&quot;</span>)</span>
+<span id="cb438-4"><a href="linear-regression-essentials-with-r.html#cb438-4" aria-hidden="true" tabindex="-1"></a>  se <span class="ot">=</span> <span class="fu">sqrt</span>(<span class="fu">diag</span>(vcov))</span>
+<span id="cb438-5"><a href="linear-regression-essentials-with-r.html#cb438-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>This makes our life somewhat easier. No, in order to compare the standard errors we could do the following.</p>
+<div class="sourceCode" id="cb439"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb439-1"><a href="linear-regression-essentials-with-r.html#cb439-1" aria-hidden="true" tabindex="-1"></a><span class="co"># run the model </span></span>
+<span id="cb439-2"><a href="linear-regression-essentials-with-r.html#cb439-2" aria-hidden="true" tabindex="-1"></a>lm_example <span class="ot">=</span> <span class="fu">lm</span>(ln_gdp_85 <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> ln_inv_gdp <span class="sc">+</span> ln_ndg, <span class="at">data =</span> mrw_non_oil)</span>
+<span id="cb439-3"><a href="linear-regression-essentials-with-r.html#cb439-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb439-4"><a href="linear-regression-essentials-with-r.html#cb439-4" aria-hidden="true" tabindex="-1"></a><span class="co"># obtain the robust ses</span></span>
+<span id="cb439-5"><a href="linear-regression-essentials-with-r.html#cb439-5" aria-hidden="true" tabindex="-1"></a>rob_se <span class="ot">=</span> <span class="fu">compute_rob_se</span>(lm_example)</span>
+<span id="cb439-6"><a href="linear-regression-essentials-with-r.html#cb439-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb439-7"><a href="linear-regression-essentials-with-r.html#cb439-7" aria-hidden="true" tabindex="-1"></a><span class="fu">stargazer</span>(lm_example, lm_example,</span>
+<span id="cb439-8"><a href="linear-regression-essentials-with-r.html#cb439-8" aria-hidden="true" tabindex="-1"></a>          <span class="at">se =</span> <span class="fu">list</span>(<span class="cn">NULL</span>, rob_se))</span></code></pre></div>
+% Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu
+% Date and time: Mon, Sep 27, 2021 - 17:19:31
+</div>
+<div id="some-graphs" class="section level2" number="7.10">
+<h2><span class="header-section-number">7.10</span> Some Graphs</h2>
+<div class="sourceCode" id="cb440"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb440-1"><a href="linear-regression-essentials-with-r.html#cb440-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(mrw_non_oil) <span class="sc">+</span></span>
+<span id="cb440-2"><a href="linear-regression-essentials-with-r.html#cb440-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> ln_gdp_60, <span class="at">y =</span> gdp_growth_60_85)) <span class="sc">+</span></span>
+<span id="cb440-3"><a href="linear-regression-essentials-with-r.html#cb440-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Log output per working-age adult in 1960&quot;</span>,</span>
+<span id="cb440-4"><a href="linear-regression-essentials-with-r.html#cb440-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Growth rate: 1960-85&quot;</span>, </span>
+<span id="cb440-5"><a href="linear-regression-essentials-with-r.html#cb440-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">&quot;Unconditional Convergence&quot;</span>) <span class="sc">+</span></span>
+<span id="cb440-6"><a href="linear-regression-essentials-with-r.html#cb440-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
+<p><img src="pp4rs-rstats_files/figure-html/unnamed-chunk-193-1.png" width="576" /></p>
+<p>Let’s try to get the residuals.</p>
+<div class="sourceCode" id="cb441"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb441-1"><a href="linear-regression-essentials-with-r.html#cb441-1" aria-hidden="true" tabindex="-1"></a>lm_y <span class="ot">=</span> <span class="fu">lm</span>(gdp_growth_60_85 <span class="sc">~</span> <span class="dv">1</span><span class="sc">+</span> ln_inv_gdp <span class="sc">+</span> ln_ndg <span class="sc">+</span> ln_school, <span class="at">data =</span> mrw_non_oil)</span>
+<span id="cb441-2"><a href="linear-regression-essentials-with-r.html#cb441-2" aria-hidden="true" tabindex="-1"></a>lm_x <span class="ot">=</span> <span class="fu">lm</span>(ln_gdp_60 <span class="sc">~</span> <span class="dv">1</span><span class="sc">+</span> ln_inv_gdp <span class="sc">+</span> ln_ndg <span class="sc">+</span> ln_school, <span class="at">data =</span> mrw_non_oil)</span>
+<span id="cb441-3"><a href="linear-regression-essentials-with-r.html#cb441-3" aria-hidden="true" tabindex="-1"></a>y_res <span class="ot">=</span> lm_y<span class="sc">$</span>residuals</span>
+<span id="cb441-4"><a href="linear-regression-essentials-with-r.html#cb441-4" aria-hidden="true" tabindex="-1"></a>x_res <span class="ot">=</span> lm_x<span class="sc">$</span>residuals</span>
+<span id="cb441-5"><a href="linear-regression-essentials-with-r.html#cb441-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb441-6"><a href="linear-regression-essentials-with-r.html#cb441-6" aria-hidden="true" tabindex="-1"></a>graph_tibble <span class="ot">=</span> <span class="fu">tibble</span>(</span>
+<span id="cb441-7"><a href="linear-regression-essentials-with-r.html#cb441-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> y_res, </span>
+<span id="cb441-8"><a href="linear-regression-essentials-with-r.html#cb441-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> x_res)</span>
+<span id="cb441-9"><a href="linear-regression-essentials-with-r.html#cb441-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb441-10"><a href="linear-regression-essentials-with-r.html#cb441-10" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(graph_tibble) <span class="sc">+</span></span>
+<span id="cb441-11"><a href="linear-regression-essentials-with-r.html#cb441-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(x, y)) <span class="sc">+</span> </span>
+<span id="cb441-12"><a href="linear-regression-essentials-with-r.html#cb441-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Res. X&quot;</span>,</span>
+<span id="cb441-13"><a href="linear-regression-essentials-with-r.html#cb441-13" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Res. Y&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb441-14"><a href="linear-regression-essentials-with-r.html#cb441-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
+<p><img src="pp4rs-rstats_files/figure-html/unnamed-chunk-194-1.png" width="576" /></p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="working-with-strings.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="linear-models-with-fixed-effects.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["pp4rs-rstats.pdf", "pp4rs-rstats.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

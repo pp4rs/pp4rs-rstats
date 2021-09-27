@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 8 Linear Models with Fixed Effects | An Introduction to R for Economics and Business Research</title>
+  <meta name="description" content="Lecture notes on R for Programming Practices in Research in Economics." />
+  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 8 Linear Models with Fixed Effects | An Introduction to R for Economics and Business Research" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Lecture notes on R for Programming Practices in Research in Economics." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 8 Linear Models with Fixed Effects | An Introduction to R for Economics and Business Research" />
+  
+  <meta name="twitter:description" content="Lecture notes on R for Programming Practices in Research in Economics." />
+  
+
+<meta name="author" content="Julian Langer" />
+<meta name="author" content="Lachlan Deer" />
+<meta name="author" content="Ulrich Bergmann" />
+
+
+<meta name="date" content="2021-09-27" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="linear-regression-essentials-with-r.html"/>
+<link rel="next" href="instrumental-variables.html"/>
+<script src="libs/header-attrs-2.9/header-attrs.js"></script>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Introduction to R for Economics and Business </a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Prerequisites</a></li>
+<li class="part"><span><b>I Working with Data</b></span></li>
+<li class="chapter" data-level="1" data-path="basics-of-r.html"><a href="basics-of-r.html"><i class="fa fa-check"></i><b>1</b> Basics of R</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="basics-of-r.html"><a href="basics-of-r.html#the-workspace"><i class="fa fa-check"></i><b>1.1</b> The Workspace</a>
+<ul>
+<li class="chapter" data-level="1.1.1" data-path="basics-of-r.html"><a href="basics-of-r.html#working-directory"><i class="fa fa-check"></i><b>1.1.1</b> Working directory</a></li>
+<li class="chapter" data-level="1.1.2" data-path="basics-of-r.html"><a href="basics-of-r.html#r-projects"><i class="fa fa-check"></i><b>1.1.2</b> R projects</a></li>
+<li class="chapter" data-level="1.1.3" data-path="basics-of-r.html"><a href="basics-of-r.html#removing-and-adding-objects-from-workspace"><i class="fa fa-check"></i><b>1.1.3</b> Removing and adding objects from workspace</a></li>
+<li class="chapter" data-level="1.1.4" data-path="basics-of-r.html"><a href="basics-of-r.html#installing-and-loading-packages"><i class="fa fa-check"></i><b>1.1.4</b> Installing and loading packages</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="basics-of-r.html"><a href="basics-of-r.html#vectors"><i class="fa fa-check"></i><b>1.2</b> Vectors</a>
+<ul>
+<li class="chapter" data-level="1.2.1" data-path="basics-of-r.html"><a href="basics-of-r.html#atomic-vector-types"><i class="fa fa-check"></i><b>1.2.1</b> Atomic vector types</a></li>
+<li class="chapter" data-level="1.2.2" data-path="basics-of-r.html"><a href="basics-of-r.html#vector-coercion"><i class="fa fa-check"></i><b>1.2.2</b> Vector coercion</a></li>
+<li class="chapter" data-level="1.2.3" data-path="basics-of-r.html"><a href="basics-of-r.html#vectors-with-multiple-values"><i class="fa fa-check"></i><b>1.2.3</b> Vectors with multiple values</a></li>
+<li class="chapter" data-level="1.2.4" data-path="basics-of-r.html"><a href="basics-of-r.html#operating-with-vectors-and-recycling"><i class="fa fa-check"></i><b>1.2.4</b> Operating with vectors and recycling</a></li>
+<li class="chapter" data-level="1.2.5" data-path="basics-of-r.html"><a href="basics-of-r.html#names"><i class="fa fa-check"></i><b>1.2.5</b> Names</a></li>
+<li class="chapter" data-level="1.2.6" data-path="basics-of-r.html"><a href="basics-of-r.html#subsetting"><i class="fa fa-check"></i><b>1.2.6</b> Subsetting</a></li>
+<li class="chapter" data-level="1.2.7" data-path="basics-of-r.html"><a href="basics-of-r.html#lists"><i class="fa fa-check"></i><b>1.2.7</b> Lists</a></li>
+</ul></li>
+<li class="chapter" data-level="1.3" data-path="basics-of-r.html"><a href="basics-of-r.html#checking-cases-with-conditionals"><i class="fa fa-check"></i><b>1.3</b> Checking cases with conditionals</a>
+<ul>
+<li class="chapter" data-level="1.3.1" data-path="basics-of-r.html"><a href="basics-of-r.html#if--else"><i class="fa fa-check"></i><b>1.3.1</b> <code>if</code>- <code>else</code></a></li>
+<li class="chapter" data-level="1.3.2" data-path="basics-of-r.html"><a href="basics-of-r.html#if---else-if---else"><i class="fa fa-check"></i><b>1.3.2</b> <code>if</code> - <code>else if</code> - <code>else</code></a></li>
+<li class="chapter" data-level="1.3.3" data-path="basics-of-r.html"><a href="basics-of-r.html#checking-multiple-cases-with-switch"><i class="fa fa-check"></i><b>1.3.3</b> Checking multiple cases with <code>switch</code></a></li>
+<li class="chapter" data-level="1.3.4" data-path="basics-of-r.html"><a href="basics-of-r.html#comparison-and-logical-operators"><i class="fa fa-check"></i><b>1.3.4</b> Comparison and logical operators</a></li>
+</ul></li>
+<li class="chapter" data-level="1.4" data-path="basics-of-r.html"><a href="basics-of-r.html#functions"><i class="fa fa-check"></i><b>1.4</b> Functions</a>
+<ul>
+<li class="chapter" data-level="1.4.1" data-path="basics-of-r.html"><a href="basics-of-r.html#function-definitions"><i class="fa fa-check"></i><b>1.4.1</b> Function definitions</a></li>
+<li class="chapter" data-level="1.4.2" data-path="basics-of-r.html"><a href="basics-of-r.html#function-arguments-and-default-values"><i class="fa fa-check"></i><b>1.4.2</b> Function arguments and default values</a></li>
+<li class="chapter" data-level="1.4.3" data-path="basics-of-r.html"><a href="basics-of-r.html#arbitrary-number-of-arguments"><i class="fa fa-check"></i><b>1.4.3</b> Arbitrary number of arguments</a></li>
+<li class="chapter" data-level="1.4.4" data-path="basics-of-r.html"><a href="basics-of-r.html#function-returns"><i class="fa fa-check"></i><b>1.4.4</b> Function returns</a></li>
+<li class="chapter" data-level="1.4.5" data-path="basics-of-r.html"><a href="basics-of-r.html#pipes"><i class="fa fa-check"></i><b>1.4.5</b> Pipes</a></li>
+</ul></li>
+<li class="chapter" data-level="1.5" data-path="basics-of-r.html"><a href="basics-of-r.html#iterations"><i class="fa fa-check"></i><b>1.5</b> Iterations</a>
+<ul>
+<li class="chapter" data-level="1.5.1" data-path="basics-of-r.html"><a href="basics-of-r.html#for-loops"><i class="fa fa-check"></i><b>1.5.1</b> <code>for</code> loops</a></li>
+<li class="chapter" data-level="1.5.2" data-path="basics-of-r.html"><a href="basics-of-r.html#split-apply-combine-with-map-functions"><i class="fa fa-check"></i><b>1.5.2</b> Split, apply, combine with <code>map</code> functions</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="basics-of-r.html"><a href="basics-of-r.html#sources"><i class="fa fa-check"></i>Sources</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="data-transformations-with-dplyr-and-tidyr.html"><a href="data-transformations-with-dplyr-and-tidyr.html"><i class="fa fa-check"></i><b>2</b> Data Transformations with <code>dplyr</code> and <code>tidyr</code></a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="data-transformations-with-dplyr-and-tidyr.html"><a href="data-transformations-with-dplyr-and-tidyr.html#single-table-verbs"><i class="fa fa-check"></i><b>2.1</b> Single table verbs</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="data-transformations-with-dplyr-and-tidyr.html"><a href="data-transformations-with-dplyr-and-tidyr.html#filter-to-filter-observations"><i class="fa fa-check"></i><b>2.1.1</b> <code>filter</code> to filter observations</a></li>
+<li class="chapter" data-level="2.1.2" data-path="data-transformations-with-dplyr-and-tidyr.html"><a href="data-transformations-with-dplyr-and-tidyr.html#arrange-to-arrange-a-dataframe-according-to-variables"><i class="fa fa-check"></i><b>2.1.2</b> <code>arrange</code> to arrange a dataframe according to variables</a></li>
+<li class="chapter" data-level="2.1.3" data-path="data-transformations-with-dplyr-and-tidyr.html"><a href="data-transformations-with-dplyr-and-tidyr.html#select-to-selectdrop-variables"><i class="fa fa-check"></i><b>2.1.3</b> <code>select</code> to select/drop variables</a></li>
+<li class="chapter" data-level="2.1.4" data-path="data-transformations-with-dplyr-and-tidyr.html"><a href="data-transformations-with-dplyr-and-tidyr.html#mutate-to-create-new-variables"><i class="fa fa-check"></i><b>2.1.4</b> <code>mutate</code> to create new variables</a></li>
+<li class="chapter" data-level="2.1.5" data-path="data-transformations-with-dplyr-and-tidyr.html"><a href="data-transformations-with-dplyr-and-tidyr.html#summarise-to-create-summary-tables"><i class="fa fa-check"></i><b>2.1.5</b> <code>summarise</code> to create summary tables</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="data-transformations-with-dplyr-and-tidyr.html"><a href="data-transformations-with-dplyr-and-tidyr.html#using-functions-in-combination-with-logical-subsetting"><i class="fa fa-check"></i><b>2.2</b> Using functions in combination with logical subsetting</a></li>
+<li class="chapter" data-level="2.3" data-path="data-transformations-with-dplyr-and-tidyr.html"><a href="data-transformations-with-dplyr-and-tidyr.html#the-pipe-operator"><i class="fa fa-check"></i><b>2.3</b> The pipe operator</a></li>
+<li class="chapter" data-level="2.4" data-path="data-transformations-with-dplyr-and-tidyr.html"><a href="data-transformations-with-dplyr-and-tidyr.html#multiple-table-verbs"><i class="fa fa-check"></i><b>2.4</b> Multiple table verbs</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="data-transformations-with-dplyr-and-tidyr.html"><a href="data-transformations-with-dplyr-and-tidyr.html#mutating-joins"><i class="fa fa-check"></i><b>2.4.1</b> Mutating joins</a></li>
+<li class="chapter" data-level="2.4.2" data-path="data-transformations-with-dplyr-and-tidyr.html"><a href="data-transformations-with-dplyr-and-tidyr.html#filtering-joins"><i class="fa fa-check"></i><b>2.4.2</b> Filtering joins</a></li>
+<li class="chapter" data-level="2.4.3" data-path="data-transformations-with-dplyr-and-tidyr.html"><a href="data-transformations-with-dplyr-and-tidyr.html#the-by-argument"><i class="fa fa-check"></i><b>2.4.3</b> The <code>by</code> argument</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="data-transformations-with-dplyr-and-tidyr.html"><a href="data-transformations-with-dplyr-and-tidyr.html#reshaping-data-with-tidyr"><i class="fa fa-check"></i><b>2.5</b> Reshaping data with <code>tidyr</code></a>
+<ul>
+<li class="chapter" data-level="2.5.1" data-path="data-transformations-with-dplyr-and-tidyr.html"><a href="data-transformations-with-dplyr-and-tidyr.html#from-dirty-wide-to-tidy-long"><i class="fa fa-check"></i><b>2.5.1</b> From dirty wide to tidy long</a></li>
+<li class="chapter" data-level="2.5.2" data-path="data-transformations-with-dplyr-and-tidyr.html"><a href="data-transformations-with-dplyr-and-tidyr.html#from-dirty-long-to-tidy-wide"><i class="fa fa-check"></i><b>2.5.2</b> From dirty long to tidy wide</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="data-transformations-with-dplyr-and-tidyr.html"><a href="data-transformations-with-dplyr-and-tidyr.html#sources-1"><i class="fa fa-check"></i>Sources</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html"><i class="fa fa-check"></i><b>3</b> Visualizing data with `ggplot2</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#introduction"><i class="fa fa-check"></i><b>3.1</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#the-dataset"><i class="fa fa-check"></i><b>3.1.1</b> The dataset</a></li>
+<li class="chapter" data-level="3.1.2" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#basic-example-an-ordinary-scatterplot"><i class="fa fa-check"></i><b>3.1.2</b> Basic example: an ordinary scatterplot</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#aesthetics"><i class="fa fa-check"></i><b>3.2</b> Aesthetics</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#aesthetic-mappings"><i class="fa fa-check"></i><b>3.2.1</b> Aesthetic mappings</a></li>
+<li class="chapter" data-level="3.2.2" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#manually-fixing-aesthetics"><i class="fa fa-check"></i><b>3.2.2</b> Manually fixing aesthetics</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#facets-subplots-for-different-variable-values"><i class="fa fa-check"></i><b>3.3</b> Facets: Subplots for different variable values</a></li>
+<li class="chapter" data-level="3.4" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#geoms"><i class="fa fa-check"></i><b>3.4</b> Geoms</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#what-kind-of-plot-do-you-have-in-mind-the-use-of-geoms."><i class="fa fa-check"></i><b>3.4.1</b> What kind of plot do you have in mind? The use of geoms.</a></li>
+<li class="chapter" data-level="3.4.2" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#multiple-geoms-in-one-plot"><i class="fa fa-check"></i><b>3.4.2</b> Multiple geoms in one plot</a></li>
+</ul></li>
+<li class="chapter" data-level="3.5" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#statistical-tranformations-with-stats"><i class="fa fa-check"></i><b>3.5</b> Statistical tranformations with <code>stats</code></a></li>
+<li class="chapter" data-level="3.6" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#positions"><i class="fa fa-check"></i><b>3.6</b> Positions</a></li>
+<li class="chapter" data-level="3.7" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#coordinate-systems"><i class="fa fa-check"></i><b>3.7</b> Coordinate systems</a></li>
+<li class="chapter" data-level="3.8" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#labeling"><i class="fa fa-check"></i><b>3.8</b> Labeling</a></li>
+<li class="chapter" data-level="3.9" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#scales"><i class="fa fa-check"></i><b>3.9</b> Scales</a></li>
+<li class="chapter" data-level="3.10" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#themes"><i class="fa fa-check"></i><b>3.10</b> Themes</a></li>
+<li class="chapter" data-level="3.11" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#saving-graphs"><i class="fa fa-check"></i><b>3.11</b> Saving graphs</a></li>
+<li class="chapter" data-level="" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#sources-2"><i class="fa fa-check"></i>Sources</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="factor-variables.html"><a href="factor-variables.html"><i class="fa fa-check"></i><b>4</b> Factor Variables</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="factor-variables.html"><a href="factor-variables.html#creating-factors"><i class="fa fa-check"></i><b>4.1</b> Creating Factors</a></li>
+<li class="chapter" data-level="4.2" data-path="factor-variables.html"><a href="factor-variables.html#some-other-useful-functions-from-forcats"><i class="fa fa-check"></i><b>4.2</b> Some other useful functions from forcats</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="factor-variables.html"><a href="factor-variables.html#modify-factor-levels"><i class="fa fa-check"></i><b>4.2.1</b> Modify factor levels</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="reading-and-writing-data.html"><a href="reading-and-writing-data.html"><i class="fa fa-check"></i><b>5</b> Reading and Writing Data</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="reading-and-writing-data.html"><a href="reading-and-writing-data.html#reading-csv-files-with-readr"><i class="fa fa-check"></i><b>5.1</b> Reading <code>csv</code> files with <code>readr</code></a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="reading-and-writing-data.html"><a href="reading-and-writing-data.html#reading-in--delimited-data"><i class="fa fa-check"></i><b>5.1.1</b> Reading in *-delimited data</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="reading-and-writing-data.html"><a href="reading-and-writing-data.html#parsing-data-correctly-with-the-parse-functions"><i class="fa fa-check"></i><b>5.2</b> Parsing data correctly with the <code>parse</code> functions</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="reading-and-writing-data.html"><a href="reading-and-writing-data.html#parsing-numbers"><i class="fa fa-check"></i><b>5.2.1</b> Parsing numbers</a></li>
+<li class="chapter" data-level="5.2.2" data-path="reading-and-writing-data.html"><a href="reading-and-writing-data.html#parsing-characters"><i class="fa fa-check"></i><b>5.2.2</b> Parsing characters</a></li>
+<li class="chapter" data-level="5.2.3" data-path="reading-and-writing-data.html"><a href="reading-and-writing-data.html#parsing-dates"><i class="fa fa-check"></i><b>5.2.3</b> Parsing dates</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="reading-and-writing-data.html"><a href="reading-and-writing-data.html#parsing-and-reading-at-the-same-time"><i class="fa fa-check"></i><b>5.3</b> Parsing and reading at the same time</a></li>
+<li class="chapter" data-level="5.4" data-path="reading-and-writing-data.html"><a href="reading-and-writing-data.html#writing-csv-files"><i class="fa fa-check"></i><b>5.4</b> Writing <code>csv</code> files</a></li>
+<li class="chapter" data-level="5.5" data-path="reading-and-writing-data.html"><a href="reading-and-writing-data.html#write-and-read-rds-files-with-readr"><i class="fa fa-check"></i><b>5.5</b> Write and read <code>RDS</code> files with <code>readr</code></a></li>
+<li class="chapter" data-level="5.6" data-path="reading-and-writing-data.html"><a href="reading-and-writing-data.html#reading-in-excel-sheets-and-stata-data-with-readxl-and-haven"><i class="fa fa-check"></i><b>5.6</b> Reading in Excel sheets and Stata data with <code>readxl</code> and <code>haven</code></a></li>
+<li class="chapter" data-level="" data-path="reading-and-writing-data.html"><a href="reading-and-writing-data.html#sources-3"><i class="fa fa-check"></i>Sources</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="working-with-strings.html"><a href="working-with-strings.html"><i class="fa fa-check"></i><b>6</b> Working with Strings</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="working-with-strings.html"><a href="working-with-strings.html#string-combine-with-str_c"><i class="fa fa-check"></i><b>6.1</b> String combine with <code>str_c</code></a></li>
+<li class="chapter" data-level="6.2" data-path="working-with-strings.html"><a href="working-with-strings.html#substrings-with-str_sub"><i class="fa fa-check"></i><b>6.2</b> Substrings with <code>str_sub</code></a></li>
+<li class="chapter" data-level="6.3" data-path="working-with-strings.html"><a href="working-with-strings.html#capitalize-or-not"><i class="fa fa-check"></i><b>6.3</b> Capitalize or not</a></li>
+<li class="chapter" data-level="6.4" data-path="working-with-strings.html"><a href="working-with-strings.html#string-sort"><i class="fa fa-check"></i><b>6.4</b> String sort</a></li>
+<li class="chapter" data-level="6.5" data-path="working-with-strings.html"><a href="working-with-strings.html#handling-nas"><i class="fa fa-check"></i><b>6.5</b> Handling NAs</a></li>
+</ul></li>
+<li class="part"><span><b>II Regression Modelling with R</b></span></li>
+<li class="chapter" data-level="7" data-path="linear-regression-essentials-with-r.html"><a href="linear-regression-essentials-with-r.html"><i class="fa fa-check"></i><b>7</b> Linear Regression Essentials with <code>R</code></a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="linear-regression-essentials-with-r.html"><a href="linear-regression-essentials-with-r.html#libraries"><i class="fa fa-check"></i><b>7.1</b> Libraries</a></li>
+<li class="chapter" data-level="7.2" data-path="linear-regression-essentials-with-r.html"><a href="linear-regression-essentials-with-r.html#loading-the-data"><i class="fa fa-check"></i><b>7.2</b> Loading the data</a></li>
+<li class="chapter" data-level="7.3" data-path="linear-regression-essentials-with-r.html"><a href="linear-regression-essentials-with-r.html#meaningful-names"><i class="fa fa-check"></i><b>7.3</b> Meaningful names</a></li>
+<li class="chapter" data-level="7.4" data-path="linear-regression-essentials-with-r.html"><a href="linear-regression-essentials-with-r.html#create-variables-for-estimation"><i class="fa fa-check"></i><b>7.4</b> Create variables for estimation</a></li>
+<li class="chapter" data-level="7.5" data-path="linear-regression-essentials-with-r.html"><a href="linear-regression-essentials-with-r.html#summary-statistics"><i class="fa fa-check"></i><b>7.5</b> Summary statistics</a></li>
+<li class="chapter" data-level="7.6" data-path="linear-regression-essentials-with-r.html"><a href="linear-regression-essentials-with-r.html#create-three-samples"><i class="fa fa-check"></i><b>7.6</b> Create three samples</a></li>
+<li class="chapter" data-level="7.7" data-path="linear-regression-essentials-with-r.html"><a href="linear-regression-essentials-with-r.html#run-the-estimation-for-table-1-in-mrw-1992"><i class="fa fa-check"></i><b>7.7</b> Run the estimation for Table 1 in MRW (1992)</a></li>
+<li class="chapter" data-level="7.8" data-path="linear-regression-essentials-with-r.html"><a href="linear-regression-essentials-with-r.html#show-the-results-in-a-table"><i class="fa fa-check"></i><b>7.8</b> Show the results in a table</a></li>
+<li class="chapter" data-level="7.9" data-path="linear-regression-essentials-with-r.html"><a href="linear-regression-essentials-with-r.html#robust-standard-errors"><i class="fa fa-check"></i><b>7.9</b> Robust standard errors</a></li>
+<li class="chapter" data-level="7.10" data-path="linear-regression-essentials-with-r.html"><a href="linear-regression-essentials-with-r.html#some-graphs"><i class="fa fa-check"></i><b>7.10</b> Some Graphs</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="linear-models-with-fixed-effects.html"><a href="linear-models-with-fixed-effects.html"><i class="fa fa-check"></i><b>8</b> Linear Models with Fixed Effects</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="linear-models-with-fixed-effects.html"><a href="linear-models-with-fixed-effects.html#libraries-1"><i class="fa fa-check"></i><b>8.1</b> Libraries</a></li>
+<li class="chapter" data-level="8.2" data-path="linear-models-with-fixed-effects.html"><a href="linear-models-with-fixed-effects.html#review-of-plotting-recreating-figure-1"><i class="fa fa-check"></i><b>8.2</b> Review of Plotting: Recreating Figure 1</a></li>
+<li class="chapter" data-level="8.3" data-path="linear-models-with-fixed-effects.html"><a href="linear-models-with-fixed-effects.html#review-of-plotting-recreating-figure-2"><i class="fa fa-check"></i><b>8.3</b> Review of Plotting: Recreating Figure 2</a></li>
+<li class="chapter" data-level="8.4" data-path="linear-models-with-fixed-effects.html"><a href="linear-models-with-fixed-effects.html#loading-the-data-for-estimation"><i class="fa fa-check"></i><b>8.4</b> Loading the data for estimation</a></li>
+<li class="chapter" data-level="8.5" data-path="linear-models-with-fixed-effects.html"><a href="linear-models-with-fixed-effects.html#pooled-ols-with-time-effects"><i class="fa fa-check"></i><b>8.5</b> Pooled OLS with Time Effects</a></li>
+<li class="chapter" data-level="8.6" data-path="linear-models-with-fixed-effects.html"><a href="linear-models-with-fixed-effects.html#fixed-effects-with-the-lm-function"><i class="fa fa-check"></i><b>8.6</b> Fixed Effects with the <code>lm</code> function</a></li>
+<li class="chapter" data-level="8.7" data-path="linear-models-with-fixed-effects.html"><a href="linear-models-with-fixed-effects.html#pooled-ols-and-fe-with-the-lfe-package"><i class="fa fa-check"></i><b>8.7</b> Pooled OLS and FE with the <code>lfe</code> package</a></li>
+<li class="chapter" data-level="8.8" data-path="linear-models-with-fixed-effects.html"><a href="linear-models-with-fixed-effects.html#review-of-iv"><i class="fa fa-check"></i><b>8.8</b> Review of IV</a></li>
+<li class="chapter" data-level="8.9" data-path="linear-models-with-fixed-effects.html"><a href="linear-models-with-fixed-effects.html#iv-with-felm"><i class="fa fa-check"></i><b>8.9</b> IV with <code>felm</code></a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="instrumental-variables.html"><a href="instrumental-variables.html"><i class="fa fa-check"></i><b>9</b> Instrumental Variables</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="instrumental-variables.html"><a href="instrumental-variables.html#libraries-2"><i class="fa fa-check"></i><b>9.1</b> Libraries</a></li>
+<li class="chapter" data-level="9.2" data-path="instrumental-variables.html"><a href="instrumental-variables.html#functions-we-might-want-to-have"><i class="fa fa-check"></i><b>9.2</b> Functions We Might Want to Have</a></li>
+<li class="chapter" data-level="9.3" data-path="instrumental-variables.html"><a href="instrumental-variables.html#a-brief-review-of-ols-replicating-table-2"><i class="fa fa-check"></i><b>9.3</b> A Brief Review of OLS: Replicating Table 2</a></li>
+<li class="chapter" data-level="9.4" data-path="instrumental-variables.html"><a href="instrumental-variables.html#a-brief-review-of-making-figures-replicating-figure-2"><i class="fa fa-check"></i><b>9.4</b> A Brief Review of Making Figures: Replicating Figure 2</a></li>
+<li class="chapter" data-level="9.5" data-path="instrumental-variables.html"><a href="instrumental-variables.html#iv-replicating-table-4"><i class="fa fa-check"></i><b>9.5</b> IV: Replicating Table 4</a>
+<ul>
+<li class="chapter" data-level="9.5.1" data-path="instrumental-variables.html"><a href="instrumental-variables.html#loading-the-data-1"><i class="fa fa-check"></i><b>9.5.1</b> Loading the data</a></li>
+<li class="chapter" data-level="9.5.2" data-path="instrumental-variables.html"><a href="instrumental-variables.html#doing-it-by-hand"><i class="fa fa-check"></i><b>9.5.2</b> Doing it by hand…</a></li>
+<li class="chapter" data-level="9.5.3" data-path="instrumental-variables.html"><a href="instrumental-variables.html#the-ivreg-command"><i class="fa fa-check"></i><b>9.5.3</b> The <code>ivreg</code> Command</a></li>
+</ul></li>
+<li class="chapter" data-level="9.6" data-path="instrumental-variables.html"><a href="instrumental-variables.html#adding-statistics-to-stargazer"><i class="fa fa-check"></i><b>9.6</b> Adding Statistics to Stargazer</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="difference-in-differences.html"><a href="difference-in-differences.html"><i class="fa fa-check"></i><b>10</b> Difference in Differences</a></li>
+<li class="chapter" data-level="11" data-path="regression-discontinuity-designs-rdd.html"><a href="regression-discontinuity-designs-rdd.html"><i class="fa fa-check"></i><b>11</b> Regression Discontinuity Designs (RDD)</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="regression-discontinuity-designs-rdd.html"><a href="regression-discontinuity-designs-rdd.html#libraries-3"><i class="fa fa-check"></i><b>11.1</b> Libraries</a></li>
+<li class="chapter" data-level="11.2" data-path="regression-discontinuity-designs-rdd.html"><a href="regression-discontinuity-designs-rdd.html#what-is-the-paper-about"><i class="fa fa-check"></i><b>11.2</b> What is the paper about?</a></li>
+<li class="chapter" data-level="11.3" data-path="regression-discontinuity-designs-rdd.html"><a href="regression-discontinuity-designs-rdd.html#lets-load-the-data."><i class="fa fa-check"></i><b>11.3</b> Let’s load the data.</a></li>
+<li class="chapter" data-level="11.4" data-path="regression-discontinuity-designs-rdd.html"><a href="regression-discontinuity-designs-rdd.html#select-and-rename-variables"><i class="fa fa-check"></i><b>11.4</b> Select and rename variables</a></li>
+<li class="chapter" data-level="11.5" data-path="regression-discontinuity-designs-rdd.html"><a href="regression-discontinuity-designs-rdd.html#create-sample"><i class="fa fa-check"></i><b>11.5</b> Create Sample</a></li>
+<li class="chapter" data-level="11.6" data-path="regression-discontinuity-designs-rdd.html"><a href="regression-discontinuity-designs-rdd.html#create-vector-of-control-variables"><i class="fa fa-check"></i><b>11.6</b> Create Vector of Control Variables</a></li>
+<li class="chapter" data-level="11.7" data-path="regression-discontinuity-designs-rdd.html"><a href="regression-discontinuity-designs-rdd.html#summary-statistics-1"><i class="fa fa-check"></i><b>11.7</b> Summary Statistics</a></li>
+<li class="chapter" data-level="11.8" data-path="regression-discontinuity-designs-rdd.html"><a href="regression-discontinuity-designs-rdd.html#histogram-of-islamic-win-margin"><i class="fa fa-check"></i><b>11.8</b> Histogram of Islamic Win Margin</a></li>
+<li class="chapter" data-level="11.9" data-path="regression-discontinuity-designs-rdd.html"><a href="regression-discontinuity-designs-rdd.html#doing-rdd-by-hand"><i class="fa fa-check"></i><b>11.9</b> Doing RDD by Hand</a></li>
+<li class="chapter" data-level="11.10" data-path="regression-discontinuity-designs-rdd.html"><a href="regression-discontinuity-designs-rdd.html#rdrobust-package"><i class="fa fa-check"></i><b>11.10</b> <code>rdrobust</code> Package</a>
+<ul>
+<li class="chapter" data-level="11.10.1" data-path="regression-discontinuity-designs-rdd.html"><a href="regression-discontinuity-designs-rdd.html#rdd-with-and-without-controls"><i class="fa fa-check"></i><b>11.10.1</b> RDD with and without controls</a></li>
+<li class="chapter" data-level="11.10.2" data-path="regression-discontinuity-designs-rdd.html"><a href="regression-discontinuity-designs-rdd.html#different-bandwidths"><i class="fa fa-check"></i><b>11.10.2</b> Different bandwidths</a></li>
+<li class="chapter" data-level="11.10.3" data-path="regression-discontinuity-designs-rdd.html"><a href="regression-discontinuity-designs-rdd.html#different-control-functions"><i class="fa fa-check"></i><b>11.10.3</b> Different control functions</a></li>
+</ul></li>
+<li class="chapter" data-level="11.11" data-path="regression-discontinuity-designs-rdd.html"><a href="regression-discontinuity-designs-rdd.html#rdd-plots"><i class="fa fa-check"></i><b>11.11</b> RDD Plots</a>
+<ul>
+<li class="chapter" data-level="11.11.1" data-path="regression-discontinuity-designs-rdd.html"><a href="regression-discontinuity-designs-rdd.html#main-outcomes-women"><i class="fa fa-check"></i><b>11.11.1</b> Main Outcomes: Women</a></li>
+<li class="chapter" data-level="11.11.2" data-path="regression-discontinuity-designs-rdd.html"><a href="regression-discontinuity-designs-rdd.html#main-outcomes-men"><i class="fa fa-check"></i><b>11.11.2</b> Main Outcomes: Men</a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>III Extended Exercises</b></span></li>
+<li class="chapter" data-level="12" data-path="data-wrangling-with-dplyr.html"><a href="data-wrangling-with-dplyr.html"><i class="fa fa-check"></i><b>12</b> Data Wrangling with <code>dplyr</code></a></li>
+<li class="chapter" data-level="13" data-path="plotting-with-ggplot.html"><a href="plotting-with-ggplot.html"><i class="fa fa-check"></i><b>13</b> Plotting with <code>ggplot</code></a>
+<ul>
+<li class="chapter" data-level="13.1" data-path="plotting-with-ggplot.html"><a href="plotting-with-ggplot.html#load-data-and-clean-variable-names"><i class="fa fa-check"></i><b>13.1</b> Load Data and Clean variable names</a></li>
+<li class="chapter" data-level="13.2" data-path="plotting-with-ggplot.html"><a href="plotting-with-ggplot.html#one-variable-graphs"><i class="fa fa-check"></i><b>13.2</b> One Variable Graphs</a></li>
+<li class="chapter" data-level="13.3" data-path="plotting-with-ggplot.html"><a href="plotting-with-ggplot.html#two-variable-graphs"><i class="fa fa-check"></i><b>13.3</b> Two Variable Graphs</a></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="replicating-adh.html"><a href="replicating-adh.html"><i class="fa fa-check"></i><b>14</b> Replicating ADH</a>
+<ul>
+<li class="chapter" data-level="14.1" data-path="replicating-adh.html"><a href="replicating-adh.html#motivation"><i class="fa fa-check"></i><b>14.1</b> Motivation</a></li>
+<li class="chapter" data-level="14.2" data-path="replicating-adh.html"><a href="replicating-adh.html#us-aggregate-data"><i class="fa fa-check"></i><b>14.2</b> US Aggregate Data</a>
+<ul>
+<li class="chapter" data-level="14.2.1" data-path="replicating-adh.html"><a href="replicating-adh.html#load-necessary-packages"><i class="fa fa-check"></i><b>14.2.1</b> Load Necessary Packages</a></li>
+<li class="chapter" data-level="14.2.2" data-path="replicating-adh.html"><a href="replicating-adh.html#get-data-from-federal-reserve"><i class="fa fa-check"></i><b>14.2.2</b> Get Data from Federal Reserve</a></li>
+<li class="chapter" data-level="14.2.3" data-path="replicating-adh.html"><a href="replicating-adh.html#data-transformations"><i class="fa fa-check"></i><b>14.2.3</b> Data Transformations</a></li>
+<li class="chapter" data-level="14.2.4" data-path="replicating-adh.html"><a href="replicating-adh.html#data-grouping"><i class="fa fa-check"></i><b>14.2.4</b> Data Grouping</a></li>
+<li class="chapter" data-level="14.2.5" data-path="replicating-adh.html"><a href="replicating-adh.html#fact-1-increase-of-imports-from-china-and-the-rest-of-the-world"><i class="fa fa-check"></i><b>14.2.5</b> Fact 1: Increase of Imports from China and the Rest of the World</a></li>
+<li class="chapter" data-level="14.2.6" data-path="replicating-adh.html"><a href="replicating-adh.html#fact-2-increasing-trade-deficit-of-the-us"><i class="fa fa-check"></i><b>14.2.6</b> Fact 2: Increasing trade-deficit of the US</a></li>
+<li class="chapter" data-level="14.2.7" data-path="replicating-adh.html"><a href="replicating-adh.html#fact-3-400-basis-point-fall-in-real-interest-rates-leading-into-china-expansion"><i class="fa fa-check"></i><b>14.2.7</b> Fact 3: 400 basis point fall in real Interest rates leading into China Expansion</a></li>
+</ul></li>
+<li class="chapter" data-level="14.3" data-path="replicating-adh.html"><a href="replicating-adh.html#descriptive-stats-in-adh-using-weighted-statistics"><i class="fa fa-check"></i><b>14.3</b> Descriptive Stats in ADH using Weighted Statistics</a>
+<ul>
+<li class="chapter" data-level="14.3.1" data-path="replicating-adh.html"><a href="replicating-adh.html#details-about-timing-is-as-follows."><i class="fa fa-check"></i><b>14.3.1</b> Details about timing is as follows.</a></li>
+<li class="chapter" data-level="14.3.2" data-path="replicating-adh.html"><a href="replicating-adh.html#understanding-the-essence-of-the-paper-and-what-comes-next."><i class="fa fa-check"></i><b>14.3.2</b> Understanding the Essence of the Paper and What Comes Next.</a></li>
+<li class="chapter" data-level="14.3.3" data-path="replicating-adh.html"><a href="replicating-adh.html#load-necessary-packages-1"><i class="fa fa-check"></i><b>14.3.3</b> Load Necessary Packages</a></li>
+<li class="chapter" data-level="14.3.4" data-path="replicating-adh.html"><a href="replicating-adh.html#load-data"><i class="fa fa-check"></i><b>14.3.4</b> Load Data</a></li>
+<li class="chapter" data-level="14.3.5" data-path="replicating-adh.html"><a href="replicating-adh.html#compute-simple-grouped-mean"><i class="fa fa-check"></i><b>14.3.5</b> Compute Simple Grouped Mean</a></li>
+<li class="chapter" data-level="14.3.6" data-path="replicating-adh.html"><a href="replicating-adh.html#computed-weighted-group-means-and-standard-deviations"><i class="fa fa-check"></i><b>14.3.6</b> Computed Weighted Group Means and Standard Deviations</a></li>
+</ul></li>
+<li class="chapter" data-level="14.4" data-path="replicating-adh.html"><a href="replicating-adh.html#regression-analysis"><i class="fa fa-check"></i><b>14.4</b> Regression Analysis</a>
+<ul>
+<li class="chapter" data-level="14.4.1" data-path="replicating-adh.html"><a href="replicating-adh.html#ols-regression"><i class="fa fa-check"></i><b>14.4.1</b> OLS regression</a></li>
+<li class="chapter" data-level="14.4.2" data-path="replicating-adh.html"><a href="replicating-adh.html#clustering"><i class="fa fa-check"></i><b>14.4.2</b> Clustering</a></li>
+<li class="chapter" data-level="14.4.3" data-path="replicating-adh.html"><a href="replicating-adh.html#instrument-variables"><i class="fa fa-check"></i><b>14.4.3</b> Instrument Variables</a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>IV Solutions to Extended Exercises</b></span></li>
+<li class="chapter" data-level="15" data-path="dplyr-solution.html"><a href="dplyr-solution.html"><i class="fa fa-check"></i><b>15</b> <code>dplyr</code> solution</a></li>
+<li class="chapter" data-level="16" data-path="ggplot-solution.html"><a href="ggplot-solution.html"><i class="fa fa-check"></i><b>16</b> <code>ggplot</code> solution</a>
+<ul>
+<li class="chapter" data-level="16.1" data-path="ggplot-solution.html"><a href="ggplot-solution.html#load-data-and-clean-variable-names-1"><i class="fa fa-check"></i><b>16.1</b> Load Data and Clean variable names</a>
+<ul>
+<li class="chapter" data-level="16.1.1" data-path="ggplot-solution.html"><a href="ggplot-solution.html#load-the-data-from-the-file-dataeconomistdata.csv."><i class="fa fa-check"></i><b>16.1.1</b> 1. Load the data from the file <code>data/EconomistData.csv</code>.</a></li>
+<li class="chapter" data-level="16.1.2" data-path="ggplot-solution.html"><a href="ggplot-solution.html#convert-all-columns-names-to-snakecase-i.e.-my_variable"><i class="fa fa-check"></i><b>16.1.2</b> 2. Convert all columns names to snakecase (i.e. <code>my_variable</code>)</a></li>
+</ul></li>
+<li class="chapter" data-level="16.2" data-path="ggplot-solution.html"><a href="ggplot-solution.html#one-variable-graphs-1"><i class="fa fa-check"></i><b>16.2</b> One Variable Graphs</a>
+<ul>
+<li class="chapter" data-level="16.2.1" data-path="ggplot-solution.html"><a href="ggplot-solution.html#create-a-histogram-of-the-human-development-index.-customize-the-number-of-bins-to-make-the-plot-look-nicer-than-the-default."><i class="fa fa-check"></i><b>16.2.1</b> 1. Create a histogram of the human development index. Customize the number of bins to make the plot look nicer than the default.</a></li>
+<li class="chapter" data-level="16.2.2" data-path="ggplot-solution.html"><a href="ggplot-solution.html#instead-of-a-histogram-create-a-density-plot-of-the-hdi.-extend-your-plot-by"><i class="fa fa-check"></i><b>16.2.2</b> 2. Instead of a histogram, create a density plot of the HDI. Extend your plot by:</a></li>
+<li class="chapter" data-level="16.2.3" data-path="ggplot-solution.html"><a href="ggplot-solution.html#a-in-one-graph-plotting-the-densities-by-region."><i class="fa fa-check"></i><b>16.2.3</b> (a) In one graph plotting the densities by region.</a></li>
+<li class="chapter" data-level="16.2.4" data-path="ggplot-solution.html"><a href="ggplot-solution.html#b-creating-separate-plots-per-region-with-the-area-under-the-density-to-be-coloured-blue."><i class="fa fa-check"></i><b>16.2.4</b> (b) Creating separate plots per region, with the area under the density to be coloured blue.</a></li>
+<li class="chapter" data-level="16.2.5" data-path="ggplot-solution.html"><a href="ggplot-solution.html#c-repeat-1-and-2-for-the-corruption-perception-index."><i class="fa fa-check"></i><b>16.2.5</b> (c) Repeat (1) and (2) for the corruption perception index.</a></li>
+</ul></li>
+<li class="chapter" data-level="16.3" data-path="ggplot-solution.html"><a href="ggplot-solution.html#two-variable-graphs-1"><i class="fa fa-check"></i><b>16.3</b> Two Variable Graphs</a>
+<ul>
+<li class="chapter" data-level="16.3.1" data-path="ggplot-solution.html"><a href="ggplot-solution.html#create-the-simple-scatter-plot"><i class="fa fa-check"></i><b>16.3.1</b> 1. Create the simple scatter plot</a></li>
+<li class="chapter" data-level="16.3.2" data-path="ggplot-solution.html"><a href="ggplot-solution.html#lets-extend-the-plot-in-different-ways.-modify-the-plot-to-each-point-should-be-a-different-plot"><i class="fa fa-check"></i><b>16.3.2</b> 2. Let’s extend the plot in different ways. Modify the plot to (each point should be a different plot)</a></li>
+<li class="chapter" data-level="16.3.3" data-path="ggplot-solution.html"><a href="ggplot-solution.html#a.-make-the-points-blue"><i class="fa fa-check"></i><b>16.3.3</b> a. Make the points blue</a></li>
+<li class="chapter" data-level="16.3.4" data-path="ggplot-solution.html"><a href="ggplot-solution.html#b.-color-the-points-by-region"><i class="fa fa-check"></i><b>16.3.4</b> b. Color the points by region</a></li>
+<li class="chapter" data-level="16.3.5" data-path="ggplot-solution.html"><a href="ggplot-solution.html#c.-color-the-points-by-region-and-make-the-size-of-the-point-vary-by-hdi."><i class="fa fa-check"></i><b>16.3.5</b> c. Color the points by region and make the size of the point vary by HDI.</a></li>
+<li class="chapter" data-level="16.3.6" data-path="ggplot-solution.html"><a href="ggplot-solution.html#lets-extend-the-plot-in-1-by-adding-some-summary-functions-to-it."><i class="fa fa-check"></i><b>16.3.6</b> 3. Let’s extend the plot in (1) by adding some summary functions to it.</a></li>
+<li class="chapter" data-level="16.3.7" data-path="ggplot-solution.html"><a href="ggplot-solution.html#a.-add-a-loess-smoother"><i class="fa fa-check"></i><b>16.3.7</b> a. Add a loess smoother</a></li>
+<li class="chapter" data-level="16.3.8" data-path="ggplot-solution.html"><a href="ggplot-solution.html#b.-add-a-linear-smoother-without-the-confidence-interval.-color-the-line-red."><i class="fa fa-check"></i><b>16.3.8</b> b. Add a linear smoother, without the confidence interval. Color the line red.</a></li>
+<li class="chapter" data-level="16.3.9" data-path="ggplot-solution.html"><a href="ggplot-solution.html#c.-add-the-line-y-x-logx-without-the-confidence-interval.-color-the-line-red."><i class="fa fa-check"></i><b>16.3.9</b> c. Add the line <code>y ~ x + log(x)</code>, without the confidence interval. Color the line red.</a></li>
+<li class="chapter" data-level="16.3.10" data-path="ggplot-solution.html"><a href="ggplot-solution.html#now-we-will-add-the-country-names-to-the-plot-from-1."><i class="fa fa-check"></i><b>16.3.10</b> 4. Now we will add the country names to the plot from (1).</a></li>
+<li class="chapter" data-level="16.3.11" data-path="ggplot-solution.html"><a href="ggplot-solution.html#a.-use-geom_text-to-add-country-names-to-our-plot."><i class="fa fa-check"></i><b>16.3.11</b> a. Use <code>geom_text()</code> to add country names to our plot.</a></li>
+<li class="chapter" data-level="16.3.12" data-path="ggplot-solution.html"><a href="ggplot-solution.html#b.-we-might-not-want-all-the-points-labelled.-create-the-vector"><i class="fa fa-check"></i><b>16.3.12</b> b. We might not want <em>all</em> the points labelled. Create the vector</a></li>
+<li class="chapter" data-level="16.3.13" data-path="ggplot-solution.html"><a href="ggplot-solution.html#now-lets-combine-what-we-learned-above-and-from-the-class-notes-to-build-up-a-presentable-notes.-proceed-as-follows"><i class="fa fa-check"></i><b>16.3.13</b> 5. Now let’s combine what we learned above, and from the class notes to build up a presentable notes. Proceed as follows:</a></li>
+<li class="chapter" data-level="16.3.14" data-path="ggplot-solution.html"><a href="ggplot-solution.html#a.-create-the-simple-scatter-plot"><i class="fa fa-check"></i><b>16.3.14</b> a. Create the simple scatter plot</a></li>
+<li class="chapter" data-level="16.3.15" data-path="ggplot-solution.html"><a href="ggplot-solution.html#b.-make-the-points-hollow-and-colored-by-region.-adjust-the-size-of-the-dots-to-make-them-easier-to-see."><i class="fa fa-check"></i><b>16.3.15</b> b. Make the points hollow, and colored by region. Adjust the size of the dots to make them easier to see.</a></li>
+<li class="chapter" data-level="16.3.16" data-path="ggplot-solution.html"><a href="ggplot-solution.html#c.-add-the-line-y-x-logx-without-the-confidence-interval.-color-the-line-red.-1"><i class="fa fa-check"></i><b>16.3.16</b> c. Add the line <code>y ~ x + log(x)</code>, without the confidence interval. Color the line red.</a></li>
+<li class="chapter" data-level="16.3.17" data-path="ggplot-solution.html"><a href="ggplot-solution.html#d.-change-the-color-of-the-dots-to-be-less-ugly.-i-used-scale_color_manual-but-you-dont-need-to."><i class="fa fa-check"></i><b>16.3.17</b> d. Change the color of the dots to be less ugly. I used <code>scale_color_manual()</code> but you don’t need to.</a></li>
+<li class="chapter" data-level="16.3.18" data-path="ggplot-solution.html"><a href="ggplot-solution.html#e.-add-meaningful-x-and-y-labels.-and-a-title-which-is-centered.-can-you-add-a-note-near-the-bottom-of-the-figure-to-say-that-the-data-comes-from-transparency-international-and-un-human-development-report"><i class="fa fa-check"></i><b>16.3.18</b> e. Add meaningful x and y labels. And a title (which is centered). Can you add a note near the bottom of the figure to say that the data comes from “Transparency International and UN Human Development Report”?</a></li>
+<li class="chapter" data-level="16.3.19" data-path="ggplot-solution.html"><a href="ggplot-solution.html#f.-label-the-points-from-points_to_label-in-4b."><i class="fa fa-check"></i><b>16.3.19</b> f. Label the points from <code>points_to_label</code> in 4b.</a></li>
+<li class="chapter" data-level="16.3.20" data-path="ggplot-solution.html"><a href="ggplot-solution.html#g.-adjust-the-x-and-y-axes-to-have-a-better-range-and-set-of-axis-ticks.-you-are-free-to-choose-what-you-like."><i class="fa fa-check"></i><b>16.3.20</b> g. Adjust the x and y axes to have a better range, and set of axis ticks. You are free to choose what you like.</a></li>
+<li class="chapter" data-level="16.3.21" data-path="ggplot-solution.html"><a href="ggplot-solution.html#h.-move-the-legend-to-the-bottom-of-the-plot.-adjust-the-legend-names-so-that-they-are-easier-to-read-and-more-meaningful.-the-easiest-way-to-do-this-is-to-use-dplyr-to-recode-the-region-variable-as-a-factor-and-give-it-appropriate-labels.-using-the-help-menu-for-factor-should-help-you-here."><i class="fa fa-check"></i><b>16.3.21</b> h. Move the legend to the bottom of the plot. Adjust the legend names so that they are easier to read and more meaningful. The easiest way to do this is to use <code>dplyr</code> to recode the region variable as a factor, and give it appropriate labels. Using the help menu for <code>factor</code> should help you here.</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="17" data-path="replicating-adh-1.html"><a href="replicating-adh-1.html"><i class="fa fa-check"></i><b>17</b> Replicating ADH</a>
+<ul>
+<li class="chapter" data-level="17.1" data-path="replicating-adh-1.html"><a href="replicating-adh-1.html#aggregate-facts"><i class="fa fa-check"></i><b>17.1</b> Aggregate Facts</a></li>
+<li class="chapter" data-level="17.2" data-path="replicating-adh-1.html"><a href="replicating-adh-1.html#descriptive-stats"><i class="fa fa-check"></i><b>17.2</b> Descriptive Stats</a>
+<ul>
+<li class="chapter" data-level="17.2.1" data-path="replicating-adh-1.html"><a href="replicating-adh-1.html#load-data-1"><i class="fa fa-check"></i><b>17.2.1</b> Load Data</a></li>
+<li class="chapter" data-level="17.2.2" data-path="replicating-adh-1.html"><a href="replicating-adh-1.html#compute-simple-grouped-mean-1"><i class="fa fa-check"></i><b>17.2.2</b> Compute Simple Grouped Mean</a></li>
+<li class="chapter" data-level="17.2.3" data-path="replicating-adh-1.html"><a href="replicating-adh-1.html#computed-weighted-group-means-and-standard-deviations-1"><i class="fa fa-check"></i><b>17.2.3</b> Computed Weighted Group Means and Standard Deviations</a></li>
+</ul></li>
+<li class="chapter" data-level="17.3" data-path="replicating-adh-1.html"><a href="replicating-adh-1.html#regression"><i class="fa fa-check"></i><b>17.3</b> Regression</a>
+<ul>
+<li class="chapter" data-level="17.3.1" data-path="replicating-adh-1.html"><a href="replicating-adh-1.html#ols-regression-1"><i class="fa fa-check"></i><b>17.3.1</b> OLS regression</a></li>
+<li class="chapter" data-level="17.3.2" data-path="replicating-adh-1.html"><a href="replicating-adh-1.html#clustering-1"><i class="fa fa-check"></i><b>17.3.2</b> Clustering</a></li>
+<li class="chapter" data-level="17.3.3" data-path="replicating-adh-1.html"><a href="replicating-adh-1.html#instrument-variables-1"><i class="fa fa-check"></i><b>17.3.3</b> Instrument Variables</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">An Introduction to R for Economics and Business Research</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="linear-models-with-fixed-effects" class="section level1" number="8">
+<h1><span class="header-section-number">Chapter 8</span> Linear Models with Fixed Effects</h1>
+<div id="libraries-1" class="section level2" number="8.1">
+<h2><span class="header-section-number">8.1</span> Libraries</h2>
+<div class="sourceCode" id="cb442"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb442-1"><a href="linear-models-with-fixed-effects.html#cb442-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl)         <span class="co"># read excel files</span></span>
+<span id="cb442-2"><a href="linear-models-with-fixed-effects.html#cb442-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tibble)         <span class="co"># cuter dataframes</span></span>
+<span id="cb442-3"><a href="linear-models-with-fixed-effects.html#cb442-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)          <span class="co"># data manipulation</span></span>
+<span id="cb442-4"><a href="linear-models-with-fixed-effects.html#cb442-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)        <span class="co"># graphs</span></span>
+<span id="cb442-5"><a href="linear-models-with-fixed-effects.html#cb442-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lfe)            <span class="co"># fixed effects models</span></span>
+<span id="cb442-6"><a href="linear-models-with-fixed-effects.html#cb442-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stargazer)      <span class="co"># nice tables</span></span>
+<span id="cb442-7"><a href="linear-models-with-fixed-effects.html#cb442-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggrepel)        <span class="co"># better graph labeling</span></span>
+<span id="cb442-8"><a href="linear-models-with-fixed-effects.html#cb442-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lmtest)         <span class="co"># for coeftest function</span></span>
+<span id="cb442-9"><a href="linear-models-with-fixed-effects.html#cb442-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(multiwayvcov)   <span class="co"># (multiway) clustered standard errors</span></span>
+<span id="cb442-10"><a href="linear-models-with-fixed-effects.html#cb442-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(AER)            <span class="co"># instrumental variables</span></span>
+<span id="cb442-11"><a href="linear-models-with-fixed-effects.html#cb442-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ivpack)         <span class="co"># robust standard errors for ivreg</span></span></code></pre></div>
+</div>
+<div id="review-of-plotting-recreating-figure-1" class="section level2" number="8.2">
+<h2><span class="header-section-number">8.2</span> Review of Plotting: Recreating Figure 1</h2>
+<div class="sourceCode" id="cb443"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb443-1"><a href="linear-models-with-fixed-effects.html#cb443-1" aria-hidden="true" tabindex="-1"></a><span class="co"># read data for first figure</span></span>
+<span id="cb443-2"><a href="linear-models-with-fixed-effects.html#cb443-2" aria-hidden="true" tabindex="-1"></a>ajry_f1 <span class="ot">=</span> <span class="fu">read_xls</span>(<span class="st">&quot;data/ajry.xls&quot;</span>, </span>
+<span id="cb443-3"><a href="linear-models-with-fixed-effects.html#cb443-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">sheet =</span> <span class="st">&quot;F1&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb443-4"><a href="linear-models-with-fixed-effects.html#cb443-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">log_gdp_pc =</span> lrgdpch, </span>
+<span id="cb443-5"><a href="linear-models-with-fixed-effects.html#cb443-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">freedom_house =</span> fhpolrigaug)</span>
+<span id="cb443-6"><a href="linear-models-with-fixed-effects.html#cb443-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb443-7"><a href="linear-models-with-fixed-effects.html#cb443-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(ajry_f1, <span class="fu">aes</span>(<span class="at">x =</span> log_gdp_pc, <span class="at">y =</span> freedom_house)) <span class="sc">+</span></span>
+<span id="cb443-8"><a href="linear-models-with-fixed-effects.html#cb443-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb443-9"><a href="linear-models-with-fixed-effects.html#cb443-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> code), <span class="at">size =</span> <span class="dv">2</span>, <span class="at">hjust =</span> <span class="dv">0</span>, <span class="at">vjust =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
+<span id="cb443-10"><a href="linear-models-with-fixed-effects.html#cb443-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>, <span class="at">size =</span> <span class="fl">0.5</span>, <span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb443-11"><a href="linear-models-with-fixed-effects.html#cb443-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Log GDP per Capita (1990-1999)&quot;</span>,</span>
+<span id="cb443-12"><a href="linear-models-with-fixed-effects.html#cb443-12" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;FH Measure of Democracy (1990-1999)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb443-13"><a href="linear-models-with-fixed-effects.html#cb443-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<p><img src="pp4rs-rstats_files/figure-html/unnamed-chunk-196-1.png" width="672" />
+That is not bad, but we cannot read half of the label. Let’s try again, with the <code>ggrepel</code> package.</p>
+<div class="sourceCode" id="cb445"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb445-1"><a href="linear-models-with-fixed-effects.html#cb445-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(ajry_f1, <span class="fu">aes</span>(<span class="at">x =</span> log_gdp_pc, <span class="at">y =</span> freedom_house)) <span class="sc">+</span></span>
+<span id="cb445-2"><a href="linear-models-with-fixed-effects.html#cb445-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb445-3"><a href="linear-models-with-fixed-effects.html#cb445-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text_repel</span>(<span class="fu">aes</span>(<span class="at">label =</span> code), <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb445-4"><a href="linear-models-with-fixed-effects.html#cb445-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>, <span class="at">size =</span> <span class="fl">0.5</span>, <span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb445-5"><a href="linear-models-with-fixed-effects.html#cb445-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Log GDP per Capita (1990-1999)&quot;</span>,</span>
+<span id="cb445-6"><a href="linear-models-with-fixed-effects.html#cb445-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;FH Measure of Democracy (1990-1999)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb445-7"><a href="linear-models-with-fixed-effects.html#cb445-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<pre><code>## Warning: ggrepel: 24 unlabeled data points (too many overlaps). Consider
+## increasing max.overlaps</code></pre>
+<p><img src="pp4rs-rstats_files/figure-html/unnamed-chunk-197-1.png" width="672" /></p>
+<div class="sourceCode" id="cb448"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb448-1"><a href="linear-models-with-fixed-effects.html#cb448-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(ajry_f1)</span></code></pre></div>
+</div>
+<div id="review-of-plotting-recreating-figure-2" class="section level2" number="8.3">
+<h2><span class="header-section-number">8.3</span> Review of Plotting: Recreating Figure 2</h2>
+<div class="sourceCode" id="cb449"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb449-1"><a href="linear-models-with-fixed-effects.html#cb449-1" aria-hidden="true" tabindex="-1"></a><span class="co"># read data for second figure</span></span>
+<span id="cb449-2"><a href="linear-models-with-fixed-effects.html#cb449-2" aria-hidden="true" tabindex="-1"></a>ajry_f2 <span class="ot">=</span> <span class="fu">read_xls</span>(<span class="st">&quot;data/ajry.xls&quot;</span>, </span>
+<span id="cb449-3"><a href="linear-models-with-fixed-effects.html#cb449-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">sheet =</span> <span class="st">&quot;F2&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb449-4"><a href="linear-models-with-fixed-effects.html#cb449-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">freedom_house_change =</span> s5fhpolrigaug,</span>
+<span id="cb449-5"><a href="linear-models-with-fixed-effects.html#cb449-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">log_gdp_pc_change =</span> s5lrgdpch)</span>
+<span id="cb449-6"><a href="linear-models-with-fixed-effects.html#cb449-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb449-7"><a href="linear-models-with-fixed-effects.html#cb449-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb449-8"><a href="linear-models-with-fixed-effects.html#cb449-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(ajry_f2, <span class="fu">aes</span>(<span class="at">x =</span> log_gdp_pc_change, <span class="at">y =</span> freedom_house_change)) <span class="sc">+</span></span>
+<span id="cb449-9"><a href="linear-models-with-fixed-effects.html#cb449-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="fl">0.5</span>) <span class="sc">+</span> </span>
+<span id="cb449-10"><a href="linear-models-with-fixed-effects.html#cb449-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="at">size =</span> <span class="fl">0.5</span>, <span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb449-11"><a href="linear-models-with-fixed-effects.html#cb449-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text_repel</span>(<span class="fu">aes</span>(<span class="at">label =</span> code), <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb449-12"><a href="linear-models-with-fixed-effects.html#cb449-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Change in GDP per Capita (1970-1995)&quot;</span>,</span>
+<span id="cb449-13"><a href="linear-models-with-fixed-effects.html#cb449-13" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Change in FH Measure of Democracy (1970-1995)&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb449-14"><a href="linear-models-with-fixed-effects.html#cb449-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<pre><code>## Warning: ggrepel: 15 unlabeled data points (too many overlaps). Consider
+## increasing max.overlaps</code></pre>
+<p><img src="pp4rs-rstats_files/figure-html/unnamed-chunk-198-1.png" width="672" /></p>
+</div>
+<div id="loading-the-data-for-estimation" class="section level2" number="8.4">
+<h2><span class="header-section-number">8.4</span> Loading the data for estimation</h2>
+<div class="sourceCode" id="cb452"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb452-1"><a href="linear-models-with-fixed-effects.html#cb452-1" aria-hidden="true" tabindex="-1"></a>ajry_df <span class="ot">=</span> <span class="fu">read_xls</span>(<span class="st">&quot;data/ajry.xls&quot;</span>, </span>
+<span id="cb452-2"><a href="linear-models-with-fixed-effects.html#cb452-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">sheet =</span> <span class="dv">2</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb452-3"><a href="linear-models-with-fixed-effects.html#cb452-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(code_numeric, year_numeric) <span class="sc">%&gt;%</span> </span>
+<span id="cb452-4"><a href="linear-models-with-fixed-effects.html#cb452-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">log_gdp_pc =</span> lrgdpch,</span>
+<span id="cb452-5"><a href="linear-models-with-fixed-effects.html#cb452-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">freedom_house =</span> fhpolrigaug)</span>
+<span id="cb452-6"><a href="linear-models-with-fixed-effects.html#cb452-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb452-7"><a href="linear-models-with-fixed-effects.html#cb452-7" aria-hidden="true" tabindex="-1"></a><span class="co"># generate lagged variables</span></span>
+<span id="cb452-8"><a href="linear-models-with-fixed-effects.html#cb452-8" aria-hidden="true" tabindex="-1"></a>ajry_df <span class="ot">=</span> ajry_df <span class="sc">%&gt;%</span> </span>
+<span id="cb452-9"><a href="linear-models-with-fixed-effects.html#cb452-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(code_numeric) <span class="sc">%&gt;%</span> </span>
+<span id="cb452-10"><a href="linear-models-with-fixed-effects.html#cb452-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">lag_log_gdp_pc =</span> <span class="fu">lag</span>(log_gdp_pc, <span class="at">order_by =</span> year_numeric),</span>
+<span id="cb452-11"><a href="linear-models-with-fixed-effects.html#cb452-11" aria-hidden="true" tabindex="-1"></a>         <span class="at">lag_freedom_house =</span> <span class="fu">lag</span>(freedom_house, <span class="at">order_by =</span> year_numeric),</span>
+<span id="cb452-12"><a href="linear-models-with-fixed-effects.html#cb452-12" aria-hidden="true" tabindex="-1"></a>         <span class="at">lag2_nsave =</span> <span class="fu">lag</span>(nsave, <span class="dv">2</span>, <span class="at">order_by =</span> year_numeric),</span>
+<span id="cb452-13"><a href="linear-models-with-fixed-effects.html#cb452-13" aria-hidden="true" tabindex="-1"></a>         <span class="at">lag_worldincome =</span> <span class="fu">lag</span>(worldincome, <span class="at">order_by =</span> year_numeric)) <span class="sc">%&gt;%</span> </span>
+<span id="cb452-14"><a href="linear-models-with-fixed-effects.html#cb452-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(sample <span class="sc">==</span> <span class="dv">1</span>)</span></code></pre></div>
+</div>
+<div id="pooled-ols-with-time-effects" class="section level2" number="8.5">
+<h2><span class="header-section-number">8.5</span> Pooled OLS with Time Effects</h2>
+<div class="sourceCode" id="cb453"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb453-1"><a href="linear-models-with-fixed-effects.html#cb453-1" aria-hidden="true" tabindex="-1"></a><span class="co"># pooled ols with lm </span></span>
+<span id="cb453-2"><a href="linear-models-with-fixed-effects.html#cb453-2" aria-hidden="true" tabindex="-1"></a>pooled_est <span class="ot">=</span> <span class="fu">lm</span>(freedom_house <span class="sc">~</span> <span class="sc">-</span><span class="dv">1</span> <span class="sc">+</span> lag_freedom_house <span class="sc">+</span> lag_log_gdp_pc <span class="sc">+</span> </span>
+<span id="cb453-3"><a href="linear-models-with-fixed-effects.html#cb453-3" aria-hidden="true" tabindex="-1"></a>             <span class="fu">factor</span>(year_numeric), <span class="at">data =</span> ajry_df)</span>
+<span id="cb453-4"><a href="linear-models-with-fixed-effects.html#cb453-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb453-5"><a href="linear-models-with-fixed-effects.html#cb453-5" aria-hidden="true" tabindex="-1"></a><span class="co"># standard errors clustered by country</span></span>
+<span id="cb453-6"><a href="linear-models-with-fixed-effects.html#cb453-6" aria-hidden="true" tabindex="-1"></a>vcov_country <span class="ot">&lt;-</span> <span class="fu">cluster.vcov</span>(pooled_est, ajry_df<span class="sc">$</span>code_numeric)</span>
+<span id="cb453-7"><a href="linear-models-with-fixed-effects.html#cb453-7" aria-hidden="true" tabindex="-1"></a><span class="fu">coeftest</span>(pooled_est, vcov_country)</span></code></pre></div>
+<pre><code>## 
+## t test of coefficients:
+## 
+##                          Estimate Std. Error t value  Pr(&gt;|t|)    
+## lag_freedom_house       0.7063698  0.0354523 19.9245 &lt; 2.2e-16 ***
+## lag_log_gdp_pc          0.0723185  0.0099233  7.2878 6.705e-13 ***
+## factor(year_numeric)33 -0.3468646  0.0617091 -5.6210 2.507e-08 ***
+## factor(year_numeric)34 -0.4297435  0.0612981 -7.0107 4.543e-12 ***
+## factor(year_numeric)35 -0.5462314  0.0669176 -8.1628 1.054e-15 ***
+## factor(year_numeric)36 -0.4586181  0.0675307 -6.7913 1.976e-11 ***
+## factor(year_numeric)37 -0.3969802  0.0689060 -5.7612 1.133e-08 ***
+## factor(year_numeric)38 -0.4194864  0.0690369 -6.0763 1.789e-09 ***
+## factor(year_numeric)39 -0.3994897  0.0650135 -6.1447 1.185e-09 ***
+## factor(year_numeric)40 -0.3791493  0.0708188 -5.3538 1.084e-07 ***
+## factor(year_numeric)41 -0.4031277  0.0653108 -6.1724 1.001e-09 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
+<div id="fixed-effects-with-the-lm-function" class="section level2" number="8.6">
+<h2><span class="header-section-number">8.6</span> Fixed Effects with the <code>lm</code> function</h2>
+<div class="sourceCode" id="cb455"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb455-1"><a href="linear-models-with-fixed-effects.html#cb455-1" aria-hidden="true" tabindex="-1"></a><span class="co"># pooled ols with lm </span></span>
+<span id="cb455-2"><a href="linear-models-with-fixed-effects.html#cb455-2" aria-hidden="true" tabindex="-1"></a>fe_est <span class="ot">=</span> <span class="fu">lm</span>(freedom_house <span class="sc">~</span> <span class="sc">-</span><span class="dv">1</span> <span class="sc">+</span> lag_freedom_house <span class="sc">+</span> lag_log_gdp_pc <span class="sc">+</span> </span>
+<span id="cb455-3"><a href="linear-models-with-fixed-effects.html#cb455-3" aria-hidden="true" tabindex="-1"></a>             <span class="fu">factor</span>(year_numeric) <span class="sc">+</span> <span class="fu">factor</span>(code_numeric), <span class="at">data =</span> ajry_df)</span>
+<span id="cb455-4"><a href="linear-models-with-fixed-effects.html#cb455-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb455-5"><a href="linear-models-with-fixed-effects.html#cb455-5" aria-hidden="true" tabindex="-1"></a><span class="co"># standard errors clustered by country</span></span>
+<span id="cb455-6"><a href="linear-models-with-fixed-effects.html#cb455-6" aria-hidden="true" tabindex="-1"></a>vcov_country <span class="ot">&lt;-</span> <span class="fu">cluster.vcov</span>(fe_est, <span class="fu">factor</span>(ajry_df<span class="sc">$</span>code_numeric))</span>
+<span id="cb455-7"><a href="linear-models-with-fixed-effects.html#cb455-7" aria-hidden="true" tabindex="-1"></a><span class="fu">coeftest</span>(fe_est, vcov_country)</span></code></pre></div>
+<pre><code>## 
+## t test of coefficients:
+## 
+##                            Estimate  Std. Error t value  Pr(&gt;|t|)    
+## lag_freedom_house        3.7863e-01  5.0931e-02  7.4341 2.758e-13 ***
+## lag_log_gdp_pc           1.0415e-02  3.4548e-02  0.3015 0.7631419    
+## factor(year_numeric)33  -4.1689e-02  2.3873e-01 -0.1746 0.8614205    
+## factor(year_numeric)34  -7.1530e-02  2.4413e-01 -0.2930 0.7695972    
+## factor(year_numeric)35  -1.7531e-01  2.5152e-01 -0.6970 0.4859906    
+## factor(year_numeric)36  -1.3071e-01  2.5226e-01 -0.5182 0.6044889    
+## factor(year_numeric)37  -7.0236e-02  2.5313e-01 -0.2775 0.7814963    
+## factor(year_numeric)38  -7.5191e-02  2.5788e-01 -0.2916 0.7706850    
+## factor(year_numeric)39  -4.0343e-02  2.5574e-01 -0.1578 0.8746916    
+## factor(year_numeric)40   6.2191e-05  2.6625e-01  0.0002 0.9998137    
+## factor(year_numeric)41   2.8773e-03  2.6406e-01  0.0109 0.9913089    
+## factor(code_numeric)4    1.6193e-01  2.9881e-02  5.4192 7.968e-08 ***
+## factor(code_numeric)6    4.1576e-01  6.6405e-02  6.2610 6.292e-10 ***
+## factor(code_numeric)7    2.2724e-01  2.0616e-02 11.0225 &lt; 2.2e-16 ***
+## factor(code_numeric)8    2.1783e-01  7.0593e-02  3.0858 0.0021015 ** 
+## factor(code_numeric)9    5.8800e-01  9.3824e-02  6.2670 6.066e-10 ***
+## factor(code_numeric)10   5.9152e-01  8.8594e-02  6.6767 4.620e-11 ***
+## factor(code_numeric)11   2.0658e-02  1.2961e-02  1.5938 0.1113794    
+## factor(code_numeric)14   8.2058e-03  2.8410e-02  0.2888 0.7727810    
+## factor(code_numeric)15   5.8962e-01  8.9159e-02  6.6132 6.952e-11 ***
+## factor(code_numeric)16   1.7273e-01  1.6391e-02 10.5381 &lt; 2.2e-16 ***
+## factor(code_numeric)17   1.7885e-01  2.6830e-02  6.6660 4.952e-11 ***
+## factor(code_numeric)18   3.4501e-01  2.2238e-02 15.5145 &lt; 2.2e-16 ***
+## factor(code_numeric)19   4.2308e-01  5.5307e-02  7.6498 5.898e-14 ***
+## factor(code_numeric)23  -5.2164e-02  3.7753e-02 -1.3817 0.1674502    
+## factor(code_numeric)24   5.4440e-01  5.9107e-02  9.2103 &lt; 2.2e-16 ***
+## factor(code_numeric)25   3.5215e-01  2.8596e-02 12.3148 &lt; 2.2e-16 ***
+## factor(code_numeric)26   3.7473e-01  4.7202e-02  7.9388 7.051e-15 ***
+## factor(code_numeric)27   5.7775e-01  7.8779e-02  7.3338 5.580e-13 ***
+## factor(code_numeric)30   5.1360e-01  4.5905e-02 11.1884 &lt; 2.2e-16 ***
+## factor(code_numeric)31   1.3606e-01  9.7552e-03 13.9473 &lt; 2.2e-16 ***
+## factor(code_numeric)32   5.8759e-01  9.5013e-02  6.1843 1.003e-09 ***
+## factor(code_numeric)33   5.8564e-01  1.0193e-01  5.7454 1.312e-08 ***
+## factor(code_numeric)34   3.7967e-01  5.0385e-02  7.5354 1.343e-13 ***
+## factor(code_numeric)35   2.4077e-02  1.2766e-02  1.8860 0.0596704 .  
+## factor(code_numeric)36   1.0009e-01  1.4282e-02  7.0081 5.205e-12 ***
+## factor(code_numeric)37   6.4791e-02  1.3045e-02  4.9668 8.355e-07 ***
+## factor(code_numeric)38   9.6525e-02  1.3631e-02  7.0813 3.176e-12 ***
+## factor(code_numeric)39   4.1831e-01  4.5697e-02  9.1539 &lt; 2.2e-16 ***
+## factor(code_numeric)40   1.5144e-01  1.6432e-02  9.2163 &lt; 2.2e-16 ***
+## factor(code_numeric)41   3.3822e-01  1.8823e-02 17.9680 &lt; 2.2e-16 ***
+## factor(code_numeric)42   5.9210e-01  5.8706e-02 10.0859 &lt; 2.2e-16 ***
+## factor(code_numeric)43  -9.9454e-02  4.0976e-02 -2.4271 0.0154442 *  
+## factor(code_numeric)44   5.1843e-01  6.4375e-02  8.0533 2.986e-15 ***
+## factor(code_numeric)45   5.1991e-01  7.8405e-02  6.6311 6.199e-11 ***
+## factor(code_numeric)47   5.1661e-01  9.2338e-02  5.5948 3.052e-08 ***
+## factor(code_numeric)51   5.2482e-01  5.3926e-02  9.7324 &lt; 2.2e-16 ***
+## factor(code_numeric)52   5.8748e-01  9.5341e-02  6.1619 1.148e-09 ***
+## factor(code_numeric)53   4.0917e-01  2.9577e-02 13.8340 &lt; 2.2e-16 ***
+## factor(code_numeric)54   9.5593e-02  3.3655e-02  2.8404 0.0046223 ** 
+## factor(code_numeric)55   3.4636e-01  3.5097e-02  9.8687 &lt; 2.2e-16 ***
+## factor(code_numeric)56   1.6095e-01  1.7164e-02  9.3770 &lt; 2.2e-16 ***
+## factor(code_numeric)58   4.0409e-01  6.6964e-02  6.0345 2.457e-09 ***
+## factor(code_numeric)59   5.8866e-01  5.8149e-02 10.1233 &lt; 2.2e-16 ***
+## factor(code_numeric)60   7.5846e-02  5.0078e-02  1.5146 0.1302880    
+## factor(code_numeric)61   7.6009e-02  3.1685e-02  2.3989 0.0166770 *  
+## factor(code_numeric)63   5.3987e-01  8.5772e-02  6.2943 5.133e-10 ***
+## factor(code_numeric)64   2.6809e-01  4.5531e-02  5.8881 5.788e-09 ***
+## factor(code_numeric)65   5.7704e-01  8.8222e-02  6.5408 1.103e-10 ***
+## factor(code_numeric)66   1.4146e-01  5.2368e-02  2.7013 0.0070550 ** 
+## factor(code_numeric)67   5.8811e-01  8.9490e-02  6.5717 9.059e-11 ***
+## factor(code_numeric)70   2.2235e-01  1.7367e-02 12.8028 &lt; 2.2e-16 ***
+## factor(code_numeric)71   2.1795e-02  1.4917e-02  1.4611 0.1443897    
+## factor(code_numeric)72   2.5364e-01  3.2729e-02  7.7499 2.847e-14 ***
+## factor(code_numeric)73   2.0237e-01  3.8840e-02  5.2104 2.410e-07 ***
+## factor(code_numeric)74  -2.0772e-02  7.9611e-03 -2.6092 0.0092480 ** 
+## factor(code_numeric)75   4.8964e-01  6.9596e-02  7.0354 4.330e-12 ***
+## factor(code_numeric)76   5.7443e-01  4.4052e-02 13.0398 &lt; 2.2e-16 ***
+## factor(code_numeric)77   3.4235e-01  3.4777e-02  9.8441 &lt; 2.2e-16 ***
+## factor(code_numeric)78   3.1616e-01  2.8584e-02 11.0605 &lt; 2.2e-16 ***
+## factor(code_numeric)79   3.4532e-01  2.2451e-02 15.3812 &lt; 2.2e-16 ***
+## factor(code_numeric)80   5.4910e-01  4.7291e-02 11.6112 &lt; 2.2e-16 ***
+## factor(code_numeric)81   1.2864e-01  1.9181e-02  6.7069 3.802e-11 ***
+## factor(code_numeric)82   3.7392e-01  5.6692e-02  6.5957 7.775e-11 ***
+## factor(code_numeric)83   1.9096e-01  9.2225e-03 20.7058 &lt; 2.2e-16 ***
+## factor(code_numeric)84   4.9470e-01  3.8115e-02 12.9792 &lt; 2.2e-16 ***
+## factor(code_numeric)85   5.8847e-01  7.6803e-02  7.6621 5.397e-14 ***
+## factor(code_numeric)86   1.4631e-01  3.3904e-02  4.3155 1.796e-05 ***
+## factor(code_numeric)88   5.8913e-01  9.0561e-02  6.5054 1.380e-10 ***
+## factor(code_numeric)89   5.2999e-01  7.6612e-02  6.9179 9.518e-12 ***
+## factor(code_numeric)90   5.8692e-01  8.6063e-02  6.8197 1.822e-11 ***
+## factor(code_numeric)91   5.2817e-01  5.0711e-02 10.4152 &lt; 2.2e-16 ***
+## factor(code_numeric)92   1.8031e-01  2.4815e-02  7.2661 8.941e-13 ***
+## factor(code_numeric)93   5.6819e-01  8.2830e-02  6.8597 1.399e-11 ***
+## factor(code_numeric)94   1.0524e-02  3.8074e-02  0.2764 0.7823069    
+## factor(code_numeric)95   1.0774e-01  1.8093e-02  5.9548 3.926e-09 ***
+## factor(code_numeric)96  -1.0717e-01  2.1725e-02 -4.9330 9.887e-07 ***
+## factor(code_numeric)97   2.6984e-02  2.2666e-02  1.1905 0.2341998    
+## factor(code_numeric)99   5.4006e-01  6.9106e-02  7.8149 1.767e-14 ***
+## factor(code_numeric)101  3.3742e-01  4.0222e-02  8.3889 2.270e-16 ***
+## factor(code_numeric)104  1.5938e-02  2.4818e-02  0.6422 0.5209229    
+## factor(code_numeric)107  5.7775e-01  5.4977e-02 10.5088 &lt; 2.2e-16 ***
+## factor(code_numeric)109  4.3280e-01  3.5299e-02 12.2611 &lt; 2.2e-16 ***
+## factor(code_numeric)110  2.3431e-01  1.6531e-02 14.1739 &lt; 2.2e-16 ***
+## factor(code_numeric)111  5.2749e-01  5.8978e-02  8.9440 &lt; 2.2e-16 ***
+## factor(code_numeric)112  5.6232e-01  9.6567e-02  5.8232 8.417e-09 ***
+## factor(code_numeric)113  5.9103e-01  5.2080e-02 11.3484 &lt; 2.2e-16 ***
+## factor(code_numeric)114  2.2973e-01  2.3776e-02  9.6620 &lt; 2.2e-16 ***
+## factor(code_numeric)115  5.6017e-01  2.0967e-02 26.7174 &lt; 2.2e-16 ***
+## factor(code_numeric)116  3.1675e-01  2.6359e-02 12.0168 &lt; 2.2e-16 ***
+## factor(code_numeric)118  3.3673e-01  5.3967e-02  6.2395 7.173e-10 ***
+## factor(code_numeric)119  2.2015e-01  3.4675e-02  6.3490 3.663e-10 ***
+## factor(code_numeric)120  1.8539e-01  2.3593e-02  7.8579 1.286e-14 ***
+## factor(code_numeric)121  5.2026e-01  7.7427e-02  6.7194 3.506e-11 ***
+## factor(code_numeric)125  2.0935e-01  2.0658e-02 10.1339 &lt; 2.2e-16 ***
+## factor(code_numeric)126  6.7562e-02  8.9508e-03  7.5482 1.225e-13 ***
+## factor(code_numeric)127  5.3418e-01  6.1703e-02  8.6573 &lt; 2.2e-16 ***
+## factor(code_numeric)128  1.7093e-01  3.7344e-02  4.5771 5.479e-06 ***
+## factor(code_numeric)129  3.3221e-01  4.5143e-02  7.3590 4.679e-13 ***
+## factor(code_numeric)130  4.2931e-01  4.5681e-02  9.3980 &lt; 2.2e-16 ***
+## factor(code_numeric)131  1.2193e-01  1.3065e-02  9.3325 &lt; 2.2e-16 ***
+## factor(code_numeric)132  1.7334e-01  1.9743e-02  8.7801 &lt; 2.2e-16 ***
+## factor(code_numeric)133  2.9120e-01  3.1504e-02  9.2434 &lt; 2.2e-16 ***
+## factor(code_numeric)134  5.8899e-01  9.0980e-02  6.4738 1.683e-10 ***
+## factor(code_numeric)135  5.8920e-01  9.0375e-02  6.5195 1.262e-10 ***
+## factor(code_numeric)136  3.0599e-01  2.5966e-02 11.7840 &lt; 2.2e-16 ***
+## factor(code_numeric)137  5.8882e-01  9.1452e-02  6.4386 2.099e-10 ***
+## factor(code_numeric)140  1.7623e-01  1.8497e-02  9.5275 &lt; 2.2e-16 ***
+## factor(code_numeric)141  4.8289e-01  2.9461e-02 16.3908 &lt; 2.2e-16 ***
+## factor(code_numeric)142  3.0421e-01  3.9037e-02  7.7930 2.075e-14 ***
+## factor(code_numeric)144  3.3488e-01  4.3930e-02  7.6230 7.156e-14 ***
+## factor(code_numeric)145  3.8707e-01  3.4541e-02 11.2061 &lt; 2.2e-16 ***
+## factor(code_numeric)147  4.8284e-01  4.3339e-02 11.1410 &lt; 2.2e-16 ***
+## factor(code_numeric)148  4.8110e-01  5.1535e-02  9.3354 &lt; 2.2e-16 ***
+## factor(code_numeric)150  4.3434e-01  5.9722e-02  7.2727 8.541e-13 ***
+## factor(code_numeric)151  2.4963e-01  3.4267e-02  7.2846 7.862e-13 ***
+## factor(code_numeric)153  1.5059e-01  1.9464e-02  7.7367 3.136e-14 ***
+## factor(code_numeric)154 -1.4431e-02  5.2231e-02 -0.2763 0.7823904    
+## factor(code_numeric)155  2.7024e-02  2.1621e-02  1.2499 0.2117055    
+## factor(code_numeric)160  3.1820e-01  1.8678e-02 17.0366 &lt; 2.2e-16 ***
+## factor(code_numeric)162  1.8732e-01  6.4579e-02  2.9007 0.0038276 ** 
+## factor(code_numeric)165  1.5966e-01  1.6637e-02  9.5967 &lt; 2.2e-16 ***
+## factor(code_numeric)166  4.1406e-01  4.3556e-02  9.5064 &lt; 2.2e-16 ***
+## factor(code_numeric)168  3.2435e-01  2.1140e-02 15.3429 &lt; 2.2e-16 ***
+## factor(code_numeric)170  5.8626e-01  6.4695e-02  9.0620 &lt; 2.2e-16 ***
+## factor(code_numeric)171  5.2006e-01  7.7996e-02  6.6677 4.897e-11 ***
+## factor(code_numeric)172  5.7662e-01  9.2971e-02  6.2021 9.002e-10 ***
+## factor(code_numeric)174  2.4048e-01  5.2931e-02  4.5433 6.411e-06 ***
+## factor(code_numeric)175  3.7597e-02  1.6757e-02  2.2437 0.0251300 *  
+## factor(code_numeric)176  6.6391e-02  1.4184e-02  4.6806 3.369e-06 ***
+## factor(code_numeric)177  6.3735e-02  1.3082e-02  4.8721 1.336e-06 ***
+## factor(code_numeric)178  3.5007e-01  2.5720e-02 13.6110 &lt; 2.2e-16 ***
+## factor(code_numeric)182  5.3754e-01  7.0228e-02  7.6543 5.710e-14 ***
+## factor(code_numeric)183  9.1527e-02  3.1195e-02  2.9340 0.0034440 ** 
+## factor(code_numeric)184  3.5105e-01  4.4278e-02  7.9284 7.617e-15 ***
+## factor(code_numeric)186  3.1766e-01  4.4714e-02  7.1043 2.715e-12 ***
+## factor(code_numeric)187  1.4516e-01  3.9787e-02  3.6483 0.0002814 ***
+## factor(code_numeric)188  9.2944e-02  3.5594e-02  2.6112 0.0091940 ** 
+## factor(code_numeric)189  1.5632e-01  4.1266e-02  3.7881 0.0001634 ***
+## factor(code_numeric)191  4.5847e-01  6.3347e-02  7.2374 1.090e-12 ***
+## factor(code_numeric)192  5.7786e-01  9.9262e-02  5.8216 8.493e-09 ***
+## factor(code_numeric)194 -8.4544e-02  1.7685e-02 -4.7806 2.086e-06 ***
+## factor(code_numeric)195  4.8397e-01  5.2186e-02  9.2739 &lt; 2.2e-16 ***
+## factor(code_numeric)196  5.0183e-01  6.8964e-02  7.2767 8.304e-13 ***
+## factor(code_numeric)197 -7.6516e-02  2.0959e-02 -3.6507 0.0002788 ***
+## factor(code_numeric)203  1.6546e-01  2.9344e-02  5.6385 2.393e-08 ***
+## factor(code_numeric)208  3.7521e-01  5.7867e-02  6.4840 1.578e-10 ***
+## factor(code_numeric)209  3.3121e-02  2.7563e-02  1.2016 0.2298658    
+## factor(code_numeric)210  1.9998e-01  2.0983e-02  9.5305 &lt; 2.2e-16 ***
+## factor(code_numeric)211  1.7752e-01  2.0392e-02  8.7054 &lt; 2.2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
+<div id="pooled-ols-and-fe-with-the-lfe-package" class="section level2" number="8.7">
+<h2><span class="header-section-number">8.7</span> Pooled OLS and FE with the <code>lfe</code> package</h2>
+<div class="sourceCode" id="cb457"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb457-1"><a href="linear-models-with-fixed-effects.html#cb457-1" aria-hidden="true" tabindex="-1"></a><span class="co"># pooled OLS</span></span>
+<span id="cb457-2"><a href="linear-models-with-fixed-effects.html#cb457-2" aria-hidden="true" tabindex="-1"></a>felm1 <span class="ot">=</span> <span class="fu">felm</span>(freedom_house <span class="sc">~</span> lag_freedom_house <span class="sc">+</span> lag_log_gdp_pc <span class="sc">|</span> year_numeric <span class="sc">|</span> <span class="dv">0</span> <span class="sc">|</span> code_numeric, </span>
+<span id="cb457-3"><a href="linear-models-with-fixed-effects.html#cb457-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">data =</span> ajry_df)</span>
+<span id="cb457-4"><a href="linear-models-with-fixed-effects.html#cb457-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb457-5"><a href="linear-models-with-fixed-effects.html#cb457-5" aria-hidden="true" tabindex="-1"></a><span class="co"># FE</span></span>
+<span id="cb457-6"><a href="linear-models-with-fixed-effects.html#cb457-6" aria-hidden="true" tabindex="-1"></a>felm2 <span class="ot">=</span> <span class="fu">felm</span>(freedom_house <span class="sc">~</span> lag_freedom_house <span class="sc">+</span> lag_log_gdp_pc <span class="sc">|</span> year_numeric <span class="sc">+</span> code_numeric <span class="sc">|</span> <span class="dv">0</span> <span class="sc">|</span> </span>
+<span id="cb457-7"><a href="linear-models-with-fixed-effects.html#cb457-7" aria-hidden="true" tabindex="-1"></a>               code_numeric, <span class="at">data =</span> ajry_df)</span>
+<span id="cb457-8"><a href="linear-models-with-fixed-effects.html#cb457-8" aria-hidden="true" tabindex="-1"></a><span class="fu">stargazer</span>(felm1, felm2, <span class="at">type =</span> <span class="st">&#39;text&#39;</span>)</span></code></pre></div>
+<pre><code>## 
+## =====================================================
+##                            Dependent variable:       
+##                     ---------------------------------
+##                               freedom_house          
+##                           (1)              (2)       
+## -----------------------------------------------------
+## lag_freedom_house       0.706***         0.379***    
+##                         (0.035)          (0.046)     
+##                                                      
+## lag_log_gdp_pc          0.072***          0.010      
+##                         (0.010)          (0.032)     
+##                                                      
+## -----------------------------------------------------
+## Observations              945              945       
+## R2                       0.725            0.796      
+## Adjusted R2              0.722            0.755      
+## Residual Std. Error 0.192 (df = 934) 0.180 (df = 785)
+## =====================================================
+## Note:                     *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01</code></pre>
+<p>Notice that this command automatically spits out cluster-robust standard errors and passes them to <code>stargazer</code>. That is absolutely fantastic, right? For robust standard errors we have to work a bit.</p>
+<div class="sourceCode" id="cb459"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb459-1"><a href="linear-models-with-fixed-effects.html#cb459-1" aria-hidden="true" tabindex="-1"></a><span class="co"># function to recover robust standard errors </span></span>
+<span id="cb459-2"><a href="linear-models-with-fixed-effects.html#cb459-2" aria-hidden="true" tabindex="-1"></a>get_felm_robust_se <span class="ot">=</span> <span class="cf">function</span>(felm_result) {</span>
+<span id="cb459-3"><a href="linear-models-with-fixed-effects.html#cb459-3" aria-hidden="true" tabindex="-1"></a>  felm_summary <span class="ot">=</span> <span class="fu">summary</span>(felm_result, <span class="at">robust =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb459-4"><a href="linear-models-with-fixed-effects.html#cb459-4" aria-hidden="true" tabindex="-1"></a>  robust_se <span class="ot">=</span> felm_summary<span class="sc">$</span>coefficients[, <span class="dv">2</span>]</span>
+<span id="cb459-5"><a href="linear-models-with-fixed-effects.html#cb459-5" aria-hidden="true" tabindex="-1"></a>  }</span></code></pre></div>
+</div>
+<div id="review-of-iv" class="section level2" number="8.8">
+<h2><span class="header-section-number">8.8</span> Review of IV</h2>
+<div class="sourceCode" id="cb460"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb460-1"><a href="linear-models-with-fixed-effects.html#cb460-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Second Stage with ivreg, normal standard errors</span></span>
+<span id="cb460-2"><a href="linear-models-with-fixed-effects.html#cb460-2" aria-hidden="true" tabindex="-1"></a>iv_sav <span class="ot">=</span> <span class="fu">ivreg</span>(freedom_house <span class="sc">~</span> lag_freedom_house <span class="sc">+</span> lag_log_gdp_pc <span class="sc">+</span> <span class="fu">factor</span>(year_numeric) <span class="sc">+</span> </span>
+<span id="cb460-3"><a href="linear-models-with-fixed-effects.html#cb460-3" aria-hidden="true" tabindex="-1"></a>        <span class="fu">factor</span>(code_numeric) <span class="sc">|</span> lag_freedom_house <span class="sc">+</span> lag2_nsave <span class="sc">+</span> <span class="fu">factor</span>(year_numeric) <span class="sc">+</span> </span>
+<span id="cb460-4"><a href="linear-models-with-fixed-effects.html#cb460-4" aria-hidden="true" tabindex="-1"></a>        <span class="fu">factor</span>(code_numeric), <span class="at">data =</span> ajry_df)</span>
+<span id="cb460-5"><a href="linear-models-with-fixed-effects.html#cb460-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(iv_sav) </span></code></pre></div>
+<pre><code>## 
+## Call:
+## ivreg(formula = freedom_house ~ lag_freedom_house + lag_log_gdp_pc + 
+##     factor(year_numeric) + factor(code_numeric) | lag_freedom_house + 
+##     lag2_nsave + factor(year_numeric) + factor(code_numeric), 
+##     data = ajry_df)
+## 
+## Residuals:
+##       Min        1Q    Median        3Q       Max 
+## -0.677516 -0.076065 -0.002338  0.085441  0.599790 
+## 
+## Coefficients:
+##                          Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)              0.169672   0.488436   0.347 0.728406    
+## lag_freedom_house        0.362910   0.035827  10.129  &lt; 2e-16 ***
+## lag_log_gdp_pc          -0.020493   0.070796  -0.289 0.772309    
+## factor(year_numeric)34  -0.030477   0.038146  -0.799 0.424565    
+## factor(year_numeric)35  -0.123590   0.041347  -2.989 0.002890 ** 
+## factor(year_numeric)36  -0.073594   0.047776  -1.540 0.123887    
+## factor(year_numeric)37  -0.007184   0.053669  -0.134 0.893557    
+## factor(year_numeric)38  -0.017182   0.058162  -0.295 0.767751    
+## factor(year_numeric)39   0.021396   0.058867   0.363 0.716364    
+## factor(year_numeric)40   0.064340   0.062995   1.021 0.307424    
+## factor(year_numeric)41   0.069922   0.065121   1.074 0.283295    
+## factor(code_numeric)6    0.479203   0.158838   3.017 0.002640 ** 
+## factor(code_numeric)8    0.284433   0.183283   1.552 0.121115    
+## factor(code_numeric)9    0.675419   0.189699   3.560 0.000394 ***
+## factor(code_numeric)10   0.673215   0.180377   3.732 0.000204 ***
+## factor(code_numeric)14  -0.015853   0.120024  -0.132 0.894954    
+## factor(code_numeric)15   0.672222   0.180646   3.721 0.000213 ***
+## factor(code_numeric)16   0.179565   0.110810   1.620 0.105550    
+## factor(code_numeric)17   0.179865   0.120176   1.497 0.134898    
+## factor(code_numeric)18   0.336736   0.119985   2.806 0.005139 ** 
+## factor(code_numeric)23  -0.017314   0.211064  -0.082 0.934645    
+## factor(code_numeric)24   0.591526   0.150815   3.922 9.58e-05 ***
+## factor(code_numeric)25   0.377306   0.109020   3.461 0.000569 ***
+## factor(code_numeric)26   0.417357   0.124468   3.353 0.000839 ***
+## factor(code_numeric)27   0.646461   0.162333   3.982 7.49e-05 ***
+## factor(code_numeric)30   0.545156   0.118985   4.582 5.40e-06 ***
+## factor(code_numeric)31   0.145409   0.106096   1.371 0.170928    
+## factor(code_numeric)32   0.676225   0.192015   3.522 0.000455 ***
+## factor(code_numeric)33   0.681284   0.205619   3.313 0.000966 ***
+## factor(code_numeric)34   0.392207   0.131573   2.981 0.002967 ** 
+## factor(code_numeric)35   0.015660   0.105347   0.149 0.881872    
+## factor(code_numeric)36   0.091454   0.108214   0.845 0.398315    
+## factor(code_numeric)37   0.042301   0.106907   0.396 0.692453    
+## factor(code_numeric)38   0.079314   0.106817   0.743 0.458002    
+## factor(code_numeric)39   0.456811   0.120229   3.800 0.000157 ***
+## factor(code_numeric)40   0.161014   0.115192   1.398 0.162592    
+## factor(code_numeric)41   0.350108   0.115632   3.028 0.002548 ** 
+## factor(code_numeric)42   0.640405   0.126330   5.069 5.04e-07 ***
+## factor(code_numeric)43  -0.059135   0.171053  -0.346 0.729657    
+## factor(code_numeric)44   0.576541   0.144363   3.994 7.15e-05 ***
+## factor(code_numeric)45   0.591476   0.236263   2.503 0.012511 *  
+## factor(code_numeric)47   0.603525   0.220770   2.734 0.006410 ** 
+## factor(code_numeric)51   0.577474   0.152402   3.789 0.000163 ***
+## factor(code_numeric)52   0.676447   0.192654   3.511 0.000473 ***
+## factor(code_numeric)53   0.473624   0.109042   4.343 1.60e-05 ***
+## factor(code_numeric)54   0.126940   0.125086   1.015 0.310521    
+## factor(code_numeric)55   0.353559   0.113777   3.107 0.001958 ** 
+## factor(code_numeric)56   0.176670   0.104458   1.691 0.091196 .  
+## factor(code_numeric)58   0.468235   0.161766   2.895 0.003908 ** 
+## factor(code_numeric)61   0.051251   0.122568   0.418 0.675965    
+## factor(code_numeric)63   0.619959   0.178506   3.473 0.000544 ***
+## factor(code_numeric)64   0.306104   0.126789   2.414 0.016006 *  
+## factor(code_numeric)65   0.658951   0.180060   3.660 0.000270 ***
+## factor(code_numeric)66   0.183726   0.150693   1.219 0.223152    
+## factor(code_numeric)67   0.671077   0.181409   3.699 0.000232 ***
+## factor(code_numeric)70   0.216119   0.106751   2.025 0.043273 *  
+## factor(code_numeric)71   0.034925   0.110002   0.317 0.750955    
+## factor(code_numeric)72   0.252102   0.115699   2.179 0.029648 *  
+## factor(code_numeric)73   0.171593   0.139591   1.229 0.219364    
+## factor(code_numeric)74  -0.014710   0.110618  -0.133 0.894247    
+## factor(code_numeric)75   0.551922   0.159201   3.467 0.000557 ***
+## factor(code_numeric)76   0.572273   0.144944   3.948 8.62e-05 ***
+## factor(code_numeric)77   0.373408   0.113488   3.290 0.001048 ** 
+## factor(code_numeric)78   0.334633   0.112832   2.966 0.003116 ** 
+## factor(code_numeric)79   0.361195   0.103505   3.490 0.000512 ***
+## factor(code_numeric)81   0.114460   0.116050   0.986 0.324307    
+## factor(code_numeric)82   0.474590   0.156578   3.031 0.002521 ** 
+## factor(code_numeric)83   0.219953   0.106311   2.069 0.038894 *  
+## factor(code_numeric)84   0.499985   0.106987   4.673 3.52e-06 ***
+## factor(code_numeric)85   0.657962   0.157570   4.176 3.32e-05 ***
+## factor(code_numeric)86   0.173215   0.123747   1.400 0.162005    
+## factor(code_numeric)88   0.673188   0.183360   3.671 0.000258 ***
+## factor(code_numeric)89   0.600827   0.162467   3.698 0.000233 ***
+## factor(code_numeric)90   0.666378   0.175112   3.805 0.000153 ***
+## factor(code_numeric)91   0.565682   0.120193   4.706 3.00e-06 ***
+## factor(code_numeric)92   0.212268   0.113589   1.869 0.062051 .  
+## factor(code_numeric)93   0.644689   0.170697   3.777 0.000171 ***
+## factor(code_numeric)95   0.098251   0.110554   0.889 0.374440    
+## factor(code_numeric)99   0.600061   0.165771   3.620 0.000315 ***
+## factor(code_numeric)101  0.388717   0.124714   3.117 0.001898 ** 
+## factor(code_numeric)104  0.039985   0.208015   0.192 0.847620    
+## factor(code_numeric)107  0.590006   0.148608   3.970 7.87e-05 ***
+## factor(code_numeric)109  0.450721   0.104293   4.322 1.76e-05 ***
+## factor(code_numeric)110  0.226397   0.113210   2.000 0.045884 *  
+## factor(code_numeric)112  0.652927   0.197087   3.313 0.000968 ***
+## factor(code_numeric)113  0.636184   0.212508   2.994 0.002847 ** 
+## factor(code_numeric)114  0.250611   0.108748   2.304 0.021468 *  
+## factor(code_numeric)116  0.285630   0.112913   2.530 0.011622 *  
+## factor(code_numeric)118  0.387727   0.140368   2.762 0.005882 ** 
+## factor(code_numeric)120  0.168198   0.117269   1.434 0.151907    
+## factor(code_numeric)125  0.194793   0.121680   1.601 0.109829    
+## factor(code_numeric)126  0.029631   0.106110   0.279 0.780134    
+## factor(code_numeric)127  0.587099   0.142284   4.126 4.10e-05 ***
+## factor(code_numeric)128  0.141620   0.129898   1.090 0.275959    
+## factor(code_numeric)129  0.372208   0.123189   3.021 0.002602 ** 
+## factor(code_numeric)130  0.465344   0.161116   2.888 0.003986 ** 
+## factor(code_numeric)131  0.138069   0.109420   1.262 0.207407    
+## factor(code_numeric)132  0.166727   0.107667   1.549 0.121916    
+## factor(code_numeric)133  0.320197   0.112626   2.843 0.004591 ** 
+## factor(code_numeric)134  0.673476   0.184172   3.657 0.000273 ***
+## factor(code_numeric)135  0.673060   0.183000   3.678 0.000252 ***
+## factor(code_numeric)136  0.318107   0.115146   2.763 0.005874 ** 
+## factor(code_numeric)137  0.673800   0.185087   3.640 0.000291 ***
+## factor(code_numeric)140  0.253155   0.123030   2.058 0.039968 *  
+## factor(code_numeric)141  0.477834   0.203031   2.354 0.018856 *  
+## factor(code_numeric)142  0.341313   0.121621   2.806 0.005141 ** 
+## factor(code_numeric)144  0.375525   0.123661   3.037 0.002475 ** 
+## factor(code_numeric)145  0.413724   0.108475   3.814 0.000148 ***
+## factor(code_numeric)147  0.512661   0.122242   4.194 3.07e-05 ***
+## factor(code_numeric)148  0.530075   0.151003   3.510 0.000474 ***
+## factor(code_numeric)150  0.490848   0.145648   3.370 0.000790 ***
+## factor(code_numeric)151  0.290133   0.118858   2.441 0.014878 *  
+## factor(code_numeric)153  0.173212   0.114921   1.507 0.132176    
+## factor(code_numeric)155  0.009336   0.114053   0.082 0.934784    
+## factor(code_numeric)160  0.319616   0.110995   2.880 0.004096 ** 
+## factor(code_numeric)162  0.247927   0.162397   1.527 0.127265    
+## factor(code_numeric)165  0.125936   0.112631   1.118 0.263873    
+## factor(code_numeric)166  0.453163   0.120692   3.755 0.000187 ***
+## factor(code_numeric)168  0.388228   0.126283   3.074 0.002187 ** 
+## factor(code_numeric)170  0.645564   0.225486   2.863 0.004314 ** 
+## factor(code_numeric)171  0.591186   0.235737   2.508 0.012359 *  
+## factor(code_numeric)172  0.664599   0.190596   3.487 0.000517 ***
+## factor(code_numeric)174  0.291291   0.160047   1.820 0.069154 .  
+## factor(code_numeric)175  0.051675   0.111336   0.464 0.642687    
+## factor(code_numeric)176  0.027898   0.109727   0.254 0.799373    
+## factor(code_numeric)177  0.054677   0.108566   0.504 0.614668    
+## factor(code_numeric)178  0.370369   0.105485   3.511 0.000473 ***
+## factor(code_numeric)182  0.599432   0.151349   3.961 8.19e-05 ***
+## factor(code_numeric)183  0.133137   0.125698   1.059 0.289860    
+## factor(code_numeric)184  0.391082   0.121874   3.209 0.001389 ** 
+## factor(code_numeric)186  0.359565   0.135055   2.662 0.007926 ** 
+## factor(code_numeric)187  0.113755   0.132925   0.856 0.392392    
+## factor(code_numeric)188  0.065677   0.127692   0.514 0.607167    
+## factor(code_numeric)189  0.192374   0.207868   0.925 0.355023    
+## factor(code_numeric)191  0.517016   0.145189   3.561 0.000393 ***
+## factor(code_numeric)192  0.670964   0.201181   3.335 0.000895 ***
+## factor(code_numeric)195  0.520239   0.149799   3.473 0.000544 ***
+## factor(code_numeric)196  0.566123   0.154300   3.669 0.000261 ***
+## factor(code_numeric)197 -0.089423   0.199570  -0.448 0.654225    
+## factor(code_numeric)203  0.111615   0.207584   0.538 0.590955    
+## factor(code_numeric)208  0.430353   0.145106   2.966 0.003115 ** 
+## factor(code_numeric)209  0.011614   0.116349   0.100 0.920514    
+## factor(code_numeric)210  0.194566   0.110077   1.768 0.077545 .  
+## factor(code_numeric)211  0.194139   0.113144   1.716 0.086603 .  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.1809 on 747 degrees of freedom
+## Multiple R-Squared: 0.7938,  Adjusted R-squared: 0.7543 
+## Wald test: 20.12 on 143 and 747 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+<div id="iv-with-felm" class="section level2" number="8.9">
+<h2><span class="header-section-number">8.9</span> IV with <code>felm</code></h2>
+<div class="sourceCode" id="cb462"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb462-1"><a href="linear-models-with-fixed-effects.html#cb462-1" aria-hidden="true" tabindex="-1"></a><span class="co"># note the difference in the instrumental variable list.</span></span>
+<span id="cb462-2"><a href="linear-models-with-fixed-effects.html#cb462-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">felm</span>(freedom_house <span class="sc">~</span> lag_freedom_house <span class="sc">|</span> year_numeric <span class="sc">+</span> code_numeric <span class="sc">|</span> </span>
+<span id="cb462-3"><a href="linear-models-with-fixed-effects.html#cb462-3" aria-hidden="true" tabindex="-1"></a>               (lag_log_gdp_pc <span class="sc">~</span> lag2_nsave) <span class="sc">|</span> code_numeric, <span class="at">data =</span> ajry_df))</span></code></pre></div>
+<pre><code>## 
+## Call:
+##    felm(formula = freedom_house ~ lag_freedom_house | year_numeric +      code_numeric | (lag_log_gdp_pc ~ lag2_nsave) | code_numeric,      data = ajry_df) 
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.67752 -0.07606 -0.00234  0.08544  0.59979 
+## 
+## Coefficients:
+##                       Estimate Cluster s.e. t value Pr(&gt;|t|)    
+## lag_freedom_house      0.36291      0.05167   7.024 1.01e-10 ***
+## `lag_log_gdp_pc(fit)` -0.02049      0.07463  -0.275    0.784    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.1809 on 747 degrees of freedom
+##   (478 observations deleted due to missingness)
+## Multiple R-squared(full model): 0.7938   Adjusted R-squared: 0.7543 
+## Multiple R-squared(proj model): 0.1264   Adjusted R-squared: -0.04086 
+## F-statistic(full model, *iid*):20.12 on 143 and 747 DF, p-value: &lt; 2.2e-16 
+## F-statistic(proj model): 25.54 on 2 and 133 DF, p-value: 4.101e-10 
+## F-statistic(endog. vars):0.07541 on 1 and 133 DF, p-value: 0.784</code></pre>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="linear-regression-essentials-with-r.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="instrumental-variables.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["pp4rs-rstats.pdf", "pp4rs-rstats.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

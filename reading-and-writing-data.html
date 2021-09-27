@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 5 Reading and Writing Data | An Introduction to R for Economics and Business Research</title>
+  <meta name="description" content="Lecture notes on R for Programming Practices in Research in Economics." />
+  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 5 Reading and Writing Data | An Introduction to R for Economics and Business Research" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Lecture notes on R for Programming Practices in Research in Economics." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 5 Reading and Writing Data | An Introduction to R for Economics and Business Research" />
+  
+  <meta name="twitter:description" content="Lecture notes on R for Programming Practices in Research in Economics." />
+  
+
+<meta name="author" content="Julian Langer" />
+<meta name="author" content="Lachlan Deer" />
+<meta name="author" content="Ulrich Bergmann" />
+
+
+<meta name="date" content="2021-09-27" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="factor-variables.html"/>
+<link rel="next" href="working-with-strings.html"/>
+<script src="libs/header-attrs-2.9/header-attrs.js"></script>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Introduction to R for Economics and Business </a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Prerequisites</a></li>
+<li class="part"><span><b>I Working with Data</b></span></li>
+<li class="chapter" data-level="1" data-path="basics-of-r.html"><a href="basics-of-r.html"><i class="fa fa-check"></i><b>1</b> Basics of R</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="basics-of-r.html"><a href="basics-of-r.html#the-workspace"><i class="fa fa-check"></i><b>1.1</b> The Workspace</a>
+<ul>
+<li class="chapter" data-level="1.1.1" data-path="basics-of-r.html"><a href="basics-of-r.html#working-directory"><i class="fa fa-check"></i><b>1.1.1</b> Working directory</a></li>
+<li class="chapter" data-level="1.1.2" data-path="basics-of-r.html"><a href="basics-of-r.html#r-projects"><i class="fa fa-check"></i><b>1.1.2</b> R projects</a></li>
+<li class="chapter" data-level="1.1.3" data-path="basics-of-r.html"><a href="basics-of-r.html#removing-and-adding-objects-from-workspace"><i class="fa fa-check"></i><b>1.1.3</b> Removing and adding objects from workspace</a></li>
+<li class="chapter" data-level="1.1.4" data-path="basics-of-r.html"><a href="basics-of-r.html#installing-and-loading-packages"><i class="fa fa-check"></i><b>1.1.4</b> Installing and loading packages</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="basics-of-r.html"><a href="basics-of-r.html#vectors"><i class="fa fa-check"></i><b>1.2</b> Vectors</a>
+<ul>
+<li class="chapter" data-level="1.2.1" data-path="basics-of-r.html"><a href="basics-of-r.html#atomic-vector-types"><i class="fa fa-check"></i><b>1.2.1</b> Atomic vector types</a></li>
+<li class="chapter" data-level="1.2.2" data-path="basics-of-r.html"><a href="basics-of-r.html#vector-coercion"><i class="fa fa-check"></i><b>1.2.2</b> Vector coercion</a></li>
+<li class="chapter" data-level="1.2.3" data-path="basics-of-r.html"><a href="basics-of-r.html#vectors-with-multiple-values"><i class="fa fa-check"></i><b>1.2.3</b> Vectors with multiple values</a></li>
+<li class="chapter" data-level="1.2.4" data-path="basics-of-r.html"><a href="basics-of-r.html#operating-with-vectors-and-recycling"><i class="fa fa-check"></i><b>1.2.4</b> Operating with vectors and recycling</a></li>
+<li class="chapter" data-level="1.2.5" data-path="basics-of-r.html"><a href="basics-of-r.html#names"><i class="fa fa-check"></i><b>1.2.5</b> Names</a></li>
+<li class="chapter" data-level="1.2.6" data-path="basics-of-r.html"><a href="basics-of-r.html#subsetting"><i class="fa fa-check"></i><b>1.2.6</b> Subsetting</a></li>
+<li class="chapter" data-level="1.2.7" data-path="basics-of-r.html"><a href="basics-of-r.html#lists"><i class="fa fa-check"></i><b>1.2.7</b> Lists</a></li>
+</ul></li>
+<li class="chapter" data-level="1.3" data-path="basics-of-r.html"><a href="basics-of-r.html#checking-cases-with-conditionals"><i class="fa fa-check"></i><b>1.3</b> Checking cases with conditionals</a>
+<ul>
+<li class="chapter" data-level="1.3.1" data-path="basics-of-r.html"><a href="basics-of-r.html#if--else"><i class="fa fa-check"></i><b>1.3.1</b> <code>if</code>- <code>else</code></a></li>
+<li class="chapter" data-level="1.3.2" data-path="basics-of-r.html"><a href="basics-of-r.html#if---else-if---else"><i class="fa fa-check"></i><b>1.3.2</b> <code>if</code> - <code>else if</code> - <code>else</code></a></li>
+<li class="chapter" data-level="1.3.3" data-path="basics-of-r.html"><a href="basics-of-r.html#checking-multiple-cases-with-switch"><i class="fa fa-check"></i><b>1.3.3</b> Checking multiple cases with <code>switch</code></a></li>
+<li class="chapter" data-level="1.3.4" data-path="basics-of-r.html"><a href="basics-of-r.html#comparison-and-logical-operators"><i class="fa fa-check"></i><b>1.3.4</b> Comparison and logical operators</a></li>
+</ul></li>
+<li class="chapter" data-level="1.4" data-path="basics-of-r.html"><a href="basics-of-r.html#functions"><i class="fa fa-check"></i><b>1.4</b> Functions</a>
+<ul>
+<li class="chapter" data-level="1.4.1" data-path="basics-of-r.html"><a href="basics-of-r.html#function-definitions"><i class="fa fa-check"></i><b>1.4.1</b> Function definitions</a></li>
+<li class="chapter" data-level="1.4.2" data-path="basics-of-r.html"><a href="basics-of-r.html#function-arguments-and-default-values"><i class="fa fa-check"></i><b>1.4.2</b> Function arguments and default values</a></li>
+<li class="chapter" data-level="1.4.3" data-path="basics-of-r.html"><a href="basics-of-r.html#arbitrary-number-of-arguments"><i class="fa fa-check"></i><b>1.4.3</b> Arbitrary number of arguments</a></li>
+<li class="chapter" data-level="1.4.4" data-path="basics-of-r.html"><a href="basics-of-r.html#function-returns"><i class="fa fa-check"></i><b>1.4.4</b> Function returns</a></li>
+<li class="chapter" data-level="1.4.5" data-path="basics-of-r.html"><a href="basics-of-r.html#pipes"><i class="fa fa-check"></i><b>1.4.5</b> Pipes</a></li>
+</ul></li>
+<li class="chapter" data-level="1.5" data-path="basics-of-r.html"><a href="basics-of-r.html#iterations"><i class="fa fa-check"></i><b>1.5</b> Iterations</a>
+<ul>
+<li class="chapter" data-level="1.5.1" data-path="basics-of-r.html"><a href="basics-of-r.html#for-loops"><i class="fa fa-check"></i><b>1.5.1</b> <code>for</code> loops</a></li>
+<li class="chapter" data-level="1.5.2" data-path="basics-of-r.html"><a href="basics-of-r.html#split-apply-combine-with-map-functions"><i class="fa fa-check"></i><b>1.5.2</b> Split, apply, combine with <code>map</code> functions</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="basics-of-r.html"><a href="basics-of-r.html#sources"><i class="fa fa-check"></i>Sources</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="data-transformations-with-dplyr-and-tidyr.html"><a href="data-transformations-with-dplyr-and-tidyr.html"><i class="fa fa-check"></i><b>2</b> Data Transformations with <code>dplyr</code> and <code>tidyr</code></a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="data-transformations-with-dplyr-and-tidyr.html"><a href="data-transformations-with-dplyr-and-tidyr.html#single-table-verbs"><i class="fa fa-check"></i><b>2.1</b> Single table verbs</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="data-transformations-with-dplyr-and-tidyr.html"><a href="data-transformations-with-dplyr-and-tidyr.html#filter-to-filter-observations"><i class="fa fa-check"></i><b>2.1.1</b> <code>filter</code> to filter observations</a></li>
+<li class="chapter" data-level="2.1.2" data-path="data-transformations-with-dplyr-and-tidyr.html"><a href="data-transformations-with-dplyr-and-tidyr.html#arrange-to-arrange-a-dataframe-according-to-variables"><i class="fa fa-check"></i><b>2.1.2</b> <code>arrange</code> to arrange a dataframe according to variables</a></li>
+<li class="chapter" data-level="2.1.3" data-path="data-transformations-with-dplyr-and-tidyr.html"><a href="data-transformations-with-dplyr-and-tidyr.html#select-to-selectdrop-variables"><i class="fa fa-check"></i><b>2.1.3</b> <code>select</code> to select/drop variables</a></li>
+<li class="chapter" data-level="2.1.4" data-path="data-transformations-with-dplyr-and-tidyr.html"><a href="data-transformations-with-dplyr-and-tidyr.html#mutate-to-create-new-variables"><i class="fa fa-check"></i><b>2.1.4</b> <code>mutate</code> to create new variables</a></li>
+<li class="chapter" data-level="2.1.5" data-path="data-transformations-with-dplyr-and-tidyr.html"><a href="data-transformations-with-dplyr-and-tidyr.html#summarise-to-create-summary-tables"><i class="fa fa-check"></i><b>2.1.5</b> <code>summarise</code> to create summary tables</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="data-transformations-with-dplyr-and-tidyr.html"><a href="data-transformations-with-dplyr-and-tidyr.html#using-functions-in-combination-with-logical-subsetting"><i class="fa fa-check"></i><b>2.2</b> Using functions in combination with logical subsetting</a></li>
+<li class="chapter" data-level="2.3" data-path="data-transformations-with-dplyr-and-tidyr.html"><a href="data-transformations-with-dplyr-and-tidyr.html#the-pipe-operator"><i class="fa fa-check"></i><b>2.3</b> The pipe operator</a></li>
+<li class="chapter" data-level="2.4" data-path="data-transformations-with-dplyr-and-tidyr.html"><a href="data-transformations-with-dplyr-and-tidyr.html#multiple-table-verbs"><i class="fa fa-check"></i><b>2.4</b> Multiple table verbs</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="data-transformations-with-dplyr-and-tidyr.html"><a href="data-transformations-with-dplyr-and-tidyr.html#mutating-joins"><i class="fa fa-check"></i><b>2.4.1</b> Mutating joins</a></li>
+<li class="chapter" data-level="2.4.2" data-path="data-transformations-with-dplyr-and-tidyr.html"><a href="data-transformations-with-dplyr-and-tidyr.html#filtering-joins"><i class="fa fa-check"></i><b>2.4.2</b> Filtering joins</a></li>
+<li class="chapter" data-level="2.4.3" data-path="data-transformations-with-dplyr-and-tidyr.html"><a href="data-transformations-with-dplyr-and-tidyr.html#the-by-argument"><i class="fa fa-check"></i><b>2.4.3</b> The <code>by</code> argument</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="data-transformations-with-dplyr-and-tidyr.html"><a href="data-transformations-with-dplyr-and-tidyr.html#reshaping-data-with-tidyr"><i class="fa fa-check"></i><b>2.5</b> Reshaping data with <code>tidyr</code></a>
+<ul>
+<li class="chapter" data-level="2.5.1" data-path="data-transformations-with-dplyr-and-tidyr.html"><a href="data-transformations-with-dplyr-and-tidyr.html#from-dirty-wide-to-tidy-long"><i class="fa fa-check"></i><b>2.5.1</b> From dirty wide to tidy long</a></li>
+<li class="chapter" data-level="2.5.2" data-path="data-transformations-with-dplyr-and-tidyr.html"><a href="data-transformations-with-dplyr-and-tidyr.html#from-dirty-long-to-tidy-wide"><i class="fa fa-check"></i><b>2.5.2</b> From dirty long to tidy wide</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="data-transformations-with-dplyr-and-tidyr.html"><a href="data-transformations-with-dplyr-and-tidyr.html#sources-1"><i class="fa fa-check"></i>Sources</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html"><i class="fa fa-check"></i><b>3</b> Visualizing data with `ggplot2</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#introduction"><i class="fa fa-check"></i><b>3.1</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#the-dataset"><i class="fa fa-check"></i><b>3.1.1</b> The dataset</a></li>
+<li class="chapter" data-level="3.1.2" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#basic-example-an-ordinary-scatterplot"><i class="fa fa-check"></i><b>3.1.2</b> Basic example: an ordinary scatterplot</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#aesthetics"><i class="fa fa-check"></i><b>3.2</b> Aesthetics</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#aesthetic-mappings"><i class="fa fa-check"></i><b>3.2.1</b> Aesthetic mappings</a></li>
+<li class="chapter" data-level="3.2.2" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#manually-fixing-aesthetics"><i class="fa fa-check"></i><b>3.2.2</b> Manually fixing aesthetics</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#facets-subplots-for-different-variable-values"><i class="fa fa-check"></i><b>3.3</b> Facets: Subplots for different variable values</a></li>
+<li class="chapter" data-level="3.4" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#geoms"><i class="fa fa-check"></i><b>3.4</b> Geoms</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#what-kind-of-plot-do-you-have-in-mind-the-use-of-geoms."><i class="fa fa-check"></i><b>3.4.1</b> What kind of plot do you have in mind? The use of geoms.</a></li>
+<li class="chapter" data-level="3.4.2" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#multiple-geoms-in-one-plot"><i class="fa fa-check"></i><b>3.4.2</b> Multiple geoms in one plot</a></li>
+</ul></li>
+<li class="chapter" data-level="3.5" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#statistical-tranformations-with-stats"><i class="fa fa-check"></i><b>3.5</b> Statistical tranformations with <code>stats</code></a></li>
+<li class="chapter" data-level="3.6" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#positions"><i class="fa fa-check"></i><b>3.6</b> Positions</a></li>
+<li class="chapter" data-level="3.7" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#coordinate-systems"><i class="fa fa-check"></i><b>3.7</b> Coordinate systems</a></li>
+<li class="chapter" data-level="3.8" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#labeling"><i class="fa fa-check"></i><b>3.8</b> Labeling</a></li>
+<li class="chapter" data-level="3.9" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#scales"><i class="fa fa-check"></i><b>3.9</b> Scales</a></li>
+<li class="chapter" data-level="3.10" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#themes"><i class="fa fa-check"></i><b>3.10</b> Themes</a></li>
+<li class="chapter" data-level="3.11" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#saving-graphs"><i class="fa fa-check"></i><b>3.11</b> Saving graphs</a></li>
+<li class="chapter" data-level="" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#sources-2"><i class="fa fa-check"></i>Sources</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="factor-variables.html"><a href="factor-variables.html"><i class="fa fa-check"></i><b>4</b> Factor Variables</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="factor-variables.html"><a href="factor-variables.html#creating-factors"><i class="fa fa-check"></i><b>4.1</b> Creating Factors</a></li>
+<li class="chapter" data-level="4.2" data-path="factor-variables.html"><a href="factor-variables.html#some-other-useful-functions-from-forcats"><i class="fa fa-check"></i><b>4.2</b> Some other useful functions from forcats</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="factor-variables.html"><a href="factor-variables.html#modify-factor-levels"><i class="fa fa-check"></i><b>4.2.1</b> Modify factor levels</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="reading-and-writing-data.html"><a href="reading-and-writing-data.html"><i class="fa fa-check"></i><b>5</b> Reading and Writing Data</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="reading-and-writing-data.html"><a href="reading-and-writing-data.html#reading-csv-files-with-readr"><i class="fa fa-check"></i><b>5.1</b> Reading <code>csv</code> files with <code>readr</code></a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="reading-and-writing-data.html"><a href="reading-and-writing-data.html#reading-in--delimited-data"><i class="fa fa-check"></i><b>5.1.1</b> Reading in *-delimited data</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="reading-and-writing-data.html"><a href="reading-and-writing-data.html#parsing-data-correctly-with-the-parse-functions"><i class="fa fa-check"></i><b>5.2</b> Parsing data correctly with the <code>parse</code> functions</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="reading-and-writing-data.html"><a href="reading-and-writing-data.html#parsing-numbers"><i class="fa fa-check"></i><b>5.2.1</b> Parsing numbers</a></li>
+<li class="chapter" data-level="5.2.2" data-path="reading-and-writing-data.html"><a href="reading-and-writing-data.html#parsing-characters"><i class="fa fa-check"></i><b>5.2.2</b> Parsing characters</a></li>
+<li class="chapter" data-level="5.2.3" data-path="reading-and-writing-data.html"><a href="reading-and-writing-data.html#parsing-dates"><i class="fa fa-check"></i><b>5.2.3</b> Parsing dates</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="reading-and-writing-data.html"><a href="reading-and-writing-data.html#parsing-and-reading-at-the-same-time"><i class="fa fa-check"></i><b>5.3</b> Parsing and reading at the same time</a></li>
+<li class="chapter" data-level="5.4" data-path="reading-and-writing-data.html"><a href="reading-and-writing-data.html#writing-csv-files"><i class="fa fa-check"></i><b>5.4</b> Writing <code>csv</code> files</a></li>
+<li class="chapter" data-level="5.5" data-path="reading-and-writing-data.html"><a href="reading-and-writing-data.html#write-and-read-rds-files-with-readr"><i class="fa fa-check"></i><b>5.5</b> Write and read <code>RDS</code> files with <code>readr</code></a></li>
+<li class="chapter" data-level="5.6" data-path="reading-and-writing-data.html"><a href="reading-and-writing-data.html#reading-in-excel-sheets-and-stata-data-with-readxl-and-haven"><i class="fa fa-check"></i><b>5.6</b> Reading in Excel sheets and Stata data with <code>readxl</code> and <code>haven</code></a></li>
+<li class="chapter" data-level="" data-path="reading-and-writing-data.html"><a href="reading-and-writing-data.html#sources-3"><i class="fa fa-check"></i>Sources</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="working-with-strings.html"><a href="working-with-strings.html"><i class="fa fa-check"></i><b>6</b> Working with Strings</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="working-with-strings.html"><a href="working-with-strings.html#string-combine-with-str_c"><i class="fa fa-check"></i><b>6.1</b> String combine with <code>str_c</code></a></li>
+<li class="chapter" data-level="6.2" data-path="working-with-strings.html"><a href="working-with-strings.html#substrings-with-str_sub"><i class="fa fa-check"></i><b>6.2</b> Substrings with <code>str_sub</code></a></li>
+<li class="chapter" data-level="6.3" data-path="working-with-strings.html"><a href="working-with-strings.html#capitalize-or-not"><i class="fa fa-check"></i><b>6.3</b> Capitalize or not</a></li>
+<li class="chapter" data-level="6.4" data-path="working-with-strings.html"><a href="working-with-strings.html#string-sort"><i class="fa fa-check"></i><b>6.4</b> String sort</a></li>
+<li class="chapter" data-level="6.5" data-path="working-with-strings.html"><a href="working-with-strings.html#handling-nas"><i class="fa fa-check"></i><b>6.5</b> Handling NAs</a></li>
+</ul></li>
+<li class="part"><span><b>II Regression Modelling with R</b></span></li>
+<li class="chapter" data-level="7" data-path="linear-regression-essentials-with-r.html"><a href="linear-regression-essentials-with-r.html"><i class="fa fa-check"></i><b>7</b> Linear Regression Essentials with <code>R</code></a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="linear-regression-essentials-with-r.html"><a href="linear-regression-essentials-with-r.html#libraries"><i class="fa fa-check"></i><b>7.1</b> Libraries</a></li>
+<li class="chapter" data-level="7.2" data-path="linear-regression-essentials-with-r.html"><a href="linear-regression-essentials-with-r.html#loading-the-data"><i class="fa fa-check"></i><b>7.2</b> Loading the data</a></li>
+<li class="chapter" data-level="7.3" data-path="linear-regression-essentials-with-r.html"><a href="linear-regression-essentials-with-r.html#meaningful-names"><i class="fa fa-check"></i><b>7.3</b> Meaningful names</a></li>
+<li class="chapter" data-level="7.4" data-path="linear-regression-essentials-with-r.html"><a href="linear-regression-essentials-with-r.html#create-variables-for-estimation"><i class="fa fa-check"></i><b>7.4</b> Create variables for estimation</a></li>
+<li class="chapter" data-level="7.5" data-path="linear-regression-essentials-with-r.html"><a href="linear-regression-essentials-with-r.html#summary-statistics"><i class="fa fa-check"></i><b>7.5</b> Summary statistics</a></li>
+<li class="chapter" data-level="7.6" data-path="linear-regression-essentials-with-r.html"><a href="linear-regression-essentials-with-r.html#create-three-samples"><i class="fa fa-check"></i><b>7.6</b> Create three samples</a></li>
+<li class="chapter" data-level="7.7" data-path="linear-regression-essentials-with-r.html"><a href="linear-regression-essentials-with-r.html#run-the-estimation-for-table-1-in-mrw-1992"><i class="fa fa-check"></i><b>7.7</b> Run the estimation for Table 1 in MRW (1992)</a></li>
+<li class="chapter" data-level="7.8" data-path="linear-regression-essentials-with-r.html"><a href="linear-regression-essentials-with-r.html#show-the-results-in-a-table"><i class="fa fa-check"></i><b>7.8</b> Show the results in a table</a></li>
+<li class="chapter" data-level="7.9" data-path="linear-regression-essentials-with-r.html"><a href="linear-regression-essentials-with-r.html#robust-standard-errors"><i class="fa fa-check"></i><b>7.9</b> Robust standard errors</a></li>
+<li class="chapter" data-level="7.10" data-path="linear-regression-essentials-with-r.html"><a href="linear-regression-essentials-with-r.html#some-graphs"><i class="fa fa-check"></i><b>7.10</b> Some Graphs</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="linear-models-with-fixed-effects.html"><a href="linear-models-with-fixed-effects.html"><i class="fa fa-check"></i><b>8</b> Linear Models with Fixed Effects</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="linear-models-with-fixed-effects.html"><a href="linear-models-with-fixed-effects.html#libraries-1"><i class="fa fa-check"></i><b>8.1</b> Libraries</a></li>
+<li class="chapter" data-level="8.2" data-path="linear-models-with-fixed-effects.html"><a href="linear-models-with-fixed-effects.html#review-of-plotting-recreating-figure-1"><i class="fa fa-check"></i><b>8.2</b> Review of Plotting: Recreating Figure 1</a></li>
+<li class="chapter" data-level="8.3" data-path="linear-models-with-fixed-effects.html"><a href="linear-models-with-fixed-effects.html#review-of-plotting-recreating-figure-2"><i class="fa fa-check"></i><b>8.3</b> Review of Plotting: Recreating Figure 2</a></li>
+<li class="chapter" data-level="8.4" data-path="linear-models-with-fixed-effects.html"><a href="linear-models-with-fixed-effects.html#loading-the-data-for-estimation"><i class="fa fa-check"></i><b>8.4</b> Loading the data for estimation</a></li>
+<li class="chapter" data-level="8.5" data-path="linear-models-with-fixed-effects.html"><a href="linear-models-with-fixed-effects.html#pooled-ols-with-time-effects"><i class="fa fa-check"></i><b>8.5</b> Pooled OLS with Time Effects</a></li>
+<li class="chapter" data-level="8.6" data-path="linear-models-with-fixed-effects.html"><a href="linear-models-with-fixed-effects.html#fixed-effects-with-the-lm-function"><i class="fa fa-check"></i><b>8.6</b> Fixed Effects with the <code>lm</code> function</a></li>
+<li class="chapter" data-level="8.7" data-path="linear-models-with-fixed-effects.html"><a href="linear-models-with-fixed-effects.html#pooled-ols-and-fe-with-the-lfe-package"><i class="fa fa-check"></i><b>8.7</b> Pooled OLS and FE with the <code>lfe</code> package</a></li>
+<li class="chapter" data-level="8.8" data-path="linear-models-with-fixed-effects.html"><a href="linear-models-with-fixed-effects.html#review-of-iv"><i class="fa fa-check"></i><b>8.8</b> Review of IV</a></li>
+<li class="chapter" data-level="8.9" data-path="linear-models-with-fixed-effects.html"><a href="linear-models-with-fixed-effects.html#iv-with-felm"><i class="fa fa-check"></i><b>8.9</b> IV with <code>felm</code></a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="instrumental-variables.html"><a href="instrumental-variables.html"><i class="fa fa-check"></i><b>9</b> Instrumental Variables</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="instrumental-variables.html"><a href="instrumental-variables.html#libraries-2"><i class="fa fa-check"></i><b>9.1</b> Libraries</a></li>
+<li class="chapter" data-level="9.2" data-path="instrumental-variables.html"><a href="instrumental-variables.html#functions-we-might-want-to-have"><i class="fa fa-check"></i><b>9.2</b> Functions We Might Want to Have</a></li>
+<li class="chapter" data-level="9.3" data-path="instrumental-variables.html"><a href="instrumental-variables.html#a-brief-review-of-ols-replicating-table-2"><i class="fa fa-check"></i><b>9.3</b> A Brief Review of OLS: Replicating Table 2</a></li>
+<li class="chapter" data-level="9.4" data-path="instrumental-variables.html"><a href="instrumental-variables.html#a-brief-review-of-making-figures-replicating-figure-2"><i class="fa fa-check"></i><b>9.4</b> A Brief Review of Making Figures: Replicating Figure 2</a></li>
+<li class="chapter" data-level="9.5" data-path="instrumental-variables.html"><a href="instrumental-variables.html#iv-replicating-table-4"><i class="fa fa-check"></i><b>9.5</b> IV: Replicating Table 4</a>
+<ul>
+<li class="chapter" data-level="9.5.1" data-path="instrumental-variables.html"><a href="instrumental-variables.html#loading-the-data-1"><i class="fa fa-check"></i><b>9.5.1</b> Loading the data</a></li>
+<li class="chapter" data-level="9.5.2" data-path="instrumental-variables.html"><a href="instrumental-variables.html#doing-it-by-hand"><i class="fa fa-check"></i><b>9.5.2</b> Doing it by hand…</a></li>
+<li class="chapter" data-level="9.5.3" data-path="instrumental-variables.html"><a href="instrumental-variables.html#the-ivreg-command"><i class="fa fa-check"></i><b>9.5.3</b> The <code>ivreg</code> Command</a></li>
+</ul></li>
+<li class="chapter" data-level="9.6" data-path="instrumental-variables.html"><a href="instrumental-variables.html#adding-statistics-to-stargazer"><i class="fa fa-check"></i><b>9.6</b> Adding Statistics to Stargazer</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="difference-in-differences.html"><a href="difference-in-differences.html"><i class="fa fa-check"></i><b>10</b> Difference in Differences</a></li>
+<li class="chapter" data-level="11" data-path="regression-discontinuity-designs-rdd.html"><a href="regression-discontinuity-designs-rdd.html"><i class="fa fa-check"></i><b>11</b> Regression Discontinuity Designs (RDD)</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="regression-discontinuity-designs-rdd.html"><a href="regression-discontinuity-designs-rdd.html#libraries-3"><i class="fa fa-check"></i><b>11.1</b> Libraries</a></li>
+<li class="chapter" data-level="11.2" data-path="regression-discontinuity-designs-rdd.html"><a href="regression-discontinuity-designs-rdd.html#what-is-the-paper-about"><i class="fa fa-check"></i><b>11.2</b> What is the paper about?</a></li>
+<li class="chapter" data-level="11.3" data-path="regression-discontinuity-designs-rdd.html"><a href="regression-discontinuity-designs-rdd.html#lets-load-the-data."><i class="fa fa-check"></i><b>11.3</b> Let’s load the data.</a></li>
+<li class="chapter" data-level="11.4" data-path="regression-discontinuity-designs-rdd.html"><a href="regression-discontinuity-designs-rdd.html#select-and-rename-variables"><i class="fa fa-check"></i><b>11.4</b> Select and rename variables</a></li>
+<li class="chapter" data-level="11.5" data-path="regression-discontinuity-designs-rdd.html"><a href="regression-discontinuity-designs-rdd.html#create-sample"><i class="fa fa-check"></i><b>11.5</b> Create Sample</a></li>
+<li class="chapter" data-level="11.6" data-path="regression-discontinuity-designs-rdd.html"><a href="regression-discontinuity-designs-rdd.html#create-vector-of-control-variables"><i class="fa fa-check"></i><b>11.6</b> Create Vector of Control Variables</a></li>
+<li class="chapter" data-level="11.7" data-path="regression-discontinuity-designs-rdd.html"><a href="regression-discontinuity-designs-rdd.html#summary-statistics-1"><i class="fa fa-check"></i><b>11.7</b> Summary Statistics</a></li>
+<li class="chapter" data-level="11.8" data-path="regression-discontinuity-designs-rdd.html"><a href="regression-discontinuity-designs-rdd.html#histogram-of-islamic-win-margin"><i class="fa fa-check"></i><b>11.8</b> Histogram of Islamic Win Margin</a></li>
+<li class="chapter" data-level="11.9" data-path="regression-discontinuity-designs-rdd.html"><a href="regression-discontinuity-designs-rdd.html#doing-rdd-by-hand"><i class="fa fa-check"></i><b>11.9</b> Doing RDD by Hand</a></li>
+<li class="chapter" data-level="11.10" data-path="regression-discontinuity-designs-rdd.html"><a href="regression-discontinuity-designs-rdd.html#rdrobust-package"><i class="fa fa-check"></i><b>11.10</b> <code>rdrobust</code> Package</a>
+<ul>
+<li class="chapter" data-level="11.10.1" data-path="regression-discontinuity-designs-rdd.html"><a href="regression-discontinuity-designs-rdd.html#rdd-with-and-without-controls"><i class="fa fa-check"></i><b>11.10.1</b> RDD with and without controls</a></li>
+<li class="chapter" data-level="11.10.2" data-path="regression-discontinuity-designs-rdd.html"><a href="regression-discontinuity-designs-rdd.html#different-bandwidths"><i class="fa fa-check"></i><b>11.10.2</b> Different bandwidths</a></li>
+<li class="chapter" data-level="11.10.3" data-path="regression-discontinuity-designs-rdd.html"><a href="regression-discontinuity-designs-rdd.html#different-control-functions"><i class="fa fa-check"></i><b>11.10.3</b> Different control functions</a></li>
+</ul></li>
+<li class="chapter" data-level="11.11" data-path="regression-discontinuity-designs-rdd.html"><a href="regression-discontinuity-designs-rdd.html#rdd-plots"><i class="fa fa-check"></i><b>11.11</b> RDD Plots</a>
+<ul>
+<li class="chapter" data-level="11.11.1" data-path="regression-discontinuity-designs-rdd.html"><a href="regression-discontinuity-designs-rdd.html#main-outcomes-women"><i class="fa fa-check"></i><b>11.11.1</b> Main Outcomes: Women</a></li>
+<li class="chapter" data-level="11.11.2" data-path="regression-discontinuity-designs-rdd.html"><a href="regression-discontinuity-designs-rdd.html#main-outcomes-men"><i class="fa fa-check"></i><b>11.11.2</b> Main Outcomes: Men</a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>III Extended Exercises</b></span></li>
+<li class="chapter" data-level="12" data-path="data-wrangling-with-dplyr.html"><a href="data-wrangling-with-dplyr.html"><i class="fa fa-check"></i><b>12</b> Data Wrangling with <code>dplyr</code></a></li>
+<li class="chapter" data-level="13" data-path="plotting-with-ggplot.html"><a href="plotting-with-ggplot.html"><i class="fa fa-check"></i><b>13</b> Plotting with <code>ggplot</code></a>
+<ul>
+<li class="chapter" data-level="13.1" data-path="plotting-with-ggplot.html"><a href="plotting-with-ggplot.html#load-data-and-clean-variable-names"><i class="fa fa-check"></i><b>13.1</b> Load Data and Clean variable names</a></li>
+<li class="chapter" data-level="13.2" data-path="plotting-with-ggplot.html"><a href="plotting-with-ggplot.html#one-variable-graphs"><i class="fa fa-check"></i><b>13.2</b> One Variable Graphs</a></li>
+<li class="chapter" data-level="13.3" data-path="plotting-with-ggplot.html"><a href="plotting-with-ggplot.html#two-variable-graphs"><i class="fa fa-check"></i><b>13.3</b> Two Variable Graphs</a></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="replicating-adh.html"><a href="replicating-adh.html"><i class="fa fa-check"></i><b>14</b> Replicating ADH</a>
+<ul>
+<li class="chapter" data-level="14.1" data-path="replicating-adh.html"><a href="replicating-adh.html#motivation"><i class="fa fa-check"></i><b>14.1</b> Motivation</a></li>
+<li class="chapter" data-level="14.2" data-path="replicating-adh.html"><a href="replicating-adh.html#us-aggregate-data"><i class="fa fa-check"></i><b>14.2</b> US Aggregate Data</a>
+<ul>
+<li class="chapter" data-level="14.2.1" data-path="replicating-adh.html"><a href="replicating-adh.html#load-necessary-packages"><i class="fa fa-check"></i><b>14.2.1</b> Load Necessary Packages</a></li>
+<li class="chapter" data-level="14.2.2" data-path="replicating-adh.html"><a href="replicating-adh.html#get-data-from-federal-reserve"><i class="fa fa-check"></i><b>14.2.2</b> Get Data from Federal Reserve</a></li>
+<li class="chapter" data-level="14.2.3" data-path="replicating-adh.html"><a href="replicating-adh.html#data-transformations"><i class="fa fa-check"></i><b>14.2.3</b> Data Transformations</a></li>
+<li class="chapter" data-level="14.2.4" data-path="replicating-adh.html"><a href="replicating-adh.html#data-grouping"><i class="fa fa-check"></i><b>14.2.4</b> Data Grouping</a></li>
+<li class="chapter" data-level="14.2.5" data-path="replicating-adh.html"><a href="replicating-adh.html#fact-1-increase-of-imports-from-china-and-the-rest-of-the-world"><i class="fa fa-check"></i><b>14.2.5</b> Fact 1: Increase of Imports from China and the Rest of the World</a></li>
+<li class="chapter" data-level="14.2.6" data-path="replicating-adh.html"><a href="replicating-adh.html#fact-2-increasing-trade-deficit-of-the-us"><i class="fa fa-check"></i><b>14.2.6</b> Fact 2: Increasing trade-deficit of the US</a></li>
+<li class="chapter" data-level="14.2.7" data-path="replicating-adh.html"><a href="replicating-adh.html#fact-3-400-basis-point-fall-in-real-interest-rates-leading-into-china-expansion"><i class="fa fa-check"></i><b>14.2.7</b> Fact 3: 400 basis point fall in real Interest rates leading into China Expansion</a></li>
+</ul></li>
+<li class="chapter" data-level="14.3" data-path="replicating-adh.html"><a href="replicating-adh.html#descriptive-stats-in-adh-using-weighted-statistics"><i class="fa fa-check"></i><b>14.3</b> Descriptive Stats in ADH using Weighted Statistics</a>
+<ul>
+<li class="chapter" data-level="14.3.1" data-path="replicating-adh.html"><a href="replicating-adh.html#details-about-timing-is-as-follows."><i class="fa fa-check"></i><b>14.3.1</b> Details about timing is as follows.</a></li>
+<li class="chapter" data-level="14.3.2" data-path="replicating-adh.html"><a href="replicating-adh.html#understanding-the-essence-of-the-paper-and-what-comes-next."><i class="fa fa-check"></i><b>14.3.2</b> Understanding the Essence of the Paper and What Comes Next.</a></li>
+<li class="chapter" data-level="14.3.3" data-path="replicating-adh.html"><a href="replicating-adh.html#load-necessary-packages-1"><i class="fa fa-check"></i><b>14.3.3</b> Load Necessary Packages</a></li>
+<li class="chapter" data-level="14.3.4" data-path="replicating-adh.html"><a href="replicating-adh.html#load-data"><i class="fa fa-check"></i><b>14.3.4</b> Load Data</a></li>
+<li class="chapter" data-level="14.3.5" data-path="replicating-adh.html"><a href="replicating-adh.html#compute-simple-grouped-mean"><i class="fa fa-check"></i><b>14.3.5</b> Compute Simple Grouped Mean</a></li>
+<li class="chapter" data-level="14.3.6" data-path="replicating-adh.html"><a href="replicating-adh.html#computed-weighted-group-means-and-standard-deviations"><i class="fa fa-check"></i><b>14.3.6</b> Computed Weighted Group Means and Standard Deviations</a></li>
+</ul></li>
+<li class="chapter" data-level="14.4" data-path="replicating-adh.html"><a href="replicating-adh.html#regression-analysis"><i class="fa fa-check"></i><b>14.4</b> Regression Analysis</a>
+<ul>
+<li class="chapter" data-level="14.4.1" data-path="replicating-adh.html"><a href="replicating-adh.html#ols-regression"><i class="fa fa-check"></i><b>14.4.1</b> OLS regression</a></li>
+<li class="chapter" data-level="14.4.2" data-path="replicating-adh.html"><a href="replicating-adh.html#clustering"><i class="fa fa-check"></i><b>14.4.2</b> Clustering</a></li>
+<li class="chapter" data-level="14.4.3" data-path="replicating-adh.html"><a href="replicating-adh.html#instrument-variables"><i class="fa fa-check"></i><b>14.4.3</b> Instrument Variables</a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>IV Solutions to Extended Exercises</b></span></li>
+<li class="chapter" data-level="15" data-path="dplyr-solution.html"><a href="dplyr-solution.html"><i class="fa fa-check"></i><b>15</b> <code>dplyr</code> solution</a></li>
+<li class="chapter" data-level="16" data-path="ggplot-solution.html"><a href="ggplot-solution.html"><i class="fa fa-check"></i><b>16</b> <code>ggplot</code> solution</a>
+<ul>
+<li class="chapter" data-level="16.1" data-path="ggplot-solution.html"><a href="ggplot-solution.html#load-data-and-clean-variable-names-1"><i class="fa fa-check"></i><b>16.1</b> Load Data and Clean variable names</a>
+<ul>
+<li class="chapter" data-level="16.1.1" data-path="ggplot-solution.html"><a href="ggplot-solution.html#load-the-data-from-the-file-dataeconomistdata.csv."><i class="fa fa-check"></i><b>16.1.1</b> 1. Load the data from the file <code>data/EconomistData.csv</code>.</a></li>
+<li class="chapter" data-level="16.1.2" data-path="ggplot-solution.html"><a href="ggplot-solution.html#convert-all-columns-names-to-snakecase-i.e.-my_variable"><i class="fa fa-check"></i><b>16.1.2</b> 2. Convert all columns names to snakecase (i.e. <code>my_variable</code>)</a></li>
+</ul></li>
+<li class="chapter" data-level="16.2" data-path="ggplot-solution.html"><a href="ggplot-solution.html#one-variable-graphs-1"><i class="fa fa-check"></i><b>16.2</b> One Variable Graphs</a>
+<ul>
+<li class="chapter" data-level="16.2.1" data-path="ggplot-solution.html"><a href="ggplot-solution.html#create-a-histogram-of-the-human-development-index.-customize-the-number-of-bins-to-make-the-plot-look-nicer-than-the-default."><i class="fa fa-check"></i><b>16.2.1</b> 1. Create a histogram of the human development index. Customize the number of bins to make the plot look nicer than the default.</a></li>
+<li class="chapter" data-level="16.2.2" data-path="ggplot-solution.html"><a href="ggplot-solution.html#instead-of-a-histogram-create-a-density-plot-of-the-hdi.-extend-your-plot-by"><i class="fa fa-check"></i><b>16.2.2</b> 2. Instead of a histogram, create a density plot of the HDI. Extend your plot by:</a></li>
+<li class="chapter" data-level="16.2.3" data-path="ggplot-solution.html"><a href="ggplot-solution.html#a-in-one-graph-plotting-the-densities-by-region."><i class="fa fa-check"></i><b>16.2.3</b> (a) In one graph plotting the densities by region.</a></li>
+<li class="chapter" data-level="16.2.4" data-path="ggplot-solution.html"><a href="ggplot-solution.html#b-creating-separate-plots-per-region-with-the-area-under-the-density-to-be-coloured-blue."><i class="fa fa-check"></i><b>16.2.4</b> (b) Creating separate plots per region, with the area under the density to be coloured blue.</a></li>
+<li class="chapter" data-level="16.2.5" data-path="ggplot-solution.html"><a href="ggplot-solution.html#c-repeat-1-and-2-for-the-corruption-perception-index."><i class="fa fa-check"></i><b>16.2.5</b> (c) Repeat (1) and (2) for the corruption perception index.</a></li>
+</ul></li>
+<li class="chapter" data-level="16.3" data-path="ggplot-solution.html"><a href="ggplot-solution.html#two-variable-graphs-1"><i class="fa fa-check"></i><b>16.3</b> Two Variable Graphs</a>
+<ul>
+<li class="chapter" data-level="16.3.1" data-path="ggplot-solution.html"><a href="ggplot-solution.html#create-the-simple-scatter-plot"><i class="fa fa-check"></i><b>16.3.1</b> 1. Create the simple scatter plot</a></li>
+<li class="chapter" data-level="16.3.2" data-path="ggplot-solution.html"><a href="ggplot-solution.html#lets-extend-the-plot-in-different-ways.-modify-the-plot-to-each-point-should-be-a-different-plot"><i class="fa fa-check"></i><b>16.3.2</b> 2. Let’s extend the plot in different ways. Modify the plot to (each point should be a different plot)</a></li>
+<li class="chapter" data-level="16.3.3" data-path="ggplot-solution.html"><a href="ggplot-solution.html#a.-make-the-points-blue"><i class="fa fa-check"></i><b>16.3.3</b> a. Make the points blue</a></li>
+<li class="chapter" data-level="16.3.4" data-path="ggplot-solution.html"><a href="ggplot-solution.html#b.-color-the-points-by-region"><i class="fa fa-check"></i><b>16.3.4</b> b. Color the points by region</a></li>
+<li class="chapter" data-level="16.3.5" data-path="ggplot-solution.html"><a href="ggplot-solution.html#c.-color-the-points-by-region-and-make-the-size-of-the-point-vary-by-hdi."><i class="fa fa-check"></i><b>16.3.5</b> c. Color the points by region and make the size of the point vary by HDI.</a></li>
+<li class="chapter" data-level="16.3.6" data-path="ggplot-solution.html"><a href="ggplot-solution.html#lets-extend-the-plot-in-1-by-adding-some-summary-functions-to-it."><i class="fa fa-check"></i><b>16.3.6</b> 3. Let’s extend the plot in (1) by adding some summary functions to it.</a></li>
+<li class="chapter" data-level="16.3.7" data-path="ggplot-solution.html"><a href="ggplot-solution.html#a.-add-a-loess-smoother"><i class="fa fa-check"></i><b>16.3.7</b> a. Add a loess smoother</a></li>
+<li class="chapter" data-level="16.3.8" data-path="ggplot-solution.html"><a href="ggplot-solution.html#b.-add-a-linear-smoother-without-the-confidence-interval.-color-the-line-red."><i class="fa fa-check"></i><b>16.3.8</b> b. Add a linear smoother, without the confidence interval. Color the line red.</a></li>
+<li class="chapter" data-level="16.3.9" data-path="ggplot-solution.html"><a href="ggplot-solution.html#c.-add-the-line-y-x-logx-without-the-confidence-interval.-color-the-line-red."><i class="fa fa-check"></i><b>16.3.9</b> c. Add the line <code>y ~ x + log(x)</code>, without the confidence interval. Color the line red.</a></li>
+<li class="chapter" data-level="16.3.10" data-path="ggplot-solution.html"><a href="ggplot-solution.html#now-we-will-add-the-country-names-to-the-plot-from-1."><i class="fa fa-check"></i><b>16.3.10</b> 4. Now we will add the country names to the plot from (1).</a></li>
+<li class="chapter" data-level="16.3.11" data-path="ggplot-solution.html"><a href="ggplot-solution.html#a.-use-geom_text-to-add-country-names-to-our-plot."><i class="fa fa-check"></i><b>16.3.11</b> a. Use <code>geom_text()</code> to add country names to our plot.</a></li>
+<li class="chapter" data-level="16.3.12" data-path="ggplot-solution.html"><a href="ggplot-solution.html#b.-we-might-not-want-all-the-points-labelled.-create-the-vector"><i class="fa fa-check"></i><b>16.3.12</b> b. We might not want <em>all</em> the points labelled. Create the vector</a></li>
+<li class="chapter" data-level="16.3.13" data-path="ggplot-solution.html"><a href="ggplot-solution.html#now-lets-combine-what-we-learned-above-and-from-the-class-notes-to-build-up-a-presentable-notes.-proceed-as-follows"><i class="fa fa-check"></i><b>16.3.13</b> 5. Now let’s combine what we learned above, and from the class notes to build up a presentable notes. Proceed as follows:</a></li>
+<li class="chapter" data-level="16.3.14" data-path="ggplot-solution.html"><a href="ggplot-solution.html#a.-create-the-simple-scatter-plot"><i class="fa fa-check"></i><b>16.3.14</b> a. Create the simple scatter plot</a></li>
+<li class="chapter" data-level="16.3.15" data-path="ggplot-solution.html"><a href="ggplot-solution.html#b.-make-the-points-hollow-and-colored-by-region.-adjust-the-size-of-the-dots-to-make-them-easier-to-see."><i class="fa fa-check"></i><b>16.3.15</b> b. Make the points hollow, and colored by region. Adjust the size of the dots to make them easier to see.</a></li>
+<li class="chapter" data-level="16.3.16" data-path="ggplot-solution.html"><a href="ggplot-solution.html#c.-add-the-line-y-x-logx-without-the-confidence-interval.-color-the-line-red.-1"><i class="fa fa-check"></i><b>16.3.16</b> c. Add the line <code>y ~ x + log(x)</code>, without the confidence interval. Color the line red.</a></li>
+<li class="chapter" data-level="16.3.17" data-path="ggplot-solution.html"><a href="ggplot-solution.html#d.-change-the-color-of-the-dots-to-be-less-ugly.-i-used-scale_color_manual-but-you-dont-need-to."><i class="fa fa-check"></i><b>16.3.17</b> d. Change the color of the dots to be less ugly. I used <code>scale_color_manual()</code> but you don’t need to.</a></li>
+<li class="chapter" data-level="16.3.18" data-path="ggplot-solution.html"><a href="ggplot-solution.html#e.-add-meaningful-x-and-y-labels.-and-a-title-which-is-centered.-can-you-add-a-note-near-the-bottom-of-the-figure-to-say-that-the-data-comes-from-transparency-international-and-un-human-development-report"><i class="fa fa-check"></i><b>16.3.18</b> e. Add meaningful x and y labels. And a title (which is centered). Can you add a note near the bottom of the figure to say that the data comes from “Transparency International and UN Human Development Report”?</a></li>
+<li class="chapter" data-level="16.3.19" data-path="ggplot-solution.html"><a href="ggplot-solution.html#f.-label-the-points-from-points_to_label-in-4b."><i class="fa fa-check"></i><b>16.3.19</b> f. Label the points from <code>points_to_label</code> in 4b.</a></li>
+<li class="chapter" data-level="16.3.20" data-path="ggplot-solution.html"><a href="ggplot-solution.html#g.-adjust-the-x-and-y-axes-to-have-a-better-range-and-set-of-axis-ticks.-you-are-free-to-choose-what-you-like."><i class="fa fa-check"></i><b>16.3.20</b> g. Adjust the x and y axes to have a better range, and set of axis ticks. You are free to choose what you like.</a></li>
+<li class="chapter" data-level="16.3.21" data-path="ggplot-solution.html"><a href="ggplot-solution.html#h.-move-the-legend-to-the-bottom-of-the-plot.-adjust-the-legend-names-so-that-they-are-easier-to-read-and-more-meaningful.-the-easiest-way-to-do-this-is-to-use-dplyr-to-recode-the-region-variable-as-a-factor-and-give-it-appropriate-labels.-using-the-help-menu-for-factor-should-help-you-here."><i class="fa fa-check"></i><b>16.3.21</b> h. Move the legend to the bottom of the plot. Adjust the legend names so that they are easier to read and more meaningful. The easiest way to do this is to use <code>dplyr</code> to recode the region variable as a factor, and give it appropriate labels. Using the help menu for <code>factor</code> should help you here.</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="17" data-path="replicating-adh-1.html"><a href="replicating-adh-1.html"><i class="fa fa-check"></i><b>17</b> Replicating ADH</a>
+<ul>
+<li class="chapter" data-level="17.1" data-path="replicating-adh-1.html"><a href="replicating-adh-1.html#aggregate-facts"><i class="fa fa-check"></i><b>17.1</b> Aggregate Facts</a></li>
+<li class="chapter" data-level="17.2" data-path="replicating-adh-1.html"><a href="replicating-adh-1.html#descriptive-stats"><i class="fa fa-check"></i><b>17.2</b> Descriptive Stats</a>
+<ul>
+<li class="chapter" data-level="17.2.1" data-path="replicating-adh-1.html"><a href="replicating-adh-1.html#load-data-1"><i class="fa fa-check"></i><b>17.2.1</b> Load Data</a></li>
+<li class="chapter" data-level="17.2.2" data-path="replicating-adh-1.html"><a href="replicating-adh-1.html#compute-simple-grouped-mean-1"><i class="fa fa-check"></i><b>17.2.2</b> Compute Simple Grouped Mean</a></li>
+<li class="chapter" data-level="17.2.3" data-path="replicating-adh-1.html"><a href="replicating-adh-1.html#computed-weighted-group-means-and-standard-deviations-1"><i class="fa fa-check"></i><b>17.2.3</b> Computed Weighted Group Means and Standard Deviations</a></li>
+</ul></li>
+<li class="chapter" data-level="17.3" data-path="replicating-adh-1.html"><a href="replicating-adh-1.html#regression"><i class="fa fa-check"></i><b>17.3</b> Regression</a>
+<ul>
+<li class="chapter" data-level="17.3.1" data-path="replicating-adh-1.html"><a href="replicating-adh-1.html#ols-regression-1"><i class="fa fa-check"></i><b>17.3.1</b> OLS regression</a></li>
+<li class="chapter" data-level="17.3.2" data-path="replicating-adh-1.html"><a href="replicating-adh-1.html#clustering-1"><i class="fa fa-check"></i><b>17.3.2</b> Clustering</a></li>
+<li class="chapter" data-level="17.3.3" data-path="replicating-adh-1.html"><a href="replicating-adh-1.html#instrument-variables-1"><i class="fa fa-check"></i><b>17.3.3</b> Instrument Variables</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">An Introduction to R for Economics and Business Research</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="reading-and-writing-data" class="section level1" number="5">
+<h1><span class="header-section-number">Chapter 5</span> Reading and Writing Data</h1>
+<p>So far we have only used datasets from <code>R</code> packages or created toy tibbles. In this section, we will learn how to read in data from a variety of sources.</p>
+<div id="reading-csv-files-with-readr" class="section level2" number="5.1">
+<h2><span class="header-section-number">5.1</span> Reading <code>csv</code> files with <code>readr</code></h2>
+<p>We will start with the <code>readr</code> packages which is useful to a) read in <code>csv</code> files and to b) correctly parsing data columns. Before we start, let’s load some packages.</p>
+<div class="sourceCode" id="cb313"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb313-1"><a href="reading-and-writing-data.html#cb313-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
+<span id="cb313-2"><a href="reading-and-writing-data.html#cb313-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tibble)</span>
+<span id="cb313-3"><a href="reading-and-writing-data.html#cb313-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code></pre></div>
+<!---
+### Working directory
+First steps first: To read in data from a specific location on our hard drive we should specify a working directory. You can get the current working directory with `getwd()` and set a new one with `setwd()`. In this case, I set the working directory to the `r_public` folder that I created before. 
+
+```r
+cat("Current working directory:")
+```
+
+```
+## Current working directory:
+```
+
+```r
+getwd()
+```
+
+```
+## [1] "/Users/runner/work/pp4rs-rstats/pp4rs-rstats"
+```
+
+```r
+my_wd = "/Users/jlanger/Dropbox/uzh_programming/r_public"
+cat("New working directory: ", my_wd)
+```
+
+```
+## New working directory:  /Users/jlanger/Dropbox/uzh_programming/r_public
+```
+
+```r
+#setwd(my_wd) # delete comment here when running code
+```
+
+--->
+<div id="reading-in--delimited-data" class="section level3" number="5.1.1">
+<h3><span class="header-section-number">5.1.1</span> Reading in *-delimited data</h3>
+<p>The <code>readr</code> package provides several functions to read in delimited data:</p>
+<ul>
+<li><code>read_csv()</code>: comma delimited</li>
+<li><code>read_csv2()</code>: semicolon delimited</li>
+<li><code>read_tsv()</code>: tab delimited</li>
+<li><code>read_delim()</code>: any delimiter</li>
+</ul>
+<p>To see how they work, let’s create some data and read them in. (I know, I know still no real data. Be patient!)</p>
+<div class="sourceCode" id="cb314"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb314-1"><a href="reading-and-writing-data.html#cb314-1" aria-hidden="true" tabindex="-1"></a>my_csv <span class="ot">=</span> <span class="st">&quot;a, b, c, d </span></span>
+<span id="cb314-2"><a href="reading-and-writing-data.html#cb314-2" aria-hidden="true" tabindex="-1"></a><span class="st">          1, 2, 3, 4</span></span>
+<span id="cb314-3"><a href="reading-and-writing-data.html#cb314-3" aria-hidden="true" tabindex="-1"></a><span class="st">          5, 6, 7, 8&quot;</span></span>
+<span id="cb314-4"><a href="reading-and-writing-data.html#cb314-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb314-5"><a href="reading-and-writing-data.html#cb314-5" aria-hidden="true" tabindex="-1"></a><span class="fu">read_csv</span>(my_csv)</span></code></pre></div>
+<pre><code>## Rows: 2 Columns: 4</code></pre>
+<pre><code>## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## dbl (4): a, b, c, d</code></pre>
+<pre><code>## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre><code>## # A tibble: 2 × 4
+##       a     b     c     d
+##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1     1     2     3     4
+## 2     5     6     7     8</code></pre>
+<p>As you can see, the function correctly interpreted the first line of our string as variable names and the remaining elements as comma-separated integers. The other functions work in a similar way. There is one exception though: <code>read_delim</code>. It allows for more general specifications.</p>
+<div class="sourceCode" id="cb319"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb319-1"><a href="reading-and-writing-data.html#cb319-1" aria-hidden="true" tabindex="-1"></a>my_csv <span class="ot">=</span> <span class="st">&quot;a_ b_ c_ d</span></span>
+<span id="cb319-2"><a href="reading-and-writing-data.html#cb319-2" aria-hidden="true" tabindex="-1"></a><span class="st">          1_ 2_ Maria_ female</span></span>
+<span id="cb319-3"><a href="reading-and-writing-data.html#cb319-3" aria-hidden="true" tabindex="-1"></a><span class="st">          5_ 6_ Teresa_ female&quot;</span></span>
+<span id="cb319-4"><a href="reading-and-writing-data.html#cb319-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb319-5"><a href="reading-and-writing-data.html#cb319-5" aria-hidden="true" tabindex="-1"></a><span class="fu">read_delim</span>(my_csv, <span class="at">delim =</span> <span class="st">&quot;_&quot;</span>, <span class="at">trim_ws =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>## Rows: 2 Columns: 4</code></pre>
+<pre><code>## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;_&quot;
+## chr (2): c, d
+## dbl (2): a, b</code></pre>
+<pre><code>## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre><code>## # A tibble: 2 × 4
+##       a     b c      d     
+##   &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; 
+## 1     1     2 Maria  female
+## 2     5     6 Teresa female</code></pre>
+<p>In this case, we specified an underscore as the delimiter and told the function to trim leading and trailing whitespace. Sometimes the <code>csv</code> file includes lines which we want <code>readr</code> to ignore. To do this we use the <code>skip</code> argument.</p>
+<div class="sourceCode" id="cb324"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb324-1"><a href="reading-and-writing-data.html#cb324-1" aria-hidden="true" tabindex="-1"></a>my_csv <span class="ot">=</span> <span class="st">&quot;Sometimes you can read some rubbish here</span></span>
+<span id="cb324-2"><a href="reading-and-writing-data.html#cb324-2" aria-hidden="true" tabindex="-1"></a><span class="st">          We don&#39;t want to import this </span></span>
+<span id="cb324-3"><a href="reading-and-writing-data.html#cb324-3" aria-hidden="true" tabindex="-1"></a><span class="st">          name, age</span></span>
+<span id="cb324-4"><a href="reading-and-writing-data.html#cb324-4" aria-hidden="true" tabindex="-1"></a><span class="st">          Julian, 29&quot;</span></span>
+<span id="cb324-5"><a href="reading-and-writing-data.html#cb324-5" aria-hidden="true" tabindex="-1"></a><span class="fu">read_csv</span>(my_csv, <span class="at">skip =</span> <span class="dv">2</span>)</span></code></pre></div>
+<pre><code>## Rows: 1 Columns: 2</code></pre>
+<pre><code>## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr (1): name
+## dbl (1): age</code></pre>
+<pre><code>## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre><code>## # A tibble: 1 × 2
+##   name     age
+##   &lt;chr&gt;  &lt;dbl&gt;
+## 1 Julian    29</code></pre>
+<p>At other times, the <code>csv</code> file does not provide variable names, we can provide them by passing a character vector as the <code>col_names</code> argument.</p>
+<div class="sourceCode" id="cb329"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb329-1"><a href="reading-and-writing-data.html#cb329-1" aria-hidden="true" tabindex="-1"></a>my_csv <span class="ot">=</span> <span class="st">&quot;Julian, 29</span><span class="sc">\n</span><span class="st">Teresa, 25&quot;</span></span>
+<span id="cb329-2"><a href="reading-and-writing-data.html#cb329-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb329-3"><a href="reading-and-writing-data.html#cb329-3" aria-hidden="true" tabindex="-1"></a><span class="fu">read_csv</span>(my_csv, <span class="at">col_names =</span> <span class="fu">c</span>(<span class="st">&quot;Name&quot;</span>, <span class="st">&quot;Age&quot;</span>))</span></code></pre></div>
+<pre><code>## Rows: 2 Columns: 2</code></pre>
+<pre><code>## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr (1): Name
+## dbl (1): Age</code></pre>
+<pre><code>## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre><code>## # A tibble: 2 × 2
+##   Name     Age
+##   &lt;chr&gt;  &lt;dbl&gt;
+## 1 Julian    29
+## 2 Teresa    25</code></pre>
+<p>There are more options and you can explore them by looking them up in the help file. For now, I will only show you one more useful option: You can use the <code>na</code> argument to specify the characters used in the <code>csv</code> file to indicate missing values.</p>
+<div class="sourceCode" id="cb334"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb334-1"><a href="reading-and-writing-data.html#cb334-1" aria-hidden="true" tabindex="-1"></a>my_csv <span class="ot">=</span> <span class="st">&quot;Julian, 29</span></span>
+<span id="cb334-2"><a href="reading-and-writing-data.html#cb334-2" aria-hidden="true" tabindex="-1"></a><span class="st">          Teresa, 25</span></span>
+<span id="cb334-3"><a href="reading-and-writing-data.html#cb334-3" aria-hidden="true" tabindex="-1"></a><span class="st">          Jonas, . </span></span>
+<span id="cb334-4"><a href="reading-and-writing-data.html#cb334-4" aria-hidden="true" tabindex="-1"></a><span class="st">          ., 64&quot;</span></span>
+<span id="cb334-5"><a href="reading-and-writing-data.html#cb334-5" aria-hidden="true" tabindex="-1"></a><span class="fu">read_csv</span>(my_csv, <span class="at">col_names =</span> <span class="fu">c</span>(<span class="st">&quot;Name&quot;</span>, <span class="st">&quot;Age&quot;</span>), <span class="at">na =</span> <span class="st">&quot;.&quot;</span>)</span></code></pre></div>
+<pre><code>## Rows: 4 Columns: 2</code></pre>
+<pre><code>## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr (1): Name
+## dbl (1): Age</code></pre>
+<pre><code>## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre><code>## # A tibble: 4 × 2
+##   Name     Age
+##   &lt;chr&gt;  &lt;dbl&gt;
+## 1 Julian    29
+## 2 Teresa    25
+## 3 Jonas     NA
+## 4 &lt;NA&gt;      64</code></pre>
+</div>
+</div>
+<div id="parsing-data-correctly-with-the-parse-functions" class="section level2" number="5.2">
+<h2><span class="header-section-number">5.2</span> Parsing data correctly with the <code>parse</code> functions</h2>
+<p>Sometimes columns are not correctly interpreted when they are read in. For these vectors, we can parse them differently using the <code>parse</code> functions. Each of these functions takes a vector and returns a vector. For example, assume in the following that I want to parse the <code>age</code> column not as an integer vector but as a character vector. I can use the <code>parse_character</code> function for this.</p>
+<div class="sourceCode" id="cb339"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb339-1"><a href="reading-and-writing-data.html#cb339-1" aria-hidden="true" tabindex="-1"></a>my_csv <span class="ot">=</span> <span class="st">&quot;Julian, 29</span></span>
+<span id="cb339-2"><a href="reading-and-writing-data.html#cb339-2" aria-hidden="true" tabindex="-1"></a><span class="st">          Teresa, 25</span></span>
+<span id="cb339-3"><a href="reading-and-writing-data.html#cb339-3" aria-hidden="true" tabindex="-1"></a><span class="st">          Jonas, . </span></span>
+<span id="cb339-4"><a href="reading-and-writing-data.html#cb339-4" aria-hidden="true" tabindex="-1"></a><span class="st">          ., 64&quot;</span></span>
+<span id="cb339-5"><a href="reading-and-writing-data.html#cb339-5" aria-hidden="true" tabindex="-1"></a>my_tibble <span class="ot">=</span> <span class="fu">read_csv</span>(my_csv, <span class="at">col_names =</span> <span class="fu">c</span>(<span class="st">&quot;name&quot;</span>, <span class="st">&quot;age&quot;</span>), <span class="at">na =</span> <span class="st">&quot;.&quot;</span>)</span></code></pre></div>
+<pre><code>## Rows: 4 Columns: 2</code></pre>
+<pre><code>## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr (1): name
+## dbl (1): age</code></pre>
+<pre><code>## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<div class="sourceCode" id="cb343"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb343-1"><a href="reading-and-writing-data.html#cb343-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(my_tibble)</span></code></pre></div>
+<pre><code>## # A tibble: 4 × 2
+##   name     age
+##   &lt;chr&gt;  &lt;dbl&gt;
+## 1 Julian    29
+## 2 Teresa    25
+## 3 Jonas     NA
+## 4 &lt;NA&gt;      64</code></pre>
+<div class="sourceCode" id="cb345"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb345-1"><a href="reading-and-writing-data.html#cb345-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(<span class="fu">parse_character</span>(my_tibble<span class="sc">$</span>age))</span></code></pre></div>
+<pre><code>## Error in parse_vector(x, col_character(), na = na, locale = locale, trim_ws = trim_ws): is.character(x) is not TRUE</code></pre>
+<p>There are a bunch of functions, each for a different kind of data type:</p>
+<ul>
+<li><code>parse_logical</code></li>
+<li><code>parse_number</code> (<code>parse_double</code>, <code>parse_integer</code>)</li>
+<li><code>parse_character</code></li>
+<li><code>parse_datetime</code> (<code>parse_date</code>, <code>parse_datetime</code>)</li>
+</ul>
+<p>Let’s look at some of them in the following.</p>
+<div id="parsing-numbers" class="section level3" number="5.2.1">
+<h3><span class="header-section-number">5.2.1</span> Parsing numbers</h3>
+<p>The <code>parse_number</code> function is pretty amazing. It can recover number vectors from almost anything! Just look at the following example.</p>
+<div class="sourceCode" id="cb347"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb347-1"><a href="reading-and-writing-data.html#cb347-1" aria-hidden="true" tabindex="-1"></a>my_column <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;100$&quot;</span>, <span class="st">&quot;20%&quot;</span>, <span class="st">&quot;Something with a 100&quot;</span>)</span>
+<span id="cb347-2"><a href="reading-and-writing-data.html#cb347-2" aria-hidden="true" tabindex="-1"></a><span class="fu">parse_number</span>(my_column)</span></code></pre></div>
+<pre><code>## [1] 100  20 100</code></pre>
+<p>You use the locale function to control for country-specific delimiters for the decimal point and grouping.</p>
+<div class="sourceCode" id="cb349"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb349-1"><a href="reading-and-writing-data.html#cb349-1" aria-hidden="true" tabindex="-1"></a><span class="co"># comma instead of decimal point</span></span>
+<span id="cb349-2"><a href="reading-and-writing-data.html#cb349-2" aria-hidden="true" tabindex="-1"></a>my_column <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;1,23&quot;</span>, <span class="st">&quot;1,23&quot;</span>, <span class="st">&quot;1,245&quot;</span>)</span>
+<span id="cb349-3"><a href="reading-and-writing-data.html#cb349-3" aria-hidden="true" tabindex="-1"></a><span class="fu">parse_number</span>(my_column, <span class="at">locale =</span> <span class="fu">locale</span>(<span class="at">decimal_mark =</span> <span class="st">&quot;,&quot;</span>))</span></code></pre></div>
+<pre><code>## [1] 1.230 1.230 1.245</code></pre>
+<div class="sourceCode" id="cb351"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb351-1"><a href="reading-and-writing-data.html#cb351-1" aria-hidden="true" tabindex="-1"></a><span class="co"># &#39; to group numbers</span></span>
+<span id="cb351-2"><a href="reading-and-writing-data.html#cb351-2" aria-hidden="true" tabindex="-1"></a>my_column <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;123&#39;456&#39;789&quot;</span>)</span>
+<span id="cb351-3"><a href="reading-and-writing-data.html#cb351-3" aria-hidden="true" tabindex="-1"></a><span class="fu">parse_number</span>(my_column, <span class="at">locale =</span> <span class="fu">locale</span>(<span class="at">grouping_mark =</span> <span class="st">&quot;&#39;&quot;</span>))</span></code></pre></div>
+<pre><code>## [1] 123456789</code></pre>
+</div>
+<div id="parsing-characters" class="section level3" number="5.2.2">
+<h3><span class="header-section-number">5.2.2</span> Parsing characters</h3>
+<p>You would think parsing characters is pretty easy. There can be difficulties though because not everybody uses the same character encoding. To learn more about this topic, take a look at this website: <a href="http://www.w3.org/International/articles/definitions-characters/" class="uri">http://www.w3.org/International/articles/definitions-characters/</a>. We only need to know that different encodings exist and they can lead to problems. R usually assumes to ‘UTF-8’ encoding (and you should use it too!). See what happens if we read in characters with <code>Latin-1</code> encoding:</p>
+<div class="sourceCode" id="cb353"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb353-1"><a href="reading-and-writing-data.html#cb353-1" aria-hidden="true" tabindex="-1"></a>x1 <span class="ot">=</span> <span class="st">&quot;El Ni</span><span class="sc">\xf1</span><span class="st">o was particularly bad this year&quot;</span></span>
+<span id="cb353-2"><a href="reading-and-writing-data.html#cb353-2" aria-hidden="true" tabindex="-1"></a><span class="fu">parse_character</span>(x1)</span></code></pre></div>
+<pre><code>## [1] &quot;El Ni\xf1o was particularly bad this year&quot;</code></pre>
+<p>Well, that does not look nice. But luckily enough, we can use the <code>locale</code> function to tell <code>readr</code> that the string is encoded with <code>Latin-1</code>.</p>
+<div class="sourceCode" id="cb355"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb355-1"><a href="reading-and-writing-data.html#cb355-1" aria-hidden="true" tabindex="-1"></a><span class="fu">parse_character</span>(x1, <span class="at">locale =</span> <span class="fu">locale</span>(<span class="at">encoding =</span> <span class="st">&quot;Latin1&quot;</span>))</span></code></pre></div>
+<pre><code>## [1] &quot;El Niño was particularly bad this year&quot;</code></pre>
+<p>Now, this time the parsing is correct! You can also use <code>readr</code> to try to guess the encoding with the <code>guess_encoding</code> function. Look up its help file if you want to know more.</p>
+</div>
+<div id="parsing-dates" class="section level3" number="5.2.3">
+<h3><span class="header-section-number">5.2.3</span> Parsing dates</h3>
+<div class="sourceCode" id="cb357"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb357-1"><a href="reading-and-writing-data.html#cb357-1" aria-hidden="true" tabindex="-1"></a><span class="co"># specify time zone maybe</span></span>
+<span id="cb357-2"><a href="reading-and-writing-data.html#cb357-2" aria-hidden="true" tabindex="-1"></a><span class="fu">parse_datetime</span>(<span class="st">&quot;2016-09-08T0708&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;2016-09-08 07:08:00 UTC&quot;</code></pre>
+<div class="sourceCode" id="cb359"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb359-1"><a href="reading-and-writing-data.html#cb359-1" aria-hidden="true" tabindex="-1"></a><span class="fu">parse_datetime</span>(<span class="st">&quot;20160908T0708&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;2016-09-08 07:08:00 UTC&quot;</code></pre>
+<div class="sourceCode" id="cb361"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb361-1"><a href="reading-and-writing-data.html#cb361-1" aria-hidden="true" tabindex="-1"></a><span class="fu">parse_date</span>(<span class="st">&quot;2016-09-08&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;2016-09-08&quot;</code></pre>
+<div class="sourceCode" id="cb363"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb363-1"><a href="reading-and-writing-data.html#cb363-1" aria-hidden="true" tabindex="-1"></a><span class="fu">parse_date</span>(<span class="st">&quot;2016/09/08&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;2016-09-08&quot;</code></pre>
+<div class="sourceCode" id="cb365"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb365-1"><a href="reading-and-writing-data.html#cb365-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(hms)</span>
+<span id="cb365-2"><a href="reading-and-writing-data.html#cb365-2" aria-hidden="true" tabindex="-1"></a><span class="fu">parse_time</span>(<span class="st">&quot;01:10 am&quot;</span>)</span></code></pre></div>
+<pre><code>## 01:10:00</code></pre>
+<div class="sourceCode" id="cb367"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb367-1"><a href="reading-and-writing-data.html#cb367-1" aria-hidden="true" tabindex="-1"></a><span class="fu">parse_date</span>(<span class="st">&quot;27/05/1987&quot;</span>, <span class="st">&quot;%d/%m/%Y&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;1987-05-27&quot;</code></pre>
+</div>
+</div>
+<div id="parsing-and-reading-at-the-same-time" class="section level2" number="5.3">
+<h2><span class="header-section-number">5.3</span> Parsing and reading at the same time</h2>
+<p>Each <code>parse</code> function has a corresponding <code>col</code> function. This allows you to use the <code>parse</code> function to find out how to correctly parse a column and then specify the correct parsing right at the beginning of the data processing using the corresponding <code>col</code> function. I usually read in data in three steps.</p>
+<ol style="list-style-type: decimal">
+<li>First, I read in all columns as character vectors. This allows me to browse the data and determine the correct parsing. To read in every column as a character vector, you can use the <code>.default</code> argument in the <code>col_types</code> function.</li>
+</ol>
+<div class="sourceCode" id="cb369"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb369-1"><a href="reading-and-writing-data.html#cb369-1" aria-hidden="true" tabindex="-1"></a>challenge1 <span class="ot">=</span> <span class="fu">read_csv</span>(<span class="fu">readr_example</span>(<span class="st">&quot;challenge.csv&quot;</span>),  </span>
+<span id="cb369-2"><a href="reading-and-writing-data.html#cb369-2" aria-hidden="true" tabindex="-1"></a>                      <span class="co"># there&#39;s an example dataset in the readr package called challenge.csv</span></span>
+<span id="cb369-3"><a href="reading-and-writing-data.html#cb369-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">col_types =</span> <span class="fu">cols</span>(</span>
+<span id="cb369-4"><a href="reading-and-writing-data.html#cb369-4" aria-hidden="true" tabindex="-1"></a>                       <span class="at">.default =</span> <span class="fu">col_character</span>()</span>
+<span id="cb369-5"><a href="reading-and-writing-data.html#cb369-5" aria-hidden="true" tabindex="-1"></a>                     ))</span></code></pre></div>
+<ol start="2" style="list-style-type: decimal">
+<li><p>I can try out different parsers using the <code>parse</code> functions. (Note that you can use the <code>parse</code> functions from the <code>readr</code> package together with other packages such as <code>readxl</code>). In this case, browsing and parsing will lead you to conclude that the correct parsers are <code>parse_double</code> and <code>parse_data</code>, respectively.</p></li>
+<li><p>Finally, we specify the correct parsers directly at the beginning of the data processing stage using the <code>col</code> functions that correspond to the <code>parse</code> functions.</p></li>
+</ol>
+<div class="sourceCode" id="cb370"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb370-1"><a href="reading-and-writing-data.html#cb370-1" aria-hidden="true" tabindex="-1"></a>challenge2 <span class="ot">=</span> <span class="fu">read_csv</span>(<span class="fu">readr_example</span>(<span class="st">&quot;challenge.csv&quot;</span>),</span>
+<span id="cb370-2"><a href="reading-and-writing-data.html#cb370-2" aria-hidden="true" tabindex="-1"></a>                      <span class="at">col_types =</span> <span class="fu">cols</span>(</span>
+<span id="cb370-3"><a href="reading-and-writing-data.html#cb370-3" aria-hidden="true" tabindex="-1"></a>                        <span class="at">x =</span> <span class="fu">col_double</span>(),</span>
+<span id="cb370-4"><a href="reading-and-writing-data.html#cb370-4" aria-hidden="true" tabindex="-1"></a>                        <span class="at">y =</span> <span class="fu">col_date</span>()</span>
+<span id="cb370-5"><a href="reading-and-writing-data.html#cb370-5" aria-hidden="true" tabindex="-1"></a>                      ))</span>
+<span id="cb370-6"><a href="reading-and-writing-data.html#cb370-6" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(challenge2)</span></code></pre></div>
+<pre><code>## # A tibble: 6 × 2
+##       x y         
+##   &lt;dbl&gt; &lt;date&gt;    
+## 1   404 NA        
+## 2  4172 NA        
+## 3  3004 NA        
+## 4   787 NA        
+## 5    37 NA        
+## 6  2332 NA</code></pre>
+</div>
+<div id="writing-csv-files" class="section level2" number="5.4">
+<h2><span class="header-section-number">5.4</span> Writing <code>csv</code> files</h2>
+<p>You can use the <code>readr</code> package to write <code>csv</code> files as well. In this case, we want to save our cleaned up dataframe as a <code>csv</code> file in a <code>dataframes</code> sub-folder. For this, we first check whether the sub-folder already exists. If it does not, we create it.</p>
+<div class="sourceCode" id="cb372"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb372-1"><a href="reading-and-writing-data.html#cb372-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">file.exists</span>(<span class="st">&quot;dataframes&quot;</span>)) {</span>
+<span id="cb372-2"><a href="reading-and-writing-data.html#cb372-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dir.create</span>(<span class="st">&quot;dataframes&quot;</span>)</span>
+<span id="cb372-3"><a href="reading-and-writing-data.html#cb372-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Then, we write the <code>csv</code> file using the <code>write_csv</code> function.</p>
+<div class="sourceCode" id="cb373"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb373-1"><a href="reading-and-writing-data.html#cb373-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(challenge2, <span class="st">&quot;./dataframes/challenge2.csv&quot;</span>)</span></code></pre></div>
+<p>You can check now in your working directory whether this worked. Note that a <code>csv</code> file does not store the information about the correct parsing of the data columns.</p>
+<div class="sourceCode" id="cb374"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb374-1"><a href="reading-and-writing-data.html#cb374-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read_csv</span>(<span class="st">&quot;./dataframes/challenge2.csv&quot;</span>)</span></code></pre></div>
+<pre><code>## Rows: 2000 Columns: 2</code></pre>
+<pre><code>## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## dbl  (1): x
+## date (1): y</code></pre>
+<pre><code>## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre><code>## # A tibble: 2,000 × 2
+##        x y         
+##    &lt;dbl&gt; &lt;date&gt;    
+##  1   404 NA        
+##  2  4172 NA        
+##  3  3004 NA        
+##  4   787 NA        
+##  5    37 NA        
+##  6  2332 NA        
+##  7  2489 NA        
+##  8  1449 NA        
+##  9  3665 NA        
+## 10  3863 NA        
+## # … with 1,990 more rows</code></pre>
+<p>We have to specify the correct parsing again! If you only work with <code>R</code> and the dataframe is not too big, you can store the dataframe as an <code>RDS</code> file instead.</p>
+</div>
+<div id="write-and-read-rds-files-with-readr" class="section level2" number="5.5">
+<h2><span class="header-section-number">5.5</span> Write and read <code>RDS</code> files with <code>readr</code></h2>
+<p>There is not much to say here apart from the fact that the <code>RDS</code> file ‘remembers’ the correct parsing.</p>
+<div class="sourceCode" id="cb379"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb379-1"><a href="reading-and-writing-data.html#cb379-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write_rds</span>(challenge2, <span class="st">&quot;./dataframes/challenge2.rds&quot;</span>)</span>
+<span id="cb379-2"><a href="reading-and-writing-data.html#cb379-2" aria-hidden="true" tabindex="-1"></a>challenge_rds <span class="ot">=</span> <span class="fu">read_rds</span>(<span class="st">&quot;./dataframes/challenge2.rds&quot;</span>)</span>
+<span id="cb379-3"><a href="reading-and-writing-data.html#cb379-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(challenge_rds)</span></code></pre></div>
+<pre><code>## # A tibble: 6 × 2
+##       x y         
+##   &lt;dbl&gt; &lt;date&gt;    
+## 1   404 NA        
+## 2  4172 NA        
+## 3  3004 NA        
+## 4   787 NA        
+## 5    37 NA        
+## 6  2332 NA</code></pre>
+</div>
+<div id="reading-in-excel-sheets-and-stata-data-with-readxl-and-haven" class="section level2" number="5.6">
+<h2><span class="header-section-number">5.6</span> Reading in Excel sheets and Stata data with <code>readxl</code> and <code>haven</code></h2>
+<p>Many datasets are stored in Excel sheets. You can read them in using the <code>readxl</code> package. A similar package, <code>haven</code>, exists for Stata files. I will not use them here, but can look at the helpfiles for the commands <code>read_excel</code> and <code>read_dta</code>.</p>
+<div class="sourceCode" id="cb381"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb381-1"><a href="reading-and-writing-data.html#cb381-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl)</span>
+<span id="cb381-2"><a href="reading-and-writing-data.html#cb381-2" aria-hidden="true" tabindex="-1"></a><span class="fu">help</span>(read_excel)</span></code></pre></div>
+<div class="sourceCode" id="cb382"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb382-1"><a href="reading-and-writing-data.html#cb382-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven)</span>
+<span id="cb382-2"><a href="reading-and-writing-data.html#cb382-2" aria-hidden="true" tabindex="-1"></a><span class="fu">help</span>(read_dta)</span></code></pre></div>
+<p>If you want to try them out, you can use the data files from the ‘Baby-Wooldridge’ here: <a href="http://www.cengage.com/aise/economics/wooldridge_3e_datasets/" class="uri">http://www.cengage.com/aise/economics/wooldridge_3e_datasets/</a>.</p>
+</div>
+<div id="sources-3" class="section level2 unnumbered">
+<h2>Sources</h2>
+<p>The exposition here is inspired by the notes for a new book on R data science by Garrett Grolemund and Hadley Wickham. You can find detailed outlines here: <a href="http://r4ds.had.co.nz" class="uri">http://r4ds.had.co.nz</a>.</p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="factor-variables.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="working-with-strings.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["pp4rs-rstats.pdf", "pp4rs-rstats.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

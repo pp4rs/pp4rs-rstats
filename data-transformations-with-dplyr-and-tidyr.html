@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 2 Data Transformations with dplyr and tidyr | An Introduction to R for Economics and Business Research</title>
+  <meta name="description" content="Lecture notes on R for Programming Practices in Research in Economics." />
+  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 2 Data Transformations with dplyr and tidyr | An Introduction to R for Economics and Business Research" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Lecture notes on R for Programming Practices in Research in Economics." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 2 Data Transformations with dplyr and tidyr | An Introduction to R for Economics and Business Research" />
+  
+  <meta name="twitter:description" content="Lecture notes on R for Programming Practices in Research in Economics." />
+  
+
+<meta name="author" content="Julian Langer" />
+<meta name="author" content="Lachlan Deer" />
+<meta name="author" content="Ulrich Bergmann" />
+
+
+<meta name="date" content="2021-09-27" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="basics-of-r.html"/>
+<link rel="next" href="visualizing-data-with-ggplot2.html"/>
+<script src="libs/header-attrs-2.9/header-attrs.js"></script>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Introduction to R for Economics and Business </a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Prerequisites</a></li>
+<li class="part"><span><b>I Working with Data</b></span></li>
+<li class="chapter" data-level="1" data-path="basics-of-r.html"><a href="basics-of-r.html"><i class="fa fa-check"></i><b>1</b> Basics of R</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="basics-of-r.html"><a href="basics-of-r.html#the-workspace"><i class="fa fa-check"></i><b>1.1</b> The Workspace</a>
+<ul>
+<li class="chapter" data-level="1.1.1" data-path="basics-of-r.html"><a href="basics-of-r.html#working-directory"><i class="fa fa-check"></i><b>1.1.1</b> Working directory</a></li>
+<li class="chapter" data-level="1.1.2" data-path="basics-of-r.html"><a href="basics-of-r.html#r-projects"><i class="fa fa-check"></i><b>1.1.2</b> R projects</a></li>
+<li class="chapter" data-level="1.1.3" data-path="basics-of-r.html"><a href="basics-of-r.html#removing-and-adding-objects-from-workspace"><i class="fa fa-check"></i><b>1.1.3</b> Removing and adding objects from workspace</a></li>
+<li class="chapter" data-level="1.1.4" data-path="basics-of-r.html"><a href="basics-of-r.html#installing-and-loading-packages"><i class="fa fa-check"></i><b>1.1.4</b> Installing and loading packages</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="basics-of-r.html"><a href="basics-of-r.html#vectors"><i class="fa fa-check"></i><b>1.2</b> Vectors</a>
+<ul>
+<li class="chapter" data-level="1.2.1" data-path="basics-of-r.html"><a href="basics-of-r.html#atomic-vector-types"><i class="fa fa-check"></i><b>1.2.1</b> Atomic vector types</a></li>
+<li class="chapter" data-level="1.2.2" data-path="basics-of-r.html"><a href="basics-of-r.html#vector-coercion"><i class="fa fa-check"></i><b>1.2.2</b> Vector coercion</a></li>
+<li class="chapter" data-level="1.2.3" data-path="basics-of-r.html"><a href="basics-of-r.html#vectors-with-multiple-values"><i class="fa fa-check"></i><b>1.2.3</b> Vectors with multiple values</a></li>
+<li class="chapter" data-level="1.2.4" data-path="basics-of-r.html"><a href="basics-of-r.html#operating-with-vectors-and-recycling"><i class="fa fa-check"></i><b>1.2.4</b> Operating with vectors and recycling</a></li>
+<li class="chapter" data-level="1.2.5" data-path="basics-of-r.html"><a href="basics-of-r.html#names"><i class="fa fa-check"></i><b>1.2.5</b> Names</a></li>
+<li class="chapter" data-level="1.2.6" data-path="basics-of-r.html"><a href="basics-of-r.html#subsetting"><i class="fa fa-check"></i><b>1.2.6</b> Subsetting</a></li>
+<li class="chapter" data-level="1.2.7" data-path="basics-of-r.html"><a href="basics-of-r.html#lists"><i class="fa fa-check"></i><b>1.2.7</b> Lists</a></li>
+</ul></li>
+<li class="chapter" data-level="1.3" data-path="basics-of-r.html"><a href="basics-of-r.html#checking-cases-with-conditionals"><i class="fa fa-check"></i><b>1.3</b> Checking cases with conditionals</a>
+<ul>
+<li class="chapter" data-level="1.3.1" data-path="basics-of-r.html"><a href="basics-of-r.html#if--else"><i class="fa fa-check"></i><b>1.3.1</b> <code>if</code>- <code>else</code></a></li>
+<li class="chapter" data-level="1.3.2" data-path="basics-of-r.html"><a href="basics-of-r.html#if---else-if---else"><i class="fa fa-check"></i><b>1.3.2</b> <code>if</code> - <code>else if</code> - <code>else</code></a></li>
+<li class="chapter" data-level="1.3.3" data-path="basics-of-r.html"><a href="basics-of-r.html#checking-multiple-cases-with-switch"><i class="fa fa-check"></i><b>1.3.3</b> Checking multiple cases with <code>switch</code></a></li>
+<li class="chapter" data-level="1.3.4" data-path="basics-of-r.html"><a href="basics-of-r.html#comparison-and-logical-operators"><i class="fa fa-check"></i><b>1.3.4</b> Comparison and logical operators</a></li>
+</ul></li>
+<li class="chapter" data-level="1.4" data-path="basics-of-r.html"><a href="basics-of-r.html#functions"><i class="fa fa-check"></i><b>1.4</b> Functions</a>
+<ul>
+<li class="chapter" data-level="1.4.1" data-path="basics-of-r.html"><a href="basics-of-r.html#function-definitions"><i class="fa fa-check"></i><b>1.4.1</b> Function definitions</a></li>
+<li class="chapter" data-level="1.4.2" data-path="basics-of-r.html"><a href="basics-of-r.html#function-arguments-and-default-values"><i class="fa fa-check"></i><b>1.4.2</b> Function arguments and default values</a></li>
+<li class="chapter" data-level="1.4.3" data-path="basics-of-r.html"><a href="basics-of-r.html#arbitrary-number-of-arguments"><i class="fa fa-check"></i><b>1.4.3</b> Arbitrary number of arguments</a></li>
+<li class="chapter" data-level="1.4.4" data-path="basics-of-r.html"><a href="basics-of-r.html#function-returns"><i class="fa fa-check"></i><b>1.4.4</b> Function returns</a></li>
+<li class="chapter" data-level="1.4.5" data-path="basics-of-r.html"><a href="basics-of-r.html#pipes"><i class="fa fa-check"></i><b>1.4.5</b> Pipes</a></li>
+</ul></li>
+<li class="chapter" data-level="1.5" data-path="basics-of-r.html"><a href="basics-of-r.html#iterations"><i class="fa fa-check"></i><b>1.5</b> Iterations</a>
+<ul>
+<li class="chapter" data-level="1.5.1" data-path="basics-of-r.html"><a href="basics-of-r.html#for-loops"><i class="fa fa-check"></i><b>1.5.1</b> <code>for</code> loops</a></li>
+<li class="chapter" data-level="1.5.2" data-path="basics-of-r.html"><a href="basics-of-r.html#split-apply-combine-with-map-functions"><i class="fa fa-check"></i><b>1.5.2</b> Split, apply, combine with <code>map</code> functions</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="basics-of-r.html"><a href="basics-of-r.html#sources"><i class="fa fa-check"></i>Sources</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="data-transformations-with-dplyr-and-tidyr.html"><a href="data-transformations-with-dplyr-and-tidyr.html"><i class="fa fa-check"></i><b>2</b> Data Transformations with <code>dplyr</code> and <code>tidyr</code></a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="data-transformations-with-dplyr-and-tidyr.html"><a href="data-transformations-with-dplyr-and-tidyr.html#single-table-verbs"><i class="fa fa-check"></i><b>2.1</b> Single table verbs</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="data-transformations-with-dplyr-and-tidyr.html"><a href="data-transformations-with-dplyr-and-tidyr.html#filter-to-filter-observations"><i class="fa fa-check"></i><b>2.1.1</b> <code>filter</code> to filter observations</a></li>
+<li class="chapter" data-level="2.1.2" data-path="data-transformations-with-dplyr-and-tidyr.html"><a href="data-transformations-with-dplyr-and-tidyr.html#arrange-to-arrange-a-dataframe-according-to-variables"><i class="fa fa-check"></i><b>2.1.2</b> <code>arrange</code> to arrange a dataframe according to variables</a></li>
+<li class="chapter" data-level="2.1.3" data-path="data-transformations-with-dplyr-and-tidyr.html"><a href="data-transformations-with-dplyr-and-tidyr.html#select-to-selectdrop-variables"><i class="fa fa-check"></i><b>2.1.3</b> <code>select</code> to select/drop variables</a></li>
+<li class="chapter" data-level="2.1.4" data-path="data-transformations-with-dplyr-and-tidyr.html"><a href="data-transformations-with-dplyr-and-tidyr.html#mutate-to-create-new-variables"><i class="fa fa-check"></i><b>2.1.4</b> <code>mutate</code> to create new variables</a></li>
+<li class="chapter" data-level="2.1.5" data-path="data-transformations-with-dplyr-and-tidyr.html"><a href="data-transformations-with-dplyr-and-tidyr.html#summarise-to-create-summary-tables"><i class="fa fa-check"></i><b>2.1.5</b> <code>summarise</code> to create summary tables</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="data-transformations-with-dplyr-and-tidyr.html"><a href="data-transformations-with-dplyr-and-tidyr.html#using-functions-in-combination-with-logical-subsetting"><i class="fa fa-check"></i><b>2.2</b> Using functions in combination with logical subsetting</a></li>
+<li class="chapter" data-level="2.3" data-path="data-transformations-with-dplyr-and-tidyr.html"><a href="data-transformations-with-dplyr-and-tidyr.html#the-pipe-operator"><i class="fa fa-check"></i><b>2.3</b> The pipe operator</a></li>
+<li class="chapter" data-level="2.4" data-path="data-transformations-with-dplyr-and-tidyr.html"><a href="data-transformations-with-dplyr-and-tidyr.html#multiple-table-verbs"><i class="fa fa-check"></i><b>2.4</b> Multiple table verbs</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="data-transformations-with-dplyr-and-tidyr.html"><a href="data-transformations-with-dplyr-and-tidyr.html#mutating-joins"><i class="fa fa-check"></i><b>2.4.1</b> Mutating joins</a></li>
+<li class="chapter" data-level="2.4.2" data-path="data-transformations-with-dplyr-and-tidyr.html"><a href="data-transformations-with-dplyr-and-tidyr.html#filtering-joins"><i class="fa fa-check"></i><b>2.4.2</b> Filtering joins</a></li>
+<li class="chapter" data-level="2.4.3" data-path="data-transformations-with-dplyr-and-tidyr.html"><a href="data-transformations-with-dplyr-and-tidyr.html#the-by-argument"><i class="fa fa-check"></i><b>2.4.3</b> The <code>by</code> argument</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="data-transformations-with-dplyr-and-tidyr.html"><a href="data-transformations-with-dplyr-and-tidyr.html#reshaping-data-with-tidyr"><i class="fa fa-check"></i><b>2.5</b> Reshaping data with <code>tidyr</code></a>
+<ul>
+<li class="chapter" data-level="2.5.1" data-path="data-transformations-with-dplyr-and-tidyr.html"><a href="data-transformations-with-dplyr-and-tidyr.html#from-dirty-wide-to-tidy-long"><i class="fa fa-check"></i><b>2.5.1</b> From dirty wide to tidy long</a></li>
+<li class="chapter" data-level="2.5.2" data-path="data-transformations-with-dplyr-and-tidyr.html"><a href="data-transformations-with-dplyr-and-tidyr.html#from-dirty-long-to-tidy-wide"><i class="fa fa-check"></i><b>2.5.2</b> From dirty long to tidy wide</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="data-transformations-with-dplyr-and-tidyr.html"><a href="data-transformations-with-dplyr-and-tidyr.html#sources-1"><i class="fa fa-check"></i>Sources</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html"><i class="fa fa-check"></i><b>3</b> Visualizing data with `ggplot2</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#introduction"><i class="fa fa-check"></i><b>3.1</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#the-dataset"><i class="fa fa-check"></i><b>3.1.1</b> The dataset</a></li>
+<li class="chapter" data-level="3.1.2" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#basic-example-an-ordinary-scatterplot"><i class="fa fa-check"></i><b>3.1.2</b> Basic example: an ordinary scatterplot</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#aesthetics"><i class="fa fa-check"></i><b>3.2</b> Aesthetics</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#aesthetic-mappings"><i class="fa fa-check"></i><b>3.2.1</b> Aesthetic mappings</a></li>
+<li class="chapter" data-level="3.2.2" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#manually-fixing-aesthetics"><i class="fa fa-check"></i><b>3.2.2</b> Manually fixing aesthetics</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#facets-subplots-for-different-variable-values"><i class="fa fa-check"></i><b>3.3</b> Facets: Subplots for different variable values</a></li>
+<li class="chapter" data-level="3.4" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#geoms"><i class="fa fa-check"></i><b>3.4</b> Geoms</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#what-kind-of-plot-do-you-have-in-mind-the-use-of-geoms."><i class="fa fa-check"></i><b>3.4.1</b> What kind of plot do you have in mind? The use of geoms.</a></li>
+<li class="chapter" data-level="3.4.2" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#multiple-geoms-in-one-plot"><i class="fa fa-check"></i><b>3.4.2</b> Multiple geoms in one plot</a></li>
+</ul></li>
+<li class="chapter" data-level="3.5" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#statistical-tranformations-with-stats"><i class="fa fa-check"></i><b>3.5</b> Statistical tranformations with <code>stats</code></a></li>
+<li class="chapter" data-level="3.6" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#positions"><i class="fa fa-check"></i><b>3.6</b> Positions</a></li>
+<li class="chapter" data-level="3.7" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#coordinate-systems"><i class="fa fa-check"></i><b>3.7</b> Coordinate systems</a></li>
+<li class="chapter" data-level="3.8" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#labeling"><i class="fa fa-check"></i><b>3.8</b> Labeling</a></li>
+<li class="chapter" data-level="3.9" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#scales"><i class="fa fa-check"></i><b>3.9</b> Scales</a></li>
+<li class="chapter" data-level="3.10" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#themes"><i class="fa fa-check"></i><b>3.10</b> Themes</a></li>
+<li class="chapter" data-level="3.11" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#saving-graphs"><i class="fa fa-check"></i><b>3.11</b> Saving graphs</a></li>
+<li class="chapter" data-level="" data-path="visualizing-data-with-ggplot2.html"><a href="visualizing-data-with-ggplot2.html#sources-2"><i class="fa fa-check"></i>Sources</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="factor-variables.html"><a href="factor-variables.html"><i class="fa fa-check"></i><b>4</b> Factor Variables</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="factor-variables.html"><a href="factor-variables.html#creating-factors"><i class="fa fa-check"></i><b>4.1</b> Creating Factors</a></li>
+<li class="chapter" data-level="4.2" data-path="factor-variables.html"><a href="factor-variables.html#some-other-useful-functions-from-forcats"><i class="fa fa-check"></i><b>4.2</b> Some other useful functions from forcats</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="factor-variables.html"><a href="factor-variables.html#modify-factor-levels"><i class="fa fa-check"></i><b>4.2.1</b> Modify factor levels</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="reading-and-writing-data.html"><a href="reading-and-writing-data.html"><i class="fa fa-check"></i><b>5</b> Reading and Writing Data</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="reading-and-writing-data.html"><a href="reading-and-writing-data.html#reading-csv-files-with-readr"><i class="fa fa-check"></i><b>5.1</b> Reading <code>csv</code> files with <code>readr</code></a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="reading-and-writing-data.html"><a href="reading-and-writing-data.html#reading-in--delimited-data"><i class="fa fa-check"></i><b>5.1.1</b> Reading in *-delimited data</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="reading-and-writing-data.html"><a href="reading-and-writing-data.html#parsing-data-correctly-with-the-parse-functions"><i class="fa fa-check"></i><b>5.2</b> Parsing data correctly with the <code>parse</code> functions</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="reading-and-writing-data.html"><a href="reading-and-writing-data.html#parsing-numbers"><i class="fa fa-check"></i><b>5.2.1</b> Parsing numbers</a></li>
+<li class="chapter" data-level="5.2.2" data-path="reading-and-writing-data.html"><a href="reading-and-writing-data.html#parsing-characters"><i class="fa fa-check"></i><b>5.2.2</b> Parsing characters</a></li>
+<li class="chapter" data-level="5.2.3" data-path="reading-and-writing-data.html"><a href="reading-and-writing-data.html#parsing-dates"><i class="fa fa-check"></i><b>5.2.3</b> Parsing dates</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="reading-and-writing-data.html"><a href="reading-and-writing-data.html#parsing-and-reading-at-the-same-time"><i class="fa fa-check"></i><b>5.3</b> Parsing and reading at the same time</a></li>
+<li class="chapter" data-level="5.4" data-path="reading-and-writing-data.html"><a href="reading-and-writing-data.html#writing-csv-files"><i class="fa fa-check"></i><b>5.4</b> Writing <code>csv</code> files</a></li>
+<li class="chapter" data-level="5.5" data-path="reading-and-writing-data.html"><a href="reading-and-writing-data.html#write-and-read-rds-files-with-readr"><i class="fa fa-check"></i><b>5.5</b> Write and read <code>RDS</code> files with <code>readr</code></a></li>
+<li class="chapter" data-level="5.6" data-path="reading-and-writing-data.html"><a href="reading-and-writing-data.html#reading-in-excel-sheets-and-stata-data-with-readxl-and-haven"><i class="fa fa-check"></i><b>5.6</b> Reading in Excel sheets and Stata data with <code>readxl</code> and <code>haven</code></a></li>
+<li class="chapter" data-level="" data-path="reading-and-writing-data.html"><a href="reading-and-writing-data.html#sources-3"><i class="fa fa-check"></i>Sources</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="working-with-strings.html"><a href="working-with-strings.html"><i class="fa fa-check"></i><b>6</b> Working with Strings</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="working-with-strings.html"><a href="working-with-strings.html#string-combine-with-str_c"><i class="fa fa-check"></i><b>6.1</b> String combine with <code>str_c</code></a></li>
+<li class="chapter" data-level="6.2" data-path="working-with-strings.html"><a href="working-with-strings.html#substrings-with-str_sub"><i class="fa fa-check"></i><b>6.2</b> Substrings with <code>str_sub</code></a></li>
+<li class="chapter" data-level="6.3" data-path="working-with-strings.html"><a href="working-with-strings.html#capitalize-or-not"><i class="fa fa-check"></i><b>6.3</b> Capitalize or not</a></li>
+<li class="chapter" data-level="6.4" data-path="working-with-strings.html"><a href="working-with-strings.html#string-sort"><i class="fa fa-check"></i><b>6.4</b> String sort</a></li>
+<li class="chapter" data-level="6.5" data-path="working-with-strings.html"><a href="working-with-strings.html#handling-nas"><i class="fa fa-check"></i><b>6.5</b> Handling NAs</a></li>
+</ul></li>
+<li class="part"><span><b>II Regression Modelling with R</b></span></li>
+<li class="chapter" data-level="7" data-path="linear-regression-essentials-with-r.html"><a href="linear-regression-essentials-with-r.html"><i class="fa fa-check"></i><b>7</b> Linear Regression Essentials with <code>R</code></a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="linear-regression-essentials-with-r.html"><a href="linear-regression-essentials-with-r.html#libraries"><i class="fa fa-check"></i><b>7.1</b> Libraries</a></li>
+<li class="chapter" data-level="7.2" data-path="linear-regression-essentials-with-r.html"><a href="linear-regression-essentials-with-r.html#loading-the-data"><i class="fa fa-check"></i><b>7.2</b> Loading the data</a></li>
+<li class="chapter" data-level="7.3" data-path="linear-regression-essentials-with-r.html"><a href="linear-regression-essentials-with-r.html#meaningful-names"><i class="fa fa-check"></i><b>7.3</b> Meaningful names</a></li>
+<li class="chapter" data-level="7.4" data-path="linear-regression-essentials-with-r.html"><a href="linear-regression-essentials-with-r.html#create-variables-for-estimation"><i class="fa fa-check"></i><b>7.4</b> Create variables for estimation</a></li>
+<li class="chapter" data-level="7.5" data-path="linear-regression-essentials-with-r.html"><a href="linear-regression-essentials-with-r.html#summary-statistics"><i class="fa fa-check"></i><b>7.5</b> Summary statistics</a></li>
+<li class="chapter" data-level="7.6" data-path="linear-regression-essentials-with-r.html"><a href="linear-regression-essentials-with-r.html#create-three-samples"><i class="fa fa-check"></i><b>7.6</b> Create three samples</a></li>
+<li class="chapter" data-level="7.7" data-path="linear-regression-essentials-with-r.html"><a href="linear-regression-essentials-with-r.html#run-the-estimation-for-table-1-in-mrw-1992"><i class="fa fa-check"></i><b>7.7</b> Run the estimation for Table 1 in MRW (1992)</a></li>
+<li class="chapter" data-level="7.8" data-path="linear-regression-essentials-with-r.html"><a href="linear-regression-essentials-with-r.html#show-the-results-in-a-table"><i class="fa fa-check"></i><b>7.8</b> Show the results in a table</a></li>
+<li class="chapter" data-level="7.9" data-path="linear-regression-essentials-with-r.html"><a href="linear-regression-essentials-with-r.html#robust-standard-errors"><i class="fa fa-check"></i><b>7.9</b> Robust standard errors</a></li>
+<li class="chapter" data-level="7.10" data-path="linear-regression-essentials-with-r.html"><a href="linear-regression-essentials-with-r.html#some-graphs"><i class="fa fa-check"></i><b>7.10</b> Some Graphs</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="linear-models-with-fixed-effects.html"><a href="linear-models-with-fixed-effects.html"><i class="fa fa-check"></i><b>8</b> Linear Models with Fixed Effects</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="linear-models-with-fixed-effects.html"><a href="linear-models-with-fixed-effects.html#libraries-1"><i class="fa fa-check"></i><b>8.1</b> Libraries</a></li>
+<li class="chapter" data-level="8.2" data-path="linear-models-with-fixed-effects.html"><a href="linear-models-with-fixed-effects.html#review-of-plotting-recreating-figure-1"><i class="fa fa-check"></i><b>8.2</b> Review of Plotting: Recreating Figure 1</a></li>
+<li class="chapter" data-level="8.3" data-path="linear-models-with-fixed-effects.html"><a href="linear-models-with-fixed-effects.html#review-of-plotting-recreating-figure-2"><i class="fa fa-check"></i><b>8.3</b> Review of Plotting: Recreating Figure 2</a></li>
+<li class="chapter" data-level="8.4" data-path="linear-models-with-fixed-effects.html"><a href="linear-models-with-fixed-effects.html#loading-the-data-for-estimation"><i class="fa fa-check"></i><b>8.4</b> Loading the data for estimation</a></li>
+<li class="chapter" data-level="8.5" data-path="linear-models-with-fixed-effects.html"><a href="linear-models-with-fixed-effects.html#pooled-ols-with-time-effects"><i class="fa fa-check"></i><b>8.5</b> Pooled OLS with Time Effects</a></li>
+<li class="chapter" data-level="8.6" data-path="linear-models-with-fixed-effects.html"><a href="linear-models-with-fixed-effects.html#fixed-effects-with-the-lm-function"><i class="fa fa-check"></i><b>8.6</b> Fixed Effects with the <code>lm</code> function</a></li>
+<li class="chapter" data-level="8.7" data-path="linear-models-with-fixed-effects.html"><a href="linear-models-with-fixed-effects.html#pooled-ols-and-fe-with-the-lfe-package"><i class="fa fa-check"></i><b>8.7</b> Pooled OLS and FE with the <code>lfe</code> package</a></li>
+<li class="chapter" data-level="8.8" data-path="linear-models-with-fixed-effects.html"><a href="linear-models-with-fixed-effects.html#review-of-iv"><i class="fa fa-check"></i><b>8.8</b> Review of IV</a></li>
+<li class="chapter" data-level="8.9" data-path="linear-models-with-fixed-effects.html"><a href="linear-models-with-fixed-effects.html#iv-with-felm"><i class="fa fa-check"></i><b>8.9</b> IV with <code>felm</code></a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="instrumental-variables.html"><a href="instrumental-variables.html"><i class="fa fa-check"></i><b>9</b> Instrumental Variables</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="instrumental-variables.html"><a href="instrumental-variables.html#libraries-2"><i class="fa fa-check"></i><b>9.1</b> Libraries</a></li>
+<li class="chapter" data-level="9.2" data-path="instrumental-variables.html"><a href="instrumental-variables.html#functions-we-might-want-to-have"><i class="fa fa-check"></i><b>9.2</b> Functions We Might Want to Have</a></li>
+<li class="chapter" data-level="9.3" data-path="instrumental-variables.html"><a href="instrumental-variables.html#a-brief-review-of-ols-replicating-table-2"><i class="fa fa-check"></i><b>9.3</b> A Brief Review of OLS: Replicating Table 2</a></li>
+<li class="chapter" data-level="9.4" data-path="instrumental-variables.html"><a href="instrumental-variables.html#a-brief-review-of-making-figures-replicating-figure-2"><i class="fa fa-check"></i><b>9.4</b> A Brief Review of Making Figures: Replicating Figure 2</a></li>
+<li class="chapter" data-level="9.5" data-path="instrumental-variables.html"><a href="instrumental-variables.html#iv-replicating-table-4"><i class="fa fa-check"></i><b>9.5</b> IV: Replicating Table 4</a>
+<ul>
+<li class="chapter" data-level="9.5.1" data-path="instrumental-variables.html"><a href="instrumental-variables.html#loading-the-data-1"><i class="fa fa-check"></i><b>9.5.1</b> Loading the data</a></li>
+<li class="chapter" data-level="9.5.2" data-path="instrumental-variables.html"><a href="instrumental-variables.html#doing-it-by-hand"><i class="fa fa-check"></i><b>9.5.2</b> Doing it by hand…</a></li>
+<li class="chapter" data-level="9.5.3" data-path="instrumental-variables.html"><a href="instrumental-variables.html#the-ivreg-command"><i class="fa fa-check"></i><b>9.5.3</b> The <code>ivreg</code> Command</a></li>
+</ul></li>
+<li class="chapter" data-level="9.6" data-path="instrumental-variables.html"><a href="instrumental-variables.html#adding-statistics-to-stargazer"><i class="fa fa-check"></i><b>9.6</b> Adding Statistics to Stargazer</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="difference-in-differences.html"><a href="difference-in-differences.html"><i class="fa fa-check"></i><b>10</b> Difference in Differences</a></li>
+<li class="chapter" data-level="11" data-path="regression-discontinuity-designs-rdd.html"><a href="regression-discontinuity-designs-rdd.html"><i class="fa fa-check"></i><b>11</b> Regression Discontinuity Designs (RDD)</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="regression-discontinuity-designs-rdd.html"><a href="regression-discontinuity-designs-rdd.html#libraries-3"><i class="fa fa-check"></i><b>11.1</b> Libraries</a></li>
+<li class="chapter" data-level="11.2" data-path="regression-discontinuity-designs-rdd.html"><a href="regression-discontinuity-designs-rdd.html#what-is-the-paper-about"><i class="fa fa-check"></i><b>11.2</b> What is the paper about?</a></li>
+<li class="chapter" data-level="11.3" data-path="regression-discontinuity-designs-rdd.html"><a href="regression-discontinuity-designs-rdd.html#lets-load-the-data."><i class="fa fa-check"></i><b>11.3</b> Let’s load the data.</a></li>
+<li class="chapter" data-level="11.4" data-path="regression-discontinuity-designs-rdd.html"><a href="regression-discontinuity-designs-rdd.html#select-and-rename-variables"><i class="fa fa-check"></i><b>11.4</b> Select and rename variables</a></li>
+<li class="chapter" data-level="11.5" data-path="regression-discontinuity-designs-rdd.html"><a href="regression-discontinuity-designs-rdd.html#create-sample"><i class="fa fa-check"></i><b>11.5</b> Create Sample</a></li>
+<li class="chapter" data-level="11.6" data-path="regression-discontinuity-designs-rdd.html"><a href="regression-discontinuity-designs-rdd.html#create-vector-of-control-variables"><i class="fa fa-check"></i><b>11.6</b> Create Vector of Control Variables</a></li>
+<li class="chapter" data-level="11.7" data-path="regression-discontinuity-designs-rdd.html"><a href="regression-discontinuity-designs-rdd.html#summary-statistics-1"><i class="fa fa-check"></i><b>11.7</b> Summary Statistics</a></li>
+<li class="chapter" data-level="11.8" data-path="regression-discontinuity-designs-rdd.html"><a href="regression-discontinuity-designs-rdd.html#histogram-of-islamic-win-margin"><i class="fa fa-check"></i><b>11.8</b> Histogram of Islamic Win Margin</a></li>
+<li class="chapter" data-level="11.9" data-path="regression-discontinuity-designs-rdd.html"><a href="regression-discontinuity-designs-rdd.html#doing-rdd-by-hand"><i class="fa fa-check"></i><b>11.9</b> Doing RDD by Hand</a></li>
+<li class="chapter" data-level="11.10" data-path="regression-discontinuity-designs-rdd.html"><a href="regression-discontinuity-designs-rdd.html#rdrobust-package"><i class="fa fa-check"></i><b>11.10</b> <code>rdrobust</code> Package</a>
+<ul>
+<li class="chapter" data-level="11.10.1" data-path="regression-discontinuity-designs-rdd.html"><a href="regression-discontinuity-designs-rdd.html#rdd-with-and-without-controls"><i class="fa fa-check"></i><b>11.10.1</b> RDD with and without controls</a></li>
+<li class="chapter" data-level="11.10.2" data-path="regression-discontinuity-designs-rdd.html"><a href="regression-discontinuity-designs-rdd.html#different-bandwidths"><i class="fa fa-check"></i><b>11.10.2</b> Different bandwidths</a></li>
+<li class="chapter" data-level="11.10.3" data-path="regression-discontinuity-designs-rdd.html"><a href="regression-discontinuity-designs-rdd.html#different-control-functions"><i class="fa fa-check"></i><b>11.10.3</b> Different control functions</a></li>
+</ul></li>
+<li class="chapter" data-level="11.11" data-path="regression-discontinuity-designs-rdd.html"><a href="regression-discontinuity-designs-rdd.html#rdd-plots"><i class="fa fa-check"></i><b>11.11</b> RDD Plots</a>
+<ul>
+<li class="chapter" data-level="11.11.1" data-path="regression-discontinuity-designs-rdd.html"><a href="regression-discontinuity-designs-rdd.html#main-outcomes-women"><i class="fa fa-check"></i><b>11.11.1</b> Main Outcomes: Women</a></li>
+<li class="chapter" data-level="11.11.2" data-path="regression-discontinuity-designs-rdd.html"><a href="regression-discontinuity-designs-rdd.html#main-outcomes-men"><i class="fa fa-check"></i><b>11.11.2</b> Main Outcomes: Men</a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>III Extended Exercises</b></span></li>
+<li class="chapter" data-level="12" data-path="data-wrangling-with-dplyr.html"><a href="data-wrangling-with-dplyr.html"><i class="fa fa-check"></i><b>12</b> Data Wrangling with <code>dplyr</code></a></li>
+<li class="chapter" data-level="13" data-path="plotting-with-ggplot.html"><a href="plotting-with-ggplot.html"><i class="fa fa-check"></i><b>13</b> Plotting with <code>ggplot</code></a>
+<ul>
+<li class="chapter" data-level="13.1" data-path="plotting-with-ggplot.html"><a href="plotting-with-ggplot.html#load-data-and-clean-variable-names"><i class="fa fa-check"></i><b>13.1</b> Load Data and Clean variable names</a></li>
+<li class="chapter" data-level="13.2" data-path="plotting-with-ggplot.html"><a href="plotting-with-ggplot.html#one-variable-graphs"><i class="fa fa-check"></i><b>13.2</b> One Variable Graphs</a></li>
+<li class="chapter" data-level="13.3" data-path="plotting-with-ggplot.html"><a href="plotting-with-ggplot.html#two-variable-graphs"><i class="fa fa-check"></i><b>13.3</b> Two Variable Graphs</a></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="replicating-adh.html"><a href="replicating-adh.html"><i class="fa fa-check"></i><b>14</b> Replicating ADH</a>
+<ul>
+<li class="chapter" data-level="14.1" data-path="replicating-adh.html"><a href="replicating-adh.html#motivation"><i class="fa fa-check"></i><b>14.1</b> Motivation</a></li>
+<li class="chapter" data-level="14.2" data-path="replicating-adh.html"><a href="replicating-adh.html#us-aggregate-data"><i class="fa fa-check"></i><b>14.2</b> US Aggregate Data</a>
+<ul>
+<li class="chapter" data-level="14.2.1" data-path="replicating-adh.html"><a href="replicating-adh.html#load-necessary-packages"><i class="fa fa-check"></i><b>14.2.1</b> Load Necessary Packages</a></li>
+<li class="chapter" data-level="14.2.2" data-path="replicating-adh.html"><a href="replicating-adh.html#get-data-from-federal-reserve"><i class="fa fa-check"></i><b>14.2.2</b> Get Data from Federal Reserve</a></li>
+<li class="chapter" data-level="14.2.3" data-path="replicating-adh.html"><a href="replicating-adh.html#data-transformations"><i class="fa fa-check"></i><b>14.2.3</b> Data Transformations</a></li>
+<li class="chapter" data-level="14.2.4" data-path="replicating-adh.html"><a href="replicating-adh.html#data-grouping"><i class="fa fa-check"></i><b>14.2.4</b> Data Grouping</a></li>
+<li class="chapter" data-level="14.2.5" data-path="replicating-adh.html"><a href="replicating-adh.html#fact-1-increase-of-imports-from-china-and-the-rest-of-the-world"><i class="fa fa-check"></i><b>14.2.5</b> Fact 1: Increase of Imports from China and the Rest of the World</a></li>
+<li class="chapter" data-level="14.2.6" data-path="replicating-adh.html"><a href="replicating-adh.html#fact-2-increasing-trade-deficit-of-the-us"><i class="fa fa-check"></i><b>14.2.6</b> Fact 2: Increasing trade-deficit of the US</a></li>
+<li class="chapter" data-level="14.2.7" data-path="replicating-adh.html"><a href="replicating-adh.html#fact-3-400-basis-point-fall-in-real-interest-rates-leading-into-china-expansion"><i class="fa fa-check"></i><b>14.2.7</b> Fact 3: 400 basis point fall in real Interest rates leading into China Expansion</a></li>
+</ul></li>
+<li class="chapter" data-level="14.3" data-path="replicating-adh.html"><a href="replicating-adh.html#descriptive-stats-in-adh-using-weighted-statistics"><i class="fa fa-check"></i><b>14.3</b> Descriptive Stats in ADH using Weighted Statistics</a>
+<ul>
+<li class="chapter" data-level="14.3.1" data-path="replicating-adh.html"><a href="replicating-adh.html#details-about-timing-is-as-follows."><i class="fa fa-check"></i><b>14.3.1</b> Details about timing is as follows.</a></li>
+<li class="chapter" data-level="14.3.2" data-path="replicating-adh.html"><a href="replicating-adh.html#understanding-the-essence-of-the-paper-and-what-comes-next."><i class="fa fa-check"></i><b>14.3.2</b> Understanding the Essence of the Paper and What Comes Next.</a></li>
+<li class="chapter" data-level="14.3.3" data-path="replicating-adh.html"><a href="replicating-adh.html#load-necessary-packages-1"><i class="fa fa-check"></i><b>14.3.3</b> Load Necessary Packages</a></li>
+<li class="chapter" data-level="14.3.4" data-path="replicating-adh.html"><a href="replicating-adh.html#load-data"><i class="fa fa-check"></i><b>14.3.4</b> Load Data</a></li>
+<li class="chapter" data-level="14.3.5" data-path="replicating-adh.html"><a href="replicating-adh.html#compute-simple-grouped-mean"><i class="fa fa-check"></i><b>14.3.5</b> Compute Simple Grouped Mean</a></li>
+<li class="chapter" data-level="14.3.6" data-path="replicating-adh.html"><a href="replicating-adh.html#computed-weighted-group-means-and-standard-deviations"><i class="fa fa-check"></i><b>14.3.6</b> Computed Weighted Group Means and Standard Deviations</a></li>
+</ul></li>
+<li class="chapter" data-level="14.4" data-path="replicating-adh.html"><a href="replicating-adh.html#regression-analysis"><i class="fa fa-check"></i><b>14.4</b> Regression Analysis</a>
+<ul>
+<li class="chapter" data-level="14.4.1" data-path="replicating-adh.html"><a href="replicating-adh.html#ols-regression"><i class="fa fa-check"></i><b>14.4.1</b> OLS regression</a></li>
+<li class="chapter" data-level="14.4.2" data-path="replicating-adh.html"><a href="replicating-adh.html#clustering"><i class="fa fa-check"></i><b>14.4.2</b> Clustering</a></li>
+<li class="chapter" data-level="14.4.3" data-path="replicating-adh.html"><a href="replicating-adh.html#instrument-variables"><i class="fa fa-check"></i><b>14.4.3</b> Instrument Variables</a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>IV Solutions to Extended Exercises</b></span></li>
+<li class="chapter" data-level="15" data-path="dplyr-solution.html"><a href="dplyr-solution.html"><i class="fa fa-check"></i><b>15</b> <code>dplyr</code> solution</a></li>
+<li class="chapter" data-level="16" data-path="ggplot-solution.html"><a href="ggplot-solution.html"><i class="fa fa-check"></i><b>16</b> <code>ggplot</code> solution</a>
+<ul>
+<li class="chapter" data-level="16.1" data-path="ggplot-solution.html"><a href="ggplot-solution.html#load-data-and-clean-variable-names-1"><i class="fa fa-check"></i><b>16.1</b> Load Data and Clean variable names</a>
+<ul>
+<li class="chapter" data-level="16.1.1" data-path="ggplot-solution.html"><a href="ggplot-solution.html#load-the-data-from-the-file-dataeconomistdata.csv."><i class="fa fa-check"></i><b>16.1.1</b> 1. Load the data from the file <code>data/EconomistData.csv</code>.</a></li>
+<li class="chapter" data-level="16.1.2" data-path="ggplot-solution.html"><a href="ggplot-solution.html#convert-all-columns-names-to-snakecase-i.e.-my_variable"><i class="fa fa-check"></i><b>16.1.2</b> 2. Convert all columns names to snakecase (i.e. <code>my_variable</code>)</a></li>
+</ul></li>
+<li class="chapter" data-level="16.2" data-path="ggplot-solution.html"><a href="ggplot-solution.html#one-variable-graphs-1"><i class="fa fa-check"></i><b>16.2</b> One Variable Graphs</a>
+<ul>
+<li class="chapter" data-level="16.2.1" data-path="ggplot-solution.html"><a href="ggplot-solution.html#create-a-histogram-of-the-human-development-index.-customize-the-number-of-bins-to-make-the-plot-look-nicer-than-the-default."><i class="fa fa-check"></i><b>16.2.1</b> 1. Create a histogram of the human development index. Customize the number of bins to make the plot look nicer than the default.</a></li>
+<li class="chapter" data-level="16.2.2" data-path="ggplot-solution.html"><a href="ggplot-solution.html#instead-of-a-histogram-create-a-density-plot-of-the-hdi.-extend-your-plot-by"><i class="fa fa-check"></i><b>16.2.2</b> 2. Instead of a histogram, create a density plot of the HDI. Extend your plot by:</a></li>
+<li class="chapter" data-level="16.2.3" data-path="ggplot-solution.html"><a href="ggplot-solution.html#a-in-one-graph-plotting-the-densities-by-region."><i class="fa fa-check"></i><b>16.2.3</b> (a) In one graph plotting the densities by region.</a></li>
+<li class="chapter" data-level="16.2.4" data-path="ggplot-solution.html"><a href="ggplot-solution.html#b-creating-separate-plots-per-region-with-the-area-under-the-density-to-be-coloured-blue."><i class="fa fa-check"></i><b>16.2.4</b> (b) Creating separate plots per region, with the area under the density to be coloured blue.</a></li>
+<li class="chapter" data-level="16.2.5" data-path="ggplot-solution.html"><a href="ggplot-solution.html#c-repeat-1-and-2-for-the-corruption-perception-index."><i class="fa fa-check"></i><b>16.2.5</b> (c) Repeat (1) and (2) for the corruption perception index.</a></li>
+</ul></li>
+<li class="chapter" data-level="16.3" data-path="ggplot-solution.html"><a href="ggplot-solution.html#two-variable-graphs-1"><i class="fa fa-check"></i><b>16.3</b> Two Variable Graphs</a>
+<ul>
+<li class="chapter" data-level="16.3.1" data-path="ggplot-solution.html"><a href="ggplot-solution.html#create-the-simple-scatter-plot"><i class="fa fa-check"></i><b>16.3.1</b> 1. Create the simple scatter plot</a></li>
+<li class="chapter" data-level="16.3.2" data-path="ggplot-solution.html"><a href="ggplot-solution.html#lets-extend-the-plot-in-different-ways.-modify-the-plot-to-each-point-should-be-a-different-plot"><i class="fa fa-check"></i><b>16.3.2</b> 2. Let’s extend the plot in different ways. Modify the plot to (each point should be a different plot)</a></li>
+<li class="chapter" data-level="16.3.3" data-path="ggplot-solution.html"><a href="ggplot-solution.html#a.-make-the-points-blue"><i class="fa fa-check"></i><b>16.3.3</b> a. Make the points blue</a></li>
+<li class="chapter" data-level="16.3.4" data-path="ggplot-solution.html"><a href="ggplot-solution.html#b.-color-the-points-by-region"><i class="fa fa-check"></i><b>16.3.4</b> b. Color the points by region</a></li>
+<li class="chapter" data-level="16.3.5" data-path="ggplot-solution.html"><a href="ggplot-solution.html#c.-color-the-points-by-region-and-make-the-size-of-the-point-vary-by-hdi."><i class="fa fa-check"></i><b>16.3.5</b> c. Color the points by region and make the size of the point vary by HDI.</a></li>
+<li class="chapter" data-level="16.3.6" data-path="ggplot-solution.html"><a href="ggplot-solution.html#lets-extend-the-plot-in-1-by-adding-some-summary-functions-to-it."><i class="fa fa-check"></i><b>16.3.6</b> 3. Let’s extend the plot in (1) by adding some summary functions to it.</a></li>
+<li class="chapter" data-level="16.3.7" data-path="ggplot-solution.html"><a href="ggplot-solution.html#a.-add-a-loess-smoother"><i class="fa fa-check"></i><b>16.3.7</b> a. Add a loess smoother</a></li>
+<li class="chapter" data-level="16.3.8" data-path="ggplot-solution.html"><a href="ggplot-solution.html#b.-add-a-linear-smoother-without-the-confidence-interval.-color-the-line-red."><i class="fa fa-check"></i><b>16.3.8</b> b. Add a linear smoother, without the confidence interval. Color the line red.</a></li>
+<li class="chapter" data-level="16.3.9" data-path="ggplot-solution.html"><a href="ggplot-solution.html#c.-add-the-line-y-x-logx-without-the-confidence-interval.-color-the-line-red."><i class="fa fa-check"></i><b>16.3.9</b> c. Add the line <code>y ~ x + log(x)</code>, without the confidence interval. Color the line red.</a></li>
+<li class="chapter" data-level="16.3.10" data-path="ggplot-solution.html"><a href="ggplot-solution.html#now-we-will-add-the-country-names-to-the-plot-from-1."><i class="fa fa-check"></i><b>16.3.10</b> 4. Now we will add the country names to the plot from (1).</a></li>
+<li class="chapter" data-level="16.3.11" data-path="ggplot-solution.html"><a href="ggplot-solution.html#a.-use-geom_text-to-add-country-names-to-our-plot."><i class="fa fa-check"></i><b>16.3.11</b> a. Use <code>geom_text()</code> to add country names to our plot.</a></li>
+<li class="chapter" data-level="16.3.12" data-path="ggplot-solution.html"><a href="ggplot-solution.html#b.-we-might-not-want-all-the-points-labelled.-create-the-vector"><i class="fa fa-check"></i><b>16.3.12</b> b. We might not want <em>all</em> the points labelled. Create the vector</a></li>
+<li class="chapter" data-level="16.3.13" data-path="ggplot-solution.html"><a href="ggplot-solution.html#now-lets-combine-what-we-learned-above-and-from-the-class-notes-to-build-up-a-presentable-notes.-proceed-as-follows"><i class="fa fa-check"></i><b>16.3.13</b> 5. Now let’s combine what we learned above, and from the class notes to build up a presentable notes. Proceed as follows:</a></li>
+<li class="chapter" data-level="16.3.14" data-path="ggplot-solution.html"><a href="ggplot-solution.html#a.-create-the-simple-scatter-plot"><i class="fa fa-check"></i><b>16.3.14</b> a. Create the simple scatter plot</a></li>
+<li class="chapter" data-level="16.3.15" data-path="ggplot-solution.html"><a href="ggplot-solution.html#b.-make-the-points-hollow-and-colored-by-region.-adjust-the-size-of-the-dots-to-make-them-easier-to-see."><i class="fa fa-check"></i><b>16.3.15</b> b. Make the points hollow, and colored by region. Adjust the size of the dots to make them easier to see.</a></li>
+<li class="chapter" data-level="16.3.16" data-path="ggplot-solution.html"><a href="ggplot-solution.html#c.-add-the-line-y-x-logx-without-the-confidence-interval.-color-the-line-red.-1"><i class="fa fa-check"></i><b>16.3.16</b> c. Add the line <code>y ~ x + log(x)</code>, without the confidence interval. Color the line red.</a></li>
+<li class="chapter" data-level="16.3.17" data-path="ggplot-solution.html"><a href="ggplot-solution.html#d.-change-the-color-of-the-dots-to-be-less-ugly.-i-used-scale_color_manual-but-you-dont-need-to."><i class="fa fa-check"></i><b>16.3.17</b> d. Change the color of the dots to be less ugly. I used <code>scale_color_manual()</code> but you don’t need to.</a></li>
+<li class="chapter" data-level="16.3.18" data-path="ggplot-solution.html"><a href="ggplot-solution.html#e.-add-meaningful-x-and-y-labels.-and-a-title-which-is-centered.-can-you-add-a-note-near-the-bottom-of-the-figure-to-say-that-the-data-comes-from-transparency-international-and-un-human-development-report"><i class="fa fa-check"></i><b>16.3.18</b> e. Add meaningful x and y labels. And a title (which is centered). Can you add a note near the bottom of the figure to say that the data comes from “Transparency International and UN Human Development Report”?</a></li>
+<li class="chapter" data-level="16.3.19" data-path="ggplot-solution.html"><a href="ggplot-solution.html#f.-label-the-points-from-points_to_label-in-4b."><i class="fa fa-check"></i><b>16.3.19</b> f. Label the points from <code>points_to_label</code> in 4b.</a></li>
+<li class="chapter" data-level="16.3.20" data-path="ggplot-solution.html"><a href="ggplot-solution.html#g.-adjust-the-x-and-y-axes-to-have-a-better-range-and-set-of-axis-ticks.-you-are-free-to-choose-what-you-like."><i class="fa fa-check"></i><b>16.3.20</b> g. Adjust the x and y axes to have a better range, and set of axis ticks. You are free to choose what you like.</a></li>
+<li class="chapter" data-level="16.3.21" data-path="ggplot-solution.html"><a href="ggplot-solution.html#h.-move-the-legend-to-the-bottom-of-the-plot.-adjust-the-legend-names-so-that-they-are-easier-to-read-and-more-meaningful.-the-easiest-way-to-do-this-is-to-use-dplyr-to-recode-the-region-variable-as-a-factor-and-give-it-appropriate-labels.-using-the-help-menu-for-factor-should-help-you-here."><i class="fa fa-check"></i><b>16.3.21</b> h. Move the legend to the bottom of the plot. Adjust the legend names so that they are easier to read and more meaningful. The easiest way to do this is to use <code>dplyr</code> to recode the region variable as a factor, and give it appropriate labels. Using the help menu for <code>factor</code> should help you here.</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="17" data-path="replicating-adh-1.html"><a href="replicating-adh-1.html"><i class="fa fa-check"></i><b>17</b> Replicating ADH</a>
+<ul>
+<li class="chapter" data-level="17.1" data-path="replicating-adh-1.html"><a href="replicating-adh-1.html#aggregate-facts"><i class="fa fa-check"></i><b>17.1</b> Aggregate Facts</a></li>
+<li class="chapter" data-level="17.2" data-path="replicating-adh-1.html"><a href="replicating-adh-1.html#descriptive-stats"><i class="fa fa-check"></i><b>17.2</b> Descriptive Stats</a>
+<ul>
+<li class="chapter" data-level="17.2.1" data-path="replicating-adh-1.html"><a href="replicating-adh-1.html#load-data-1"><i class="fa fa-check"></i><b>17.2.1</b> Load Data</a></li>
+<li class="chapter" data-level="17.2.2" data-path="replicating-adh-1.html"><a href="replicating-adh-1.html#compute-simple-grouped-mean-1"><i class="fa fa-check"></i><b>17.2.2</b> Compute Simple Grouped Mean</a></li>
+<li class="chapter" data-level="17.2.3" data-path="replicating-adh-1.html"><a href="replicating-adh-1.html#computed-weighted-group-means-and-standard-deviations-1"><i class="fa fa-check"></i><b>17.2.3</b> Computed Weighted Group Means and Standard Deviations</a></li>
+</ul></li>
+<li class="chapter" data-level="17.3" data-path="replicating-adh-1.html"><a href="replicating-adh-1.html#regression"><i class="fa fa-check"></i><b>17.3</b> Regression</a>
+<ul>
+<li class="chapter" data-level="17.3.1" data-path="replicating-adh-1.html"><a href="replicating-adh-1.html#ols-regression-1"><i class="fa fa-check"></i><b>17.3.1</b> OLS regression</a></li>
+<li class="chapter" data-level="17.3.2" data-path="replicating-adh-1.html"><a href="replicating-adh-1.html#clustering-1"><i class="fa fa-check"></i><b>17.3.2</b> Clustering</a></li>
+<li class="chapter" data-level="17.3.3" data-path="replicating-adh-1.html"><a href="replicating-adh-1.html#instrument-variables-1"><i class="fa fa-check"></i><b>17.3.3</b> Instrument Variables</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">An Introduction to R for Economics and Business Research</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="data-transformations-with-dplyr-and-tidyr" class="section level1" number="2">
+<h1><span class="header-section-number">Chapter 2</span> Data Transformations with <code>dplyr</code> and <code>tidyr</code></h1>
+<p>It is rare that we obtain a data set and it looks exactly as we want it. Usually, we drop variables, transform variables, merge data etc. While it is possible to perform these tasks using base R, there is now a package called <code>dplyr</code> which simplifies them enormously. Before we actually start working with it, we have to clean our workspace and load some packages.</p>
+<div class="sourceCode" id="cb175"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb175-1"><a href="data-transformations-with-dplyr-and-tidyr.html#cb175-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tibble)   <span class="co"># nicer dataframes</span></span>
+<span id="cb175-2"><a href="data-transformations-with-dplyr-and-tidyr.html#cb175-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)    <span class="co"># data transformations</span></span>
+<span id="cb175-3"><a href="data-transformations-with-dplyr-and-tidyr.html#cb175-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Ecdat)    <span class="co"># Econ datasets</span></span></code></pre></div>
+<p>While we are at it, let us also load a dataset that we will use in the following. It contains a cross-section of 601 individuals in the United States, some of their characteristics and how many extramarital affairs they had in the past year.</p>
+<div class="sourceCode" id="cb176"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb176-1"><a href="data-transformations-with-dplyr-and-tidyr.html#cb176-1" aria-hidden="true" tabindex="-1"></a>affairs <span class="ot">=</span> <span class="fu">as_data_frame</span>(Fair) <span class="co"># from Ecdat</span></span></code></pre></div>
+<pre><code>## Warning: `as_data_frame()` was deprecated in tibble 2.0.0.
+## Please use `as_tibble()` instead.
+## The signature and semantics have changed, see `?as_tibble`.</code></pre>
+<div class="sourceCode" id="cb178"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb178-1"><a href="data-transformations-with-dplyr-and-tidyr.html#cb178-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(affairs)</span></code></pre></div>
+<pre><code>## # A tibble: 6 × 9
+##   sex      age    ym child religious education occupation  rate nbaffairs
+##   &lt;fct&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;fct&gt;     &lt;int&gt;     &lt;dbl&gt;      &lt;int&gt; &lt;int&gt;     &lt;dbl&gt;
+## 1 male      37 10    no            3        18          7     4         0
+## 2 female    27  4    no            4        14          6     4         0
+## 3 female    32 15    yes           1        12          1     4         0
+## 4 male      57 15    yes           5        18          6     5         0
+## 5 male      22  0.75 no            2        17          6     3         0
+## 6 female    32  1.5  no            2        17          5     5         0</code></pre>
+<p>As you can see, the dataframe contains 9 variables.</p>
+<ul>
+<li><strong>sex</strong>: factor: male or female</li>
+<li><strong>age</strong>: age in years</li>
+<li><strong>ym</strong>: number of years married</li>
+<li><strong>child</strong>: factor: yes or no?</li>
+<li><strong>religious</strong>: How religious from 1 (anti) to 5 (very)?</li>
+<li><strong>education</strong>: education in years</li>
+<li><strong>occupation</strong>: occupation, from 1 to 7, according to hollingshead classification</li>
+<li><strong>rate</strong>: self rating of marriage, from 1 (very unhappy) to 5 (very happy)</li>
+<li><strong>nbaffairs</strong>: number of affairs in past year</li>
+</ul>
+<div id="single-table-verbs" class="section level2" number="2.1">
+<h2><span class="header-section-number">2.1</span> Single table verbs</h2>
+<p>The <code>dplyr</code> package contains a number of single-table verbs which can be used to handle most of the day-to-day data work. The structure of the commands is always the same: <code>verb(dataframe, operation)</code>. The output of the functions is again a dataframe. Let’s look at each of the verbs in turn. We start with <code>filter</code>.</p>
+<div id="filter-to-filter-observations" class="section level3" number="2.1.1">
+<h3><span class="header-section-number">2.1.1</span> <code>filter</code> to filter observations</h3>
+<p>Filter can be used to select a subset of observations based on the truth value of a condition. Let’s say that we are only interested in the affairs of men.</p>
+<div class="sourceCode" id="cb180"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb180-1"><a href="data-transformations-with-dplyr-and-tidyr.html#cb180-1" aria-hidden="true" tabindex="-1"></a><span class="fu">filter</span>(affairs, sex <span class="sc">==</span> <span class="st">&quot;male&quot;</span>)</span></code></pre></div>
+<pre><code>## # A tibble: 286 × 9
+##    sex     age    ym child religious education occupation  rate nbaffairs
+##    &lt;fct&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;fct&gt;     &lt;int&gt;     &lt;dbl&gt;      &lt;int&gt; &lt;int&gt;     &lt;dbl&gt;
+##  1 male     37 10    no            3        18          7     4         0
+##  2 male     57 15    yes           5        18          6     5         0
+##  3 male     22  0.75 no            2        17          6     3         0
+##  4 male     57 15    yes           2        14          4     4         0
+##  5 male     22  1.5  no            4        14          4     5         0
+##  6 male     37 15    yes           2        20          7     2         0
+##  7 male     27  4    yes           4        18          6     4         0
+##  8 male     47 15    yes           5        17          6     4         0
+##  9 male     37  4    yes           2        20          6     4         0
+## 10 male     42 15    yes           5        20          6     4         0
+## # … with 276 more rows</code></pre>
+<p>As you can see, this gives us dataframe which just contains the observations for men. So, far we have just applied the function <code>filter</code> but have not saved the result anywhere. We need to assign it to a new dataframe or reassign it to the existing one.</p>
+<div class="sourceCode" id="cb182"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb182-1"><a href="data-transformations-with-dplyr-and-tidyr.html#cb182-1" aria-hidden="true" tabindex="-1"></a>affairs_men <span class="ot">=</span> <span class="fu">filter</span>(affairs, sex <span class="sc">==</span> <span class="st">&quot;male&quot;</span>)</span>
+<span id="cb182-2"><a href="data-transformations-with-dplyr-and-tidyr.html#cb182-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(affairs_men)</span></code></pre></div>
+<pre><code>## # A tibble: 6 × 9
+##   sex     age    ym child religious education occupation  rate nbaffairs
+##   &lt;fct&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;fct&gt;     &lt;int&gt;     &lt;dbl&gt;      &lt;int&gt; &lt;int&gt;     &lt;dbl&gt;
+## 1 male     37 10    no            3        18          7     4         0
+## 2 male     57 15    yes           5        18          6     5         0
+## 3 male     22  0.75 no            2        17          6     3         0
+## 4 male     57 15    yes           2        14          4     4         0
+## 5 male     22  1.5  no            4        14          4     5         0
+## 6 male     37 15    yes           2        20          7     2         0</code></pre>
+<p>We can of course add further conditions. Let’s say we are only interested in men without children.</p>
+<div class="sourceCode" id="cb184"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb184-1"><a href="data-transformations-with-dplyr-and-tidyr.html#cb184-1" aria-hidden="true" tabindex="-1"></a>affairs_childless_men <span class="ot">=</span> <span class="fu">filter</span>(affairs, sex <span class="sc">==</span> <span class="st">&quot;male&quot;</span>, child <span class="sc">==</span> <span class="st">&quot;no&quot;</span>)</span>
+<span id="cb184-2"><a href="data-transformations-with-dplyr-and-tidyr.html#cb184-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(affairs_childless_men)</span></code></pre></div>
+<pre><code>## # A tibble: 6 × 9
+##   sex     age     ym child religious education occupation  rate nbaffairs
+##   &lt;fct&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;fct&gt;     &lt;int&gt;     &lt;dbl&gt;      &lt;int&gt; &lt;int&gt;     &lt;dbl&gt;
+## 1 male     37 10     no            3        18          7     4         0
+## 2 male     22  0.75  no            2        17          6     3         0
+## 3 male     22  1.5   no            4        14          4     5         0
+## 4 male     27  0.417 no            4        17          6     4         0
+## 5 male     22  4     no            3        16          5     5         0
+## 6 male     22  4     no            1        18          5     5         0</code></pre>
+<p>You can add as many conditions as you want, these are then linked by a logical ‘and’. You can also create more complicated statements with the following logical and relational operators:</p>
+<ul>
+<li><code>==</code> equal</li>
+<li><code>!=</code> not equal</li>
+<li><code>!</code> not</li>
+<li><code>&amp;</code> and</li>
+<li><code>|</code> or</li>
+<li><code>&gt;</code> greater</li>
+<li><code>&lt;</code> smaller</li>
+<li><code>&gt;=</code> greater or equal</li>
+<li><code>&lt;=</code> smaller or equal</li>
+</ul>
+<p>So, let’s say we want to have the very religious, childless men. This can be accomplished as follows:</p>
+<div class="sourceCode" id="cb186"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb186-1"><a href="data-transformations-with-dplyr-and-tidyr.html#cb186-1" aria-hidden="true" tabindex="-1"></a>affairs_childless_zealots <span class="ot">=</span> <span class="fu">filter</span>(affairs, sex <span class="sc">==</span> <span class="st">&quot;male&quot;</span>, child <span class="sc">==</span> <span class="st">&quot;no&quot;</span>, religious <span class="sc">==</span> <span class="dv">4</span> <span class="sc">|</span> religious <span class="sc">==</span> <span class="dv">5</span>)</span></code></pre></div>
+<p>So, there you go. One last thing. Sometimes you have missing values in your dataframe, which are denoted as <code>NA</code>s (not available). I will create a small dataframe for us in the following.</p>
+<div class="sourceCode" id="cb187"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb187-1"><a href="data-transformations-with-dplyr-and-tidyr.html#cb187-1" aria-hidden="true" tabindex="-1"></a>na_df <span class="ot">=</span> <span class="fu">tibble</span>(</span>
+<span id="cb187-2"><a href="data-transformations-with-dplyr-and-tidyr.html#cb187-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>),</span>
+<span id="cb187-3"><a href="data-transformations-with-dplyr-and-tidyr.html#cb187-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="dv">3</span><span class="sc">:</span><span class="dv">8</span>)</span>
+<span id="cb187-4"><a href="data-transformations-with-dplyr-and-tidyr.html#cb187-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb187-5"><a href="data-transformations-with-dplyr-and-tidyr.html#cb187-5" aria-hidden="true" tabindex="-1"></a>na_df</span></code></pre></div>
+<pre><code>## # A tibble: 10 × 2
+##        x     y
+##    &lt;int&gt; &lt;int&gt;
+##  1     1     1
+##  2     2     2
+##  3     3    NA
+##  4     4    NA
+##  5     5     3
+##  6     6     4
+##  7     7     5
+##  8     8     6
+##  9     9     7
+## 10    10     8</code></pre>
+<p>To check for <code>NA</code>, we can use the function <code>is.na</code> which returns either <code>TRUE</code> or <code>FALSE</code>. We can exploit this, if we want to filter <code>NA</code>s out.</p>
+<div class="sourceCode" id="cb189"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb189-1"><a href="data-transformations-with-dplyr-and-tidyr.html#cb189-1" aria-hidden="true" tabindex="-1"></a><span class="fu">filter</span>(na_df, <span class="fu">is.na</span>(y))   <span class="co"># dataframe consisting of observations with NAs</span></span></code></pre></div>
+<pre><code>## # A tibble: 2 × 2
+##       x     y
+##   &lt;int&gt; &lt;int&gt;
+## 1     3    NA
+## 2     4    NA</code></pre>
+<div class="sourceCode" id="cb191"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb191-1"><a href="data-transformations-with-dplyr-and-tidyr.html#cb191-1" aria-hidden="true" tabindex="-1"></a><span class="fu">filter</span>(na_df, <span class="sc">!</span><span class="fu">is.na</span>(y))  <span class="co"># dataframe consisting of observations with non-missing values</span></span></code></pre></div>
+<pre><code>## # A tibble: 8 × 2
+##       x     y
+##   &lt;int&gt; &lt;int&gt;
+## 1     1     1
+## 2     2     2
+## 3     5     3
+## 4     6     4
+## 5     7     5
+## 6     8     6
+## 7     9     7
+## 8    10     8</code></pre>
+</div>
+<div id="arrange-to-arrange-a-dataframe-according-to-variables" class="section level3" number="2.1.2">
+<h3><span class="header-section-number">2.1.2</span> <code>arrange</code> to arrange a dataframe according to variables</h3>
+<p>Next in line, we have the <code>arrange</code> command. It can be used to change the order of a dataframe according to one or several variables. For example, assume we want to sort the dataframe by sex and age.</p>
+<div class="sourceCode" id="cb193"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb193-1"><a href="data-transformations-with-dplyr-and-tidyr.html#cb193-1" aria-hidden="true" tabindex="-1"></a>affairs <span class="ot">=</span> <span class="fu">arrange</span>(affairs, sex, age)</span></code></pre></div>
+<p>To change the direction of ordering, use the <code>desc</code> function.</p>
+<div class="sourceCode" id="cb194"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb194-1"><a href="data-transformations-with-dplyr-and-tidyr.html#cb194-1" aria-hidden="true" tabindex="-1"></a>affairs <span class="ot">=</span> <span class="fu">arrange</span>(affairs, sex, <span class="fu">desc</span>(age)) <span class="co"># sorted from old to young</span></span></code></pre></div>
+<p>And that is everything there is to know about the <code>arrange</code> function.</p>
+</div>
+<div id="select-to-selectdrop-variables" class="section level3" number="2.1.3">
+<h3><span class="header-section-number">2.1.3</span> <code>select</code> to select/drop variables</h3>
+<p>Our next verb can be used to select variables from a dataframe. Before we start, let me quickly get rid of the dataframes that we do not need anymore.</p>
+<div class="sourceCode" id="cb195"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb195-1"><a href="data-transformations-with-dplyr-and-tidyr.html#cb195-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(affairs_childless_men, affairs_childless_zealots, affairs_men, na_df)</span></code></pre></div>
+<p>So, let’s remind ourselves what is in our dataset.</p>
+<div class="sourceCode" id="cb196"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb196-1"><a href="data-transformations-with-dplyr-and-tidyr.html#cb196-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(affairs)</span></code></pre></div>
+<pre><code>## # A tibble: 6 × 9
+##   sex      age    ym child religious education occupation  rate nbaffairs
+##   &lt;fct&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;fct&gt;     &lt;int&gt;     &lt;dbl&gt;      &lt;int&gt; &lt;int&gt;     &lt;dbl&gt;
+## 1 female    57    15 yes           4        16          6     4         0
+## 2 female    57    15 yes           2        18          5     2         0
+## 3 female    57    15 yes           3        18          5     2         0
+## 4 female    57    15 no            4        20          6     5         0
+## 5 female    57    15 yes           1        18          5     4         2
+## 6 female    52    15 yes           5        12          1     3         0</code></pre>
+<p>We now create a new dataset consisting only of the variables <code>sex</code>, <code>age</code>, <code>nbaffairs</code>.</p>
+<div class="sourceCode" id="cb198"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb198-1"><a href="data-transformations-with-dplyr-and-tidyr.html#cb198-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">select</span>(affairs, sex, age, nbaffairs))</span></code></pre></div>
+<pre><code>## # A tibble: 6 × 3
+##   sex      age nbaffairs
+##   &lt;fct&gt;  &lt;dbl&gt;     &lt;dbl&gt;
+## 1 female    57         0
+## 2 female    57         0
+## 3 female    57         0
+## 4 female    57         0
+## 5 female    57         2
+## 6 female    52         0</code></pre>
+<p>We could also have given the variables new names while selecting them.</p>
+<div class="sourceCode" id="cb200"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb200-1"><a href="data-transformations-with-dplyr-and-tidyr.html#cb200-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">select</span>(affairs, sex, age, <span class="at">number_of_affairs =</span> nbaffairs))</span></code></pre></div>
+<pre><code>## # A tibble: 6 × 3
+##   sex      age number_of_affairs
+##   &lt;fct&gt;  &lt;dbl&gt;             &lt;dbl&gt;
+## 1 female    57                 0
+## 2 female    57                 0
+## 3 female    57                 0
+## 4 female    57                 0
+## 5 female    57                 2
+## 6 female    52                 0</code></pre>
+<p>Note however that there is a better function for renaming variables, <code>rename</code>, since it does not drop all the variables that are not explicitly mentioned.</p>
+<div class="sourceCode" id="cb202"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb202-1"><a href="data-transformations-with-dplyr-and-tidyr.html#cb202-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">rename</span>(affairs, <span class="at">number_of_affairs =</span> nbaffairs))</span></code></pre></div>
+<pre><code>## # A tibble: 6 × 9
+##   sex      age    ym child religious education occupation  rate number_of_affai…
+##   &lt;fct&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;fct&gt;     &lt;int&gt;     &lt;dbl&gt;      &lt;int&gt; &lt;int&gt;            &lt;dbl&gt;
+## 1 female    57    15 yes           4        16          6     4                0
+## 2 female    57    15 yes           2        18          5     2                0
+## 3 female    57    15 yes           3        18          5     2                0
+## 4 female    57    15 no            4        20          6     5                0
+## 5 female    57    15 yes           1        18          5     4                2
+## 6 female    52    15 yes           5        12          1     3                0</code></pre>
+<p>If you want to keep most variables but just get rid of some, you can use the minus sign. The following command will keep all variables except rate:</p>
+<div class="sourceCode" id="cb204"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb204-1"><a href="data-transformations-with-dplyr-and-tidyr.html#cb204-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">select</span>(affairs, <span class="sc">-</span> rate))</span></code></pre></div>
+<pre><code>## # A tibble: 6 × 8
+##   sex      age    ym child religious education occupation nbaffairs
+##   &lt;fct&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;fct&gt;     &lt;int&gt;     &lt;dbl&gt;      &lt;int&gt;     &lt;dbl&gt;
+## 1 female    57    15 yes           4        16          6         0
+## 2 female    57    15 yes           2        18          5         0
+## 3 female    57    15 yes           3        18          5         0
+## 4 female    57    15 no            4        20          6         0
+## 5 female    57    15 yes           1        18          5         2
+## 6 female    52    15 yes           5        12          1         0</code></pre>
+<p>Vertical slicing is also possible. To get all variables from <code>education</code> to <code>nbaffairs</code> you can write. The minus operator works here as well.</p>
+<div class="sourceCode" id="cb206"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb206-1"><a href="data-transformations-with-dplyr-and-tidyr.html#cb206-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">select</span>(affairs, education<span class="sc">:</span>nbaffairs))</span></code></pre></div>
+<pre><code>## # A tibble: 6 × 4
+##   education occupation  rate nbaffairs
+##       &lt;dbl&gt;      &lt;int&gt; &lt;int&gt;     &lt;dbl&gt;
+## 1        16          6     4         0
+## 2        18          5     2         0
+## 3        18          5     2         0
+## 4        20          6     5         0
+## 5        18          5     4         2
+## 6        12          1     3         0</code></pre>
+<div class="sourceCode" id="cb208"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb208-1"><a href="data-transformations-with-dplyr-and-tidyr.html#cb208-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">select</span>(affairs, <span class="sc">-</span>(education<span class="sc">:</span>nbaffairs)))</span></code></pre></div>
+<pre><code>## # A tibble: 6 × 5
+##   sex      age    ym child religious
+##   &lt;fct&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;fct&gt;     &lt;int&gt;
+## 1 female    57    15 yes           4
+## 2 female    57    15 yes           2
+## 3 female    57    15 yes           3
+## 4 female    57    15 no            4
+## 5 female    57    15 yes           1
+## 6 female    52    15 yes           5</code></pre>
+<p>Note that select also works nicely to reorder the columns of a dataframe. For example, if we want to have the <code>nbaffairs</code> in first place, we can write.</p>
+<div class="sourceCode" id="cb210"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb210-1"><a href="data-transformations-with-dplyr-and-tidyr.html#cb210-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">select</span>(affairs, nbaffairs, <span class="fu">everything</span>()))</span></code></pre></div>
+<pre><code>## # A tibble: 6 × 9
+##   nbaffairs sex      age    ym child religious education occupation  rate
+##       &lt;dbl&gt; &lt;fct&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;fct&gt;     &lt;int&gt;     &lt;dbl&gt;      &lt;int&gt; &lt;int&gt;
+## 1         0 female    57    15 yes           4        16          6     4
+## 2         0 female    57    15 yes           2        18          5     2
+## 3         0 female    57    15 yes           3        18          5     2
+## 4         0 female    57    15 no            4        20          6     5
+## 5         2 female    57    15 yes           1        18          5     4
+## 6         0 female    52    15 yes           5        12          1     3</code></pre>
+<p>The function <code>everthing</code> is a function to capture all other variables except the ones explicitly mentioned. There are also some other helper functions to select all variables that start, end, or contain with a certain string.</p>
+<ul>
+<li>starts_with(“string”)</li>
+<li>ends_with(“string”)</li>
+<li>contains(“string”)</li>
+<li>matches(“reg_expression”)</li>
+</ul>
+<p>Here is one example.</p>
+<div class="sourceCode" id="cb212"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb212-1"><a href="data-transformations-with-dplyr-and-tidyr.html#cb212-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">select</span>(affairs, <span class="fu">starts_with</span>(<span class="st">&quot;r&quot;</span>)))</span></code></pre></div>
+<pre><code>## # A tibble: 6 × 2
+##   religious  rate
+##       &lt;int&gt; &lt;int&gt;
+## 1         4     4
+## 2         2     2
+## 3         3     2
+## 4         4     5
+## 5         1     4
+## 6         5     3</code></pre>
+<p>That’s it. Now onwards to the <code>mutate</code> verb!</p>
+</div>
+<div id="mutate-to-create-new-variables" class="section level3" number="2.1.4">
+<h3><span class="header-section-number">2.1.4</span> <code>mutate</code> to create new variables</h3>
+<p>With <code>mutate</code> we can create new variables. For example, we might want to create a variable to capture the age at which a person got married. In our dataset we have two variables available to do just this: <code>age</code> (unfortunately, only measured in discrete steps, so our measure is somewhat imprecise) and <code>ym</code>. So, let’s do it.</p>
+<div class="sourceCode" id="cb214"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb214-1"><a href="data-transformations-with-dplyr-and-tidyr.html#cb214-1" aria-hidden="true" tabindex="-1"></a>affairs <span class="ot">=</span> <span class="fu">mutate</span>(affairs, <span class="at">age_married =</span> age <span class="sc">-</span> ym) </span></code></pre></div>
+<p>You can use several functions to create new variables:</p>
+<ul>
+<li>arithmetic operators: <code>+, -, *, /, ^</code></li>
+<li>aggregate functions: you can use aggregate functions such as <code>sum</code> and <code>mean</code> which we will talk about later</li>
+<li><code>log</code>: to create variables in logs, you can use <code>log</code>, <code>log2</code>, and <code>log10</code></li>
+<li>offsets: you can use <code>lag</code> and <code>lead</code> to refer to leading or lagged values, provided that your data are grouped (more about that later)</li>
+<li>logical comparisons: you can create Boolean variables using logical comparisons such as <code>&lt;, &lt;=, &gt;=, !=, ==</code>.</li>
+</ul>
+</div>
+<div id="summarise-to-create-summary-tables" class="section level3" number="2.1.5">
+<h3><span class="header-section-number">2.1.5</span> <code>summarise</code> to create summary tables</h3>
+<p>The last single-table verb, we’ll get to know is summarise. It conjunction with aggregate functions such as <code>mean</code> it can be used to collapse our dataframe.</p>
+<div class="sourceCode" id="cb215"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb215-1"><a href="data-transformations-with-dplyr-and-tidyr.html#cb215-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summarise</span>(affairs, <span class="at">age =</span> <span class="fu">mean</span>(age, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span></code></pre></div>
+<pre><code>## # A tibble: 1 × 1
+##     age
+##   &lt;dbl&gt;
+## 1  32.5</code></pre>
+<p>As you can see, this collapses our dataframe to just one number, the average age of the persons in the sample. It gets more interesting if we structure our dataframe before applying <code>summarise</code>. Say we want to have the average age by sex. (By the way, why did we use the <code>na.rm</code> argument here?)</p>
+<div class="sourceCode" id="cb217"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb217-1"><a href="data-transformations-with-dplyr-and-tidyr.html#cb217-1" aria-hidden="true" tabindex="-1"></a>affairs_grouped <span class="ot">=</span> <span class="fu">group_by</span>(affairs, sex)</span>
+<span id="cb217-2"><a href="data-transformations-with-dplyr-and-tidyr.html#cb217-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summarise</span>(affairs_grouped, <span class="at">age =</span> <span class="fu">mean</span>(age, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span></code></pre></div>
+<pre><code>## # A tibble: 2 × 2
+##   sex      age
+##   &lt;fct&gt;  &lt;dbl&gt;
+## 1 female  30.8
+## 2 male    34.3</code></pre>
+<p>Aha! Now, we have the mean ages for both men and women! Let’s go further by cross-tabulating sex and whether or not the person has children.</p>
+<div class="sourceCode" id="cb219"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb219-1"><a href="data-transformations-with-dplyr-and-tidyr.html#cb219-1" aria-hidden="true" tabindex="-1"></a>affairs_grouped <span class="ot">=</span> <span class="fu">group_by</span>(affairs, sex, child)</span>
+<span id="cb219-2"><a href="data-transformations-with-dplyr-and-tidyr.html#cb219-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summarise</span>(affairs_grouped, <span class="at">age =</span> <span class="fu">mean</span>(age, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span></code></pre></div>
+<pre><code>## `summarise()` has grouped output by &#39;sex&#39;. You can override using the `.groups` argument.</code></pre>
+<pre><code>## # A tibble: 4 × 3
+## # Groups:   sex [2]
+##   sex    child   age
+##   &lt;fct&gt;  &lt;fct&gt; &lt;dbl&gt;
+## 1 female no     24.5
+## 2 female yes    33.7
+## 3 male   no     28.7
+## 4 male   yes    36.3</code></pre>
+<p>As you can see the results of the <code>summarise</code> verb depend on how we grouped our data beforehand. You can ungroup a dataframe by using the <code>ungroup</code> function:</p>
+<div class="sourceCode" id="cb222"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb222-1"><a href="data-transformations-with-dplyr-and-tidyr.html#cb222-1" aria-hidden="true" tabindex="-1"></a>affairs_ungrouped <span class="ot">=</span> <span class="fu">ungroup</span>(affairs_grouped)</span>
+<span id="cb222-2"><a href="data-transformations-with-dplyr-and-tidyr.html#cb222-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summarise</span>(affairs_ungrouped, <span class="at">age =</span> <span class="fu">mean</span>(age, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="co"># returns only one value again since data are ungrouped</span></span></code></pre></div>
+<pre><code>## # A tibble: 1 × 1
+##     age
+##   &lt;dbl&gt;
+## 1  32.5</code></pre>
+<p>Of course, <code>mean</code> is not the only aggregate function that we can use in combination with <code>summarise</code>. Here are some more:</p>
+<ul>
+<li><code>sum(x)</code>: create group-wise sum for variable <code>x</code></li>
+<li><code>median(x)</code>: create group-wise median for variable <code>x</code></li>
+<li><code>sd(x)</code>: group-wise standard deviation for variable <code>x</code></li>
+<li><code>min(x)</code>: minimum by group for variable <code>x</code></li>
+<li><code>max(x)</code>: see above</li>
+<li><code>quantile(x, v)</code>: vth quantile for variable <code>x</code> by group</li>
+<li><code>first(x)</code>: first x-value in group by group</li>
+<li><code>last(x)</code>: last x-value in group by group</li>
+<li><code>n()</code>: number of values in group by group</li>
+<li><code>n_distinct(x)</code>: number of distinct values in group by group</li>
+</ul>
+</div>
+</div>
+<div id="using-functions-in-combination-with-logical-subsetting" class="section level2" number="2.2">
+<h2><span class="header-section-number">2.2</span> Using functions in combination with logical subsetting</h2>
+<p>The Boolean values TRUE and FALSE are treated as 1 and 0, respectively. This makes them useful in combination with our aggregate functions. Say we want to have the total number of very religious people. We can use <code>summarize</code> for this.</p>
+<div class="sourceCode" id="cb224"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb224-1"><a href="data-transformations-with-dplyr-and-tidyr.html#cb224-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summarise</span>(affairs, <span class="at">no_very_religious =</span> <span class="fu">sum</span>(religious <span class="sc">&gt;=</span> <span class="dv">4</span>))</span></code></pre></div>
+<pre><code>## # A tibble: 1 × 1
+##   no_very_religious
+##               &lt;int&gt;
+## 1               260</code></pre>
+<p>How does this work? Well the expression <code>religious &gt;= 4</code> produces a vector of the same length as <code>religious</code> with TRUE and FALSE values. If we sum over these values, we add a 1 for every observation for which the statement is true.</p>
+<p>We can also use subsetting in a different way. Let’s say we want to have the mean age of all those very religious people. We can then write:</p>
+<div class="sourceCode" id="cb226"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb226-1"><a href="data-transformations-with-dplyr-and-tidyr.html#cb226-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summarise</span>(affairs, <span class="at">mean_age =</span> <span class="fu">mean</span>(age[religious <span class="sc">&gt;=</span> <span class="dv">4</span>]))</span></code></pre></div>
+<pre><code>## # A tibble: 1 × 1
+##   mean_age
+##      &lt;dbl&gt;
+## 1     34.5</code></pre>
+<p>OK, let’s try to understand this. The expression <code>age[religious &gt;= 4]</code> selects only those observations from the age vector for which <code>religious &gt;= 4</code> is true. Then, the mean of these observations is calculated. You might get a feeling now how powerful the interplay of logical subsetting and the functions can be.</p>
+</div>
+<div id="the-pipe-operator" class="section level2" number="2.3">
+<h2><span class="header-section-number">2.3</span> The pipe operator</h2>
+<p>Now that we understand <code>dplyr</code> a little better, let’s make our code more beautiful and readible at the same time. I now introduce the pipe operator. Before, let’s quickly get rid of our mess.</p>
+<div class="sourceCode" id="cb228"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb228-1"><a href="data-transformations-with-dplyr-and-tidyr.html#cb228-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">c</span>(<span class="st">&quot;affairs_grouped&quot;</span>, <span class="st">&quot;affairs_ungrouped&quot;</span>))</span></code></pre></div>
+<p>We now have our original dataframe again. Let’s say I want to select the variables <code>age</code>, <code>ym</code>, and <code>nbaffairs</code>, create the variable which gives us age at marriage and sort the data by the number of affairs and our new variables. The wordy way looks like this:</p>
+<div class="sourceCode" id="cb229"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb229-1"><a href="data-transformations-with-dplyr-and-tidyr.html#cb229-1" aria-hidden="true" tabindex="-1"></a>affairs <span class="ot">=</span> <span class="fu">select</span>(affairs, age, ym, nbaffairs)</span>
+<span id="cb229-2"><a href="data-transformations-with-dplyr-and-tidyr.html#cb229-2" aria-hidden="true" tabindex="-1"></a>affairs <span class="ot">=</span> <span class="fu">mutate</span>(affairs, <span class="at">age_married =</span> age <span class="sc">-</span> ym)</span>
+<span id="cb229-3"><a href="data-transformations-with-dplyr-and-tidyr.html#cb229-3" aria-hidden="true" tabindex="-1"></a>affairs <span class="ot">=</span> <span class="fu">arrange</span>(affairs, nbaffairs, age_married) </span>
+<span id="cb229-4"><a href="data-transformations-with-dplyr-and-tidyr.html#cb229-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(affairs)</span></code></pre></div>
+<pre><code>## # A tibble: 6 × 4
+##     age    ym nbaffairs age_married
+##   &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;       &lt;dbl&gt;
+## 1  17.5 10            0         7.5
+## 2  22    7            0        15  
+## 3  22    7            0        15  
+## 4  22    7            0        15  
+## 5  17.5  1.5          0        16  
+## 6  17.5  0.75         0        16.8</code></pre>
+<p>Now, I don’t know about you but I have the feeling that I wrote the word <code>affairs</code> way too many times. This is because we a) have to reassign the new dataframe to the old dataframe so many times and b) always have to make sure that R knows on which dataframe we are using our verbs. Here, using the pipe operator comes in handy. Let’s first restore our original dataset.</p>
+<div class="sourceCode" id="cb231"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb231-1"><a href="data-transformations-with-dplyr-and-tidyr.html#cb231-1" aria-hidden="true" tabindex="-1"></a>affairs <span class="ot">=</span> <span class="fu">as_data_frame</span>(Fair) <span class="co"># restore dataframe</span></span></code></pre></div>
+<p>We can alternatively write the code as:</p>
+<div class="sourceCode" id="cb232"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb232-1"><a href="data-transformations-with-dplyr-and-tidyr.html#cb232-1" aria-hidden="true" tabindex="-1"></a>affairs <span class="ot">=</span> affairs <span class="sc">%&gt;%</span></span>
+<span id="cb232-2"><a href="data-transformations-with-dplyr-and-tidyr.html#cb232-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(age, ym, nbaffairs) <span class="sc">%&gt;%</span></span>
+<span id="cb232-3"><a href="data-transformations-with-dplyr-and-tidyr.html#cb232-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">age_married =</span> age <span class="sc">-</span> ym) <span class="sc">%&gt;%</span></span>
+<span id="cb232-4"><a href="data-transformations-with-dplyr-and-tidyr.html#cb232-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(nbaffairs, age_married)</span>
+<span id="cb232-5"><a href="data-transformations-with-dplyr-and-tidyr.html#cb232-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(affairs)</span></code></pre></div>
+<pre><code>## # A tibble: 6 × 4
+##     age    ym nbaffairs age_married
+##   &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;       &lt;dbl&gt;
+## 1  17.5 10            0         7.5
+## 2  22    7            0        15  
+## 3  22    7            0        15  
+## 4  22    7            0        15  
+## 5  17.5  1.5          0        16  
+## 6  17.5  0.75         0        16.8</code></pre>
+<p>Now, this look much nicer, right? We can skip the tedious reassignments and also don’t have to tell R on which dataframe we want to operate. You can read this as follows:</p>
+<ol style="list-style-type: decimal">
+<li>Take the affairs dataframe and apply the <code>select</code> verb on it. The result is a new dataframe with the three variables.</li>
+<li>Take this dataframe of three variables and apply the <code>mutate</code> verb to it. The result is a new dataframe which also includes the variable age_married.</li>
+<li>Take the new dataframe and apply the <code>arrange</code> verb to it. The result is a new dataframe.</li>
+<li>Assign this new dataframe to our variable <code>affairs</code>.</li>
+</ol>
+<p>Neat, eh? Piping works so nicely, because the input and output of <code>dplyr</code> verbs is always a dataframe. You can use the pipe operator also with other packages and we will use it when it is reasonable to do so.</p>
+</div>
+<div id="multiple-table-verbs" class="section level2" number="2.4">
+<h2><span class="header-section-number">2.4</span> Multiple table verbs</h2>
+<p><code>dplyr</code> also features verbs which you can apply to two tables. These are usually functions to join or merge two datasets.</p>
+<div id="mutating-joins" class="section level3" number="2.4.1">
+<h3><span class="header-section-number">2.4.1</span> Mutating joins</h3>
+<p>Mutating joins allow you to combine variables from multiple tables. To see how they work, let’s create two small tibbles.</p>
+<div class="sourceCode" id="cb234"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb234-1"><a href="data-transformations-with-dplyr-and-tidyr.html#cb234-1" aria-hidden="true" tabindex="-1"></a>first_df <span class="ot">=</span> <span class="fu">tibble</span>(</span>
+<span id="cb234-2"><a href="data-transformations-with-dplyr-and-tidyr.html#cb234-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">country =</span> <span class="fu">c</span>(<span class="st">&#39;Afghanistan&#39;</span>, <span class="st">&#39;Belgium&#39;</span>, <span class="st">&#39;China&#39;</span>, <span class="st">&#39;Denmark&#39;</span>),</span>
+<span id="cb234-3"><a href="data-transformations-with-dplyr-and-tidyr.html#cb234-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">population =</span> <span class="fu">c</span>(<span class="dv">33369945</span>, <span class="dv">11371928</span>, <span class="dv">1382323332</span>, <span class="dv">5690750</span>)</span>
+<span id="cb234-4"><a href="data-transformations-with-dplyr-and-tidyr.html#cb234-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb234-5"><a href="data-transformations-with-dplyr-and-tidyr.html#cb234-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb234-6"><a href="data-transformations-with-dplyr-and-tidyr.html#cb234-6" aria-hidden="true" tabindex="-1"></a><span class="co"># gdp in millions</span></span>
+<span id="cb234-7"><a href="data-transformations-with-dplyr-and-tidyr.html#cb234-7" aria-hidden="true" tabindex="-1"></a>second_df <span class="ot">=</span> <span class="fu">tibble</span>(</span>
+<span id="cb234-8"><a href="data-transformations-with-dplyr-and-tidyr.html#cb234-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">country =</span> <span class="fu">c</span>(<span class="st">&#39;Afghanistan&#39;</span>, <span class="st">&#39;Belgium&#39;</span>, <span class="st">&#39;Denmark&#39;</span>, <span class="st">&#39;Germany&#39;</span>),</span>
+<span id="cb234-9"><a href="data-transformations-with-dplyr-and-tidyr.html#cb234-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">gdp =</span> <span class="fu">c</span>(<span class="dv">35146</span>, <span class="dv">422809</span>, <span class="dv">211916</span>, <span class="dv">3232545</span>)</span>
+<span id="cb234-10"><a href="data-transformations-with-dplyr-and-tidyr.html#cb234-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb234-11"><a href="data-transformations-with-dplyr-and-tidyr.html#cb234-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb234-12"><a href="data-transformations-with-dplyr-and-tidyr.html#cb234-12" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(first_df)</span></code></pre></div>
+<pre><code>## # A tibble: 4 × 2
+##   country     population
+##   &lt;chr&gt;            &lt;dbl&gt;
+## 1 Afghanistan   33369945
+## 2 Belgium       11371928
+## 3 China       1382323332
+## 4 Denmark        5690750</code></pre>
+<div class="sourceCode" id="cb236"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb236-1"><a href="data-transformations-with-dplyr-and-tidyr.html#cb236-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(second_df)</span></code></pre></div>
+<pre><code>## # A tibble: 4 × 2
+##   country         gdp
+##   &lt;chr&gt;         &lt;dbl&gt;
+## 1 Afghanistan   35146
+## 2 Belgium      422809
+## 3 Denmark      211916
+## 4 Germany     3232545</code></pre>
+<div id="left_join" class="section level4" number="2.4.1.1">
+<h4><span class="header-section-number">2.4.1.1</span> <code>left_join</code></h4>
+<p>The <code>left_join</code> function matches rows from the second dataframe to the first dataframe. All rows from the first dataframe are kept.</p>
+<div class="sourceCode" id="cb238"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb238-1"><a href="data-transformations-with-dplyr-and-tidyr.html#cb238-1" aria-hidden="true" tabindex="-1"></a><span class="fu">left_join</span>(first_df, second_df, <span class="at">by =</span> <span class="st">&quot;country&quot;</span>)</span></code></pre></div>
+<pre><code>## # A tibble: 4 × 3
+##   country     population    gdp
+##   &lt;chr&gt;            &lt;dbl&gt;  &lt;dbl&gt;
+## 1 Afghanistan   33369945  35146
+## 2 Belgium       11371928 422809
+## 3 China       1382323332     NA
+## 4 Denmark        5690750 211916</code></pre>
+</div>
+<div id="right_join" class="section level4" number="2.4.1.2">
+<h4><span class="header-section-number">2.4.1.2</span> <code>right_join</code></h4>
+<p>The <code>right_join</code> function does exactly the opposite. It matches rows from the second dataframe to the first dataframe. All rows from the second dataframe are kept.</p>
+<div class="sourceCode" id="cb240"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb240-1"><a href="data-transformations-with-dplyr-and-tidyr.html#cb240-1" aria-hidden="true" tabindex="-1"></a><span class="fu">right_join</span>(first_df, second_df, <span class="at">by =</span> <span class="st">&quot;country&quot;</span>)</span></code></pre></div>
+<pre><code>## # A tibble: 4 × 3
+##   country     population     gdp
+##   &lt;chr&gt;            &lt;dbl&gt;   &lt;dbl&gt;
+## 1 Afghanistan   33369945   35146
+## 2 Belgium       11371928  422809
+## 3 Denmark        5690750  211916
+## 4 Germany             NA 3232545</code></pre>
+</div>
+<div id="inner_join" class="section level4" number="2.4.1.3">
+<h4><span class="header-section-number">2.4.1.3</span> <code>inner_join</code></h4>
+<p>The <code>inner_join</code> function joins the data from both dataframes but only keeps those observations which exist in both dataframes.</p>
+<div class="sourceCode" id="cb242"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb242-1"><a href="data-transformations-with-dplyr-and-tidyr.html#cb242-1" aria-hidden="true" tabindex="-1"></a><span class="fu">inner_join</span>(first_df, second_df, <span class="at">by =</span> <span class="st">&quot;country&quot;</span>)</span></code></pre></div>
+<pre><code>## # A tibble: 3 × 3
+##   country     population    gdp
+##   &lt;chr&gt;            &lt;dbl&gt;  &lt;dbl&gt;
+## 1 Afghanistan   33369945  35146
+## 2 Belgium       11371928 422809
+## 3 Denmark        5690750 211916</code></pre>
+</div>
+<div id="full_join" class="section level4" number="2.4.1.4">
+<h4><span class="header-section-number">2.4.1.4</span> <code>full_join</code></h4>
+<p>The <code>full_join</code> function also joins the data from both dataframes but keeps all observations.</p>
+<div class="sourceCode" id="cb244"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb244-1"><a href="data-transformations-with-dplyr-and-tidyr.html#cb244-1" aria-hidden="true" tabindex="-1"></a><span class="fu">full_join</span>(first_df, second_df, <span class="at">by =</span> <span class="st">&quot;country&quot;</span>)</span></code></pre></div>
+<pre><code>## # A tibble: 5 × 3
+##   country     population     gdp
+##   &lt;chr&gt;            &lt;dbl&gt;   &lt;dbl&gt;
+## 1 Afghanistan   33369945   35146
+## 2 Belgium       11371928  422809
+## 3 China       1382323332      NA
+## 4 Denmark        5690750  211916
+## 5 Germany             NA 3232545</code></pre>
+</div>
+</div>
+<div id="filtering-joins" class="section level3" number="2.4.2">
+<h3><span class="header-section-number">2.4.2</span> Filtering joins</h3>
+<p>Filtering joins are helpful if you want to filter the observations in one dataset based on whether they exist in the other dataset.</p>
+<div id="semi_join" class="section level4" number="2.4.2.1">
+<h4><span class="header-section-number">2.4.2.1</span> <code>semi_join</code></h4>
+<p>The <code>semi_join</code> function keeps all observations in the first dataframe which also exist in the second.</p>
+<div class="sourceCode" id="cb246"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb246-1"><a href="data-transformations-with-dplyr-and-tidyr.html#cb246-1" aria-hidden="true" tabindex="-1"></a><span class="fu">semi_join</span>(first_df, second_df, <span class="at">by =</span> <span class="st">&quot;country&quot;</span>)</span></code></pre></div>
+<pre><code>## # A tibble: 3 × 2
+##   country     population
+##   &lt;chr&gt;            &lt;dbl&gt;
+## 1 Afghanistan   33369945
+## 2 Belgium       11371928
+## 3 Denmark        5690750</code></pre>
+</div>
+<div id="anti_join" class="section level4" number="2.4.2.2">
+<h4><span class="header-section-number">2.4.2.2</span> <code>anti_join</code></h4>
+<p>The <code>anti_join</code> function drops all observations in the first dataframe which also exist in the second.</p>
+<div class="sourceCode" id="cb248"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb248-1"><a href="data-transformations-with-dplyr-and-tidyr.html#cb248-1" aria-hidden="true" tabindex="-1"></a><span class="fu">anti_join</span>(first_df, second_df, <span class="at">by =</span> <span class="st">&quot;country&quot;</span>)</span></code></pre></div>
+<pre><code>## # A tibble: 1 × 2
+##   country population
+##   &lt;chr&gt;        &lt;dbl&gt;
+## 1 China   1382323332</code></pre>
+</div>
+</div>
+<div id="the-by-argument" class="section level3" number="2.4.3">
+<h3><span class="header-section-number">2.4.3</span> The <code>by</code> argument</h3>
+<p>The <code>by</code> argument controls by what variables two dataframes are matched. If you do not specify it, <code>dplyr</code> uses all variables that exist in both tables, a so-called natural join. In our examples we could also have left the <code>by</code> argument unspecified since both dataframes only share the variable <code>country</code>.</p>
+<p>You can also pass character vector to specify by which variable the two dataframes are supposed to be matched. This is what we did in the preceding examples.</p>
+<p>Finally, what to do if the variable by which you want to match has different names in the two dataframes. Use a named character vector!</p>
+<div class="sourceCode" id="cb250"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb250-1"><a href="data-transformations-with-dplyr-and-tidyr.html#cb250-1" aria-hidden="true" tabindex="-1"></a>first_df <span class="ot">=</span> <span class="fu">tibble</span>(</span>
+<span id="cb250-2"><a href="data-transformations-with-dplyr-and-tidyr.html#cb250-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">country =</span> <span class="fu">c</span>(<span class="st">&#39;Afghanistan&#39;</span>, <span class="st">&#39;Belgium&#39;</span>, <span class="st">&#39;China&#39;</span>, <span class="st">&#39;Denmark&#39;</span>),</span>
+<span id="cb250-3"><a href="data-transformations-with-dplyr-and-tidyr.html#cb250-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">population =</span> <span class="fu">c</span>(<span class="dv">33369945</span>, <span class="dv">11371928</span>, <span class="dv">1382323332</span>, <span class="dv">5690750</span>)</span>
+<span id="cb250-4"><a href="data-transformations-with-dplyr-and-tidyr.html#cb250-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb250-5"><a href="data-transformations-with-dplyr-and-tidyr.html#cb250-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb250-6"><a href="data-transformations-with-dplyr-and-tidyr.html#cb250-6" aria-hidden="true" tabindex="-1"></a><span class="co"># gdp in millions</span></span>
+<span id="cb250-7"><a href="data-transformations-with-dplyr-and-tidyr.html#cb250-7" aria-hidden="true" tabindex="-1"></a>second_df <span class="ot">=</span> <span class="fu">tibble</span>(</span>
+<span id="cb250-8"><a href="data-transformations-with-dplyr-and-tidyr.html#cb250-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">country_name =</span> <span class="fu">c</span>(<span class="st">&#39;Afghanistan&#39;</span>, <span class="st">&#39;Belgium&#39;</span>, <span class="st">&#39;Denmark&#39;</span>, <span class="st">&#39;Germany&#39;</span>),</span>
+<span id="cb250-9"><a href="data-transformations-with-dplyr-and-tidyr.html#cb250-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">gdp =</span> <span class="fu">c</span>(<span class="dv">35146</span>, <span class="dv">422809</span>, <span class="dv">211916</span>, <span class="dv">3232545</span>)</span>
+<span id="cb250-10"><a href="data-transformations-with-dplyr-and-tidyr.html#cb250-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb250-11"><a href="data-transformations-with-dplyr-and-tidyr.html#cb250-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb250-12"><a href="data-transformations-with-dplyr-and-tidyr.html#cb250-12" aria-hidden="true" tabindex="-1"></a><span class="fu">full_join</span>(first_df, second_df, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&#39;country&#39;</span> <span class="ot">=</span> <span class="st">&#39;country_name&#39;</span>))</span></code></pre></div>
+<pre><code>## # A tibble: 5 × 3
+##   country     population     gdp
+##   &lt;chr&gt;            &lt;dbl&gt;   &lt;dbl&gt;
+## 1 Afghanistan   33369945   35146
+## 2 Belgium       11371928  422809
+## 3 China       1382323332      NA
+## 4 Denmark        5690750  211916
+## 5 Germany             NA 3232545</code></pre>
+<p>As you can see, this matched variable <code>country</code> in our first dataframe with <code>country_name</code> in our second dataframe. The variable name for the resulting dataframe is <code>country</code>.</p>
+</div>
+</div>
+<div id="reshaping-data-with-tidyr" class="section level2" number="2.5">
+<h2><span class="header-section-number">2.5</span> Reshaping data with <code>tidyr</code></h2>
+<p>Another thing that happens very often is that the datasets we obtain are not in the right format. What do I mean by ‘right’ here? You already talked with Lachlan about this but some basic principles are:</p>
+<ol style="list-style-type: decimal">
+<li>Every row is an observation.</li>
+<li>Every column is a variable.</li>
+<li>Each cell contains the value of a variable for a specific observation.</li>
+</ol>
+<p>Datasets which conform to these three principles are called <code>tidy</code> in the <code>R</code> world. There is now package called <code>tidyr</code> which helps you in converting untidy datasets to tidy ones.</p>
+<div class="sourceCode" id="cb252"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb252-1"><a href="data-transformations-with-dplyr-and-tidyr.html#cb252-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span></code></pre></div>
+<p>In the following we will look at two cases which I will call dirty wide and dirty long datasets.</p>
+<div id="from-dirty-wide-to-tidy-long" class="section level3" number="2.5.1">
+<h3><span class="header-section-number">2.5.1</span> From dirty wide to tidy long</h3>
+<p>Have a look at the following small dataset, containing population data.</p>
+<div class="sourceCode" id="cb253"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb253-1"><a href="data-transformations-with-dplyr-and-tidyr.html#cb253-1" aria-hidden="true" tabindex="-1"></a>dirty_wide <span class="ot">=</span> <span class="fu">as_data_frame</span>(table4a)</span>
+<span id="cb253-2"><a href="data-transformations-with-dplyr-and-tidyr.html#cb253-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(dirty_wide)</span></code></pre></div>
+<pre><code>## # A tibble: 3 × 3
+##   country     `1999` `2000`
+##   &lt;chr&gt;        &lt;int&gt;  &lt;int&gt;
+## 1 Afghanistan    745   2666
+## 2 Brazil       37737  80488
+## 3 China       212258 213766</code></pre>
+<p>Are these tidy? No! First of all, we have column names which are actually variable values: 1999 and 2000. Secondly, it is not clear what data the cells contain. To reshape the data from dirty long to tidy long, we use the <code>gather</code> command.</p>
+<div class="sourceCode" id="cb255"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb255-1"><a href="data-transformations-with-dplyr-and-tidyr.html#cb255-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gather</span>(dirty_wide, <span class="st">`</span><span class="at">1999</span><span class="st">`</span>, <span class="st">`</span><span class="at">2000</span><span class="st">`</span>, <span class="at">key =</span> <span class="st">&#39;year&#39;</span>, <span class="at">value =</span> <span class="st">&#39;population&#39;</span>)</span></code></pre></div>
+<pre><code>## # A tibble: 6 × 3
+##   country     year  population
+##   &lt;chr&gt;       &lt;chr&gt;      &lt;int&gt;
+## 1 Afghanistan 1999         745
+## 2 Brazil      1999       37737
+## 3 China       1999      212258
+## 4 Afghanistan 2000        2666
+## 5 Brazil      2000       80488
+## 6 China       2000      213766</code></pre>
+<p>How did this work? The first argument is the name of the dataset. The following arguments are the column names which are actually the values of a variable. We want these values to be stored in a variable called <code>year</code> so we write: <code>key = 'year'</code>. ‘Key’ in this context is just another word for variable name. Finally, we specify the variable name <code>population</code> for the values in our cells by writing <code>value = 'population'</code>. The result is a tidy long dataframe.</p>
+</div>
+<div id="from-dirty-long-to-tidy-wide" class="section level3" number="2.5.2">
+<h3><span class="header-section-number">2.5.2</span> From dirty long to tidy wide</h3>
+<p>We can also have a dirty long dataframe. Look at the following tibble.</p>
+<div class="sourceCode" id="cb257"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb257-1"><a href="data-transformations-with-dplyr-and-tidyr.html#cb257-1" aria-hidden="true" tabindex="-1"></a>dirty_long <span class="ot">=</span> <span class="fu">as_data_frame</span>(table2)</span>
+<span id="cb257-2"><a href="data-transformations-with-dplyr-and-tidyr.html#cb257-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(dirty_long)</span></code></pre></div>
+<pre><code>## # A tibble: 6 × 4
+##   country      year type           count
+##   &lt;chr&gt;       &lt;int&gt; &lt;chr&gt;          &lt;int&gt;
+## 1 Afghanistan  1999 cases            745
+## 2 Afghanistan  1999 population  19987071
+## 3 Afghanistan  2000 cases           2666
+## 4 Afghanistan  2000 population  20595360
+## 5 Brazil       1999 cases          37737
+## 6 Brazil       1999 population 172006362</code></pre>
+<p>Again this dataframe is not tidy. The variable <code>tidy</code> contains variable names and the <code>count</code> variable the corresponding values. We want to reshape these data and create two variables <code>cases</code> and <code>population</code> with the cells containing the corresponding values. This can be accomplished using the <code>spread</code> command.</p>
+<div class="sourceCode" id="cb259"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb259-1"><a href="data-transformations-with-dplyr-and-tidyr.html#cb259-1" aria-hidden="true" tabindex="-1"></a><span class="fu">spread</span>(dirty_long, <span class="at">key =</span> type, <span class="at">value =</span> count)</span></code></pre></div>
+<pre><code>## # A tibble: 6 × 4
+##   country      year  cases population
+##   &lt;chr&gt;       &lt;int&gt;  &lt;int&gt;      &lt;int&gt;
+## 1 Afghanistan  1999    745   19987071
+## 2 Afghanistan  2000   2666   20595360
+## 3 Brazil       1999  37737  172006362
+## 4 Brazil       2000  80488  174504898
+## 5 China        1999 212258 1272915272
+## 6 China        2000 213766 1280428583</code></pre>
+<p>The first argument is the name of the dataframe again. Secondly, we specify the column, <code>type</code> in this case, which contains the variable names or keys. Finally, we specify the variable, <code>count</code>, which contains the values of the variables. The resulting dataframe is tidy again.</p>
+</div>
+</div>
+<div id="sources-1" class="section level2 unnumbered">
+<h2>Sources</h2>
+<p>You can find the cheat sheet for <code>dplyr</code> and <code>tidyr</code> here: <a href="https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf" class="uri">https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf</a>. If you want to know more about the principles underlying tidy data, have a look at the following article by Hadley Wickham: <a href="https://www.jstatsoft.org/article/view/v059i10" class="uri">https://www.jstatsoft.org/article/view/v059i10</a>. There is also another packages called <code>reshape2</code> which can do everything that <code>tidyr</code> can and more: <a href="https://cran.r-project.org/web/packages/reshape2/index.html" class="uri">https://cran.r-project.org/web/packages/reshape2/index.html</a>.</p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="basics-of-r.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="visualizing-data-with-ggplot2.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["pp4rs-rstats.pdf", "pp4rs-rstats.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
