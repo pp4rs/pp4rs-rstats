@@ -82,7 +82,7 @@ read_csv(my_csv, col_names = c("Name", "Age"), na = ".")
 
 Sometimes columns are not correctly interpreted when they are read in. For these vectors, we can parse them differently using the `parse` functions. Each of these functions takes a vector and returns a vector. For example, assume in the following that I want to parse the `age` column not as an integer vector but as a character vector. I can use the `parse_character` function for this. 
 
-```{r}
+```{r, error=TRUE}
 my_csv = "Julian, 29
           Teresa, 25
           Jonas, . 
