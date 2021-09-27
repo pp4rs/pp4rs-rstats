@@ -1,0 +1,215 @@
+# (PART) Regression Modelling with R {-}
+
+# Linear Regression Essentials with `R`
+
+## Libraries
+```{r, warning=FALSE, message=FALSE}
+library(haven)      # reading stata data
+library(dplyr)      # data manipulation
+library(tibble)     # nicer dataframes
+library(stargazer)  # tables
+library(ggplot2)    # graphs
+```
+
+## Loading the data
+
+```{r}
+mrw_df = read_dta('data/mrw.dta')
+head(mrw_df)
+```
+
+We can cutify the output a little by using the `kable` function.
+```{r}
+knitr::kable(head(mrw_df))
+```
+
+As you can see, we have `r ncol(mrw_df)` variables and `r nrow(mrw_df)` observations. 
+
+We have the following variables: 
+
+* __number__: a country identifier between 1 and 121 country country name (a string variable)
+* __country__: the name of the country
+* __n__: a dummy variable equal to one if the country is included in the non-oil sample
+* __i__: a dummy variable equal to one if the country is included in the intermediate sample
+* __o__: a dummy variable equal to one if the country is included in the oecd sample
+* __rgdpw60__: real GDP per working age population in 1960
+* __rgdpw85__: real GDP per working age population in 1985
+* __gdpgrowth__: average annual growth rate of real GDP per working age population between 1960 and 1985 
+* __popgrowth__: average annual growth rate of the working age population
+between 1960 and 1985
+* __i_y__: real investment as a share of real GDP, averaged over the period 1960-85
+* __school__: % of working age population in secondary school
+
+## Meaningful names
+The first thing we should do is probably to give these variables more meaningful names in order to escape the 90s charme conveyed by them. 
+
+```{r}
+mrw_df = mrw_df %>% 
+  rename(non_oil = n, 
+         oecd = o,
+         intermediate = i,
+         gdp_60 = rgdpw60,
+         gdp_85 = rgdpw85,
+         gdp_growth_60_85 = gdpgrowth,
+         pop_growth_60_85 = popgrowth,
+         inv_gdp = i_y,
+         school = school)
+```
+
+## Create variables for estimation
+In order to follow the estimation, we will need to create some additional variables: 
+
+* The logs of the GDP per working age pop. in 1985 and 1960.
+* The investment to GDP ratio has to be converted to lie between 0 and 1. Also we need the log of it. 
+* We have to create the `ndg` variable which is assumed to be population growth (0 - 1) + 0.05. Again, we need the log of it. 
+* We want to use the log of the schooling rate (again first divided by 100). 
+* Finally, and just for consistency, we should convert our sample dummies to factors. 
+
+
+```{r}
+# log gdp 
+mrw_df = mrw_df %>% 
+  mutate(ln_gdp_85 = log(gdp_85),
+         ln_gdp_60 = log(gdp_60),
+         ln_inv_gdp = log(inv_gdp/100),
+         non_oil = factor(non_oil),
+         intermediate = factor(intermediate),
+         oecd = factor(oecd),
+         ln_ndg = log(pop_growth_60_85/100 + 0.05),
+         ln_school = log(school/100)) %>% 
+  select(country, ln_gdp_85, ln_gdp_60, ln_inv_gdp, 
+         non_oil, intermediate, oecd,
+         ln_ndg, ln_school, gdp_growth_60_85)
+head(mrw_df)
+```
+
+## Summary statistics
+
+Maybe, we would like to have summary statistics for our dataframe. For that, we need `summary`.
+
+```{r}
+summary(mrw_df)
+```
+
+## Create three samples
+
+```{r}
+mrw_oecd = mrw_df %>% filter(oecd == 1)
+mrw_int = mrw_df %>% filter(intermediate == 1)
+mrw_non_oil = mrw_df %>% filter(non_oil == 1)
+```
+
+## Run the estimation for Table 1 in MRW (1992)
+To run a linear model we need the `lm` command. 
+
+```{r}
+m_non_oil = lm(ln_gdp_85 ~ 1 + ln_inv_gdp + ln_ndg, data = mrw_non_oil)
+m_int = lm(ln_gdp_85 ~ 1 + ln_inv_gdp + ln_ndg, data = mrw_int)
+m_oecd = lm(ln_gdp_85 ~ 1 + ln_inv_gdp + ln_ndg, data = mrw_oecd)
+```
+
+To get nicely formatted results, we can use the `summary` command: 
+```{r}
+summary(m_non_oil)
+```
+
+
+## Show the results in a table
+```{r, results='asis'}
+stargazer(m_non_oil, m_int, m_oecd, type = "latex")
+```
+
+```{r, results='asis'}
+stargazer(m_non_oil, m_int, m_oecd, type = "latex",
+          column.labels = c("Non-Oil", 
+                            "Intermediate", 
+                            "OECD"),
+          covariate.labels = c("$\\log(\\frac{I}{GDP})$", 
+                               "$\\log(n+\\delta+g)$", 
+                               "Constant"), 
+          dep.var.labels = "Log(GDP) 1985",
+          omit.stat = c("f", 
+                        "rsq", 
+                        "ser"),
+          title = "Replication of (part of) Table 1 in Mankiw, Romer, and Weil (1992)",
+          style = "qje")
+```
+
+## Robust standard errors
+
+In economics, we often would like to have robust standard errors. To look at how we see them. Let's go back to an example. 
+
+
+```{r}
+lm_example = lm(ln_gdp_85 ~ 1 + ln_inv_gdp + ln_ndg, data = mrw_non_oil)
+```
+
+```{r}
+library(sandwich) # for robust standard errors
+library(lmtest)   # to nicely summarize the results
+
+lm_robust = coeftest(lm_example, vcov = vcovHC(lm_example, "HC1"))
+print(lm_robust)
+```
+Since we do not want to type this every time. We should write a short function that takes a linear model and returns the robust summary of it. 
+
+```{r}
+
+# needs sandwich and lmtest
+print_robust = function(lm_model) {
+  results_robust = coeftest(lm_model, vcov = vcovHC(lm_model, "HC1"))
+  print(results_robust)
+}
+
+print_robust(lm_example)
+```
+
+Now, unfortunately the `coeftest` function does not return an object that is easily transferred to a stargazer table. Thus, we will have to write another function. 
+```{r}
+# needs sandwich
+compute_rob_se = function(lm_model) {
+  vcov = vcovHC(lm_example, "HC1")
+  se = sqrt(diag(vcov))
+}
+```
+This makes our life somewhat easier. No, in order to compare the standard errors we could do the following. 
+```{r, results = 'asis'}
+# run the model 
+lm_example = lm(ln_gdp_85 ~ 1 + ln_inv_gdp + ln_ndg, data = mrw_non_oil)
+
+# obtain the robust ses
+rob_se = compute_rob_se(lm_example)
+
+stargazer(lm_example, lm_example,
+          se = list(NULL, rob_se))
+```
+
+## Some Graphs
+
+```{r, fig.width = 6}
+ggplot(mrw_non_oil) +
+  geom_point(aes(x = ln_gdp_60, y = gdp_growth_60_85)) +
+  labs(x = "Log output per working-age adult in 1960",
+       y = "Growth rate: 1960-85", 
+       title = "Unconditional Convergence") +
+  theme_bw()
+```
+
+Let's try to get the residuals.
+
+```{r, fig.width = 6}
+lm_y = lm(gdp_growth_60_85 ~ 1+ ln_inv_gdp + ln_ndg + ln_school, data = mrw_non_oil)
+lm_x = lm(ln_gdp_60 ~ 1+ ln_inv_gdp + ln_ndg + ln_school, data = mrw_non_oil)
+y_res = lm_y$residuals
+x_res = lm_x$residuals
+
+graph_tibble = tibble(
+  y = y_res, 
+  x = x_res)
+
+ggplot(graph_tibble) +
+  geom_point(aes(x, y)) + 
+  labs(x = "Res. X",
+       y = "Res. Y") + 
+  theme_bw()
+```

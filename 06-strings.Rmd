@@ -1,0 +1,52 @@
+# Working with Strings
+
+First load the package.
+
+```{r}
+library(stringr)
+
+```
+
+## String combine with `str_c`
+```{r}
+our_string = c("With", "great", "power", "comes", "great", "responsibility")
+
+str_length(our_string)
+```
+```{r}
+str_c("Hello", "World", sep = " ")
+str_c(our_string)
+```
+```{r}
+str_c(our_string,  collapse = " ")
+```
+## Substrings  with `str_sub`
+```{r}
+str_sub(our_string, 1, 1)
+str_sub(our_string, 1, 2)
+str_sub(our_string, -1, -1)
+str_sub(our_string, -2, -1)
+```
+## Capitalize or not
+```{r}
+str_to_lower(our_string)
+str_to_upper(our_string)
+str_to_title(our_string)
+
+# specify locale to be sure that behavior is consistent with locale option
+str_to_title(our_string, locale = "en")
+```
+```{r}
+# capitalize first letter
+str_sub(our_string, 1, 1) <- str_to_upper(str_sub(our_string, 1, 1))
+our_string
+```
+## String sort
+```{r}
+str_sort(our_string)
+```
+## Handling NAs
+```{r}
+another_string = c(NA, "Hello", "World")
+str_c(another_string, collapse = " ")
+```

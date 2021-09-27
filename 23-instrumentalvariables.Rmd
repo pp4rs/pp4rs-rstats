@@ -1,0 +1,175 @@
+# Instrumental Variables
+
+## Libraries
+```{r, message = FALSE}
+library(AER)      # ivreg command
+library(ivpack)   # robust and clustered standard errors
+library(dplyr)    # data manipulation
+library(ggplot2)  # graphs
+library(tibble)   # nice dataframes
+library(haven)    # dta files
+library(stargazer)# tables
+library(sandwich) # robust se
+library(lmtest)   # for print robust
+```
+
+## Functions We Might Want to Have
+```{r}
+# function to compute robust standard errors for lm
+compute_lm_rse = function(lmodel) {
+  vcov = vcovHC(lmodel, "HC1")
+  se = sqrt(diag(vcov))
+}
+
+# function to easily pass lm results to stargazer
+lm_robust = function(lm_formula, data) {
+  lm_result = lm(lm_formula, data)
+  lm_se = compute_lm_rse(lm_result)
+  return(list("result" = lm_result, "rse" = lm_se))
+}
+
+# summary of OLS with robust standard errors
+print_lm_robust = function(lmodel){
+  results_robust = coeftest(lmodel, vcov = vcovHC(lmodel, "HC1"))
+  print(results_robust)
+}
+```
+
+## A Brief Review of OLS: Replicating Table 2
+
+```{r}
+ajr_world = read_dta("data/ajr/maketable2/maketable2.dta") %>% 
+  mutate(baseco = if_else(is.na(baseco), 0, 1)) %>% 
+  mutate(africa = factor(africa),
+         asia = factor(asia),
+         other = factor(other))  
+
+ajr_base = ajr_world %>% 
+  filter(baseco == 1) 
+```
+
+```{r}
+lm_1 = lm_robust(logpgp95 ~ avexpr, data = ajr_world)
+lm_2 = lm_robust(logpgp95 ~ avexpr, data = ajr_base)
+lm_3 = lm_robust(logpgp95 ~ avexpr + lat_abst, data = ajr_world)
+lm_4 = lm_robust(logpgp95 ~ avexpr + lat_abst, data = ajr_base)
+lm_5 = lm_robust(logpgp95 ~ avexpr + lat_abst + africa + asia + other, 
+                 data = ajr_world)
+lm_6 = lm_robust(logpgp95 ~ avexpr + lat_abst + africa + asia + other, 
+                 data = ajr_base)
+```
+```{r, results = 'asis'}
+stargazer(lm_1$result, lm_2$result, lm_3$result, lm_4$result, lm_5$result, lm_6$result, 
+          type = 'latex',
+          dep.var.labels = "Log GDP per Capita in 1995",
+          covariate.labels = c("Expropriation Risk", "Latitude", "Africa", "Asia", "Other", "Constant"),
+          omit.stat = c('f', 'ser'),
+          se = list(lm_1$rse, lm_2$rse, lm_3$rse, lm_4$rse, lm_5$rse, lm_6$rse),
+          title = "OLS Results")
+```
+
+## A Brief Review of Making Figures: Replicating Figure 2
+```{r}
+ggplot(ajr_base, aes(x = avexpr, y = logpgp95)) + 
+  geom_text(aes(label = shortnam), hjust = 0, vjust = 0, size = 3) + 
+  geom_smooth(method = "lm", color = "Black", size = 0.5) + 
+  labs(x = "Average Expropriation Risk 1985-95",
+       y = "Log GDP per Capita, 1995") +
+  theme_bw()
+```
+
+## IV: Replicating Table 4
+
+### Loading the data
+```{r}
+ajr_world = read_dta("data/ajr/maketable4/maketable4.dta") %>% 
+  mutate(rich4 = factor(rich4))
+ajr_base = ajr_world %>% 
+  filter(baseco == 1)
+```
+
+
+### Doing it by hand...
+
+```{r}
+# first stage
+iv_1_fs = lm(avexpr ~ logem4, ajr_base)
+print_lm_robust(iv_1_fs)
+
+# add predicted variable to the dataset
+ajr_base = ajr_base %>% 
+  mutate(avexpr_pred = iv_1_fs$fitted.values)
+
+# second stage
+iv_2_ss = lm(logpgp95 ~ avexpr_pred, ajr_base)
+print_lm_robust(iv_2_ss)
+```
+Note that the robust standard errors are still not correct, because we did not account for the 2SLS standard error correction. The next command will do all of this for us. 
+
+### The `ivreg` Command
+```{r}
+iv_1 = ivreg(logpgp95 ~ avexpr | logem4, data = ajr_base)
+summary(iv_1)
+```
+If we want to use robust or clustered standard errors, we can use the functionalities from the `ivpack`. 
+```{r}
+# print robust standard errors
+robust.se(iv_1)
+```
+
+Again, we can write a wrapper function that gives us both the model as well as the robust standard errors so that we can easily pass them to stargazer. Unfortunately, it is not perfect yet, because it also prints out some stuff.  
+
+```{r}
+# function to easily pass robust iv results to stargazer
+iv_robust = function(iv_formula, data_iv) {
+  iv_result = ivreg(formula = iv_formula, data = data_iv)
+  iv_rse = robust.se(iv_result)[, 2]
+  return(list("result" = iv_result, "rse" = iv_rse))
+}
+```
+OK, now let's replicate table 4. 
+
+```{r}
+iv_1 = iv_robust(logpgp95 ~ avexpr | logem4, ajr_base)
+iv_2 = iv_robust(logpgp95 ~ avexpr + lat_abst | logem4  + lat_abst, ajr_base)
+
+ajr_noneo = ajr_base %>% 
+  filter(!rich4 == 1)
+
+iv_3 = iv_robust(logpgp95 ~ avexpr | logem4, ajr_noneo)
+iv_4 = iv_robust(logpgp95 ~ avexpr + lat_abst | logem4  + lat_abst, ajr_noneo)
+```
+```{r, results = 'asis'}
+stargazer(iv_1$result, iv_2$result, iv_3$result, iv_4$result, 
+          se = list(iv_1$rse, iv_2$rse, iv_3$rse, iv_4$rse),
+          dep.var.labels = "Log GDP in 1995",
+          covariate.labels = c("Expropriation Risk", "Latitude", "Constant"),
+          omit.stat = "ser",
+          title = "Instrumental Variable Results", 
+          type = "latex")
+```
+
+## Adding Statistics to Stargazer
+So far, we have not talked at all about additional test statistics. To look at those for our first specification, we can do this as follows: 
+
+```{r}
+# generate value of robust f-test
+iv_1_fs = lm_robust(avexpr ~ logem4, ajr_base)
+iv_1_fs_null = lm_robust(avexpr ~ 1, ajr_base)
+f_iv_1 = waldtest(iv_1_fs$result, iv_1_fs_null$result, 
+                  vcov = vcovHC(iv_1_fs$result, type="HC1"))$F[2]
+```
+
+```{r, results = 'asis'}
+stargazer(iv_1_fs$result,
+          se = list(iv_1_fs$rse),
+          add.lines = list(c("Robust F", format(round(f_iv_1, 2), nsmall = 2))),
+          dep.var.labels = "Expropriation Risk",
+          covariate.labels = c("Log of Settler Mortality", "Constant"),
+          title = "First Stage",
+          omit.stat = c("ser", "f"),
+          type = "latex")
+```
+
+
+

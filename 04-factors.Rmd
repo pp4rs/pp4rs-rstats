@@ -1,0 +1,58 @@
+# Factor Variables 
+
+## Creating Factors
+```{r}
+library(tibble)
+library(dplyr)
+library(ggplot2)
+
+my_dataframe = tibble(
+  age = c(12, 17, 11, 8),
+  gender = c("Male", "Male", "Female", "Female"),
+  review = c("C", "B", "B", "A")
+)
+
+my_dataframe = my_dataframe %>%
+  mutate(gender = factor(gender, levels = c("Male", "Female"))) %>% 
+  mutate(review = factor(review, levels = c("C", "B", "A"), ordered = TRUE))
+
+head(my_dataframe)
+```
+So, we created an ordered as well as an unordered factor. If you want to see the values for the factor levels, use `levels`. 
+```{r}
+levels(my_dataframe$gender)
+levels(my_dataframe$review)
+```
+
+## Some other useful functions from forcats
+```{r}
+library(forcats)
+```
+### Modify factor levels 
+```{r}
+my_dataframe = my_dataframe %>%
+  mutate(review = fct_recode(review,
+                             "Very Good" = "A",
+                             "Good"      = "B", 
+                             "Bad"       = "C"))
+head(my_dataframe)
+```
+
+No bad people.
+
+```{r}
+my_dataframe = my_dataframe %>%
+  mutate(review = fct_recode(review,
+                             "Good" = "Bad"))
+head(my_dataframe)
+```
+```{r}
+my_dataframe = my_dataframe %>%
+  group_by(gender) %>%
+  summarize(mean_age = mean(age, na.rm = TRUE)) %>%
+  mutate(gender = fct_reorder(gender, mean_age))
+
+ggplot(my_dataframe) + 
+  geom_point(aes(x = mean_age, y = gender)) 
+```
+

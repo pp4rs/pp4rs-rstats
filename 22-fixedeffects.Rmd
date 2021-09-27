@@ -1,0 +1,146 @@
+# Linear Models with Fixed Effects
+
+## Libraries
+```{r, message = FALSE}
+library(readxl)         # read excel files
+library(tibble)         # cuter dataframes
+library(dplyr)          # data manipulation
+library(ggplot2)        # graphs
+library(lfe)            # fixed effects models
+library(stargazer)      # nice tables
+library(ggrepel)        # better graph labeling
+library(lmtest)         # for coeftest function
+library(multiwayvcov)   # (multiway) clustered standard errors
+library(AER)            # instrumental variables
+library(ivpack)         # robust standard errors for ivreg
+```
+
+## Review of Plotting: Recreating Figure 1
+```{r}
+# read data for first figure
+ajry_f1 = read_xls("data/ajry.xls", 
+                   sheet = "F1") %>% 
+  rename(log_gdp_pc = lrgdpch, 
+         freedom_house = fhpolrigaug)
+
+ggplot(ajry_f1, aes(x = log_gdp_pc, y = freedom_house)) +
+  geom_point(size = 0.5) +
+  geom_text(aes(label = code), size = 2, hjust = 0, vjust = 0) +
+  geom_smooth(method = "lm", color = "black", size = 0.5, alpha = 0.2) +
+  labs(x = "Log GDP per Capita (1990-1999)",
+       y = "FH Measure of Democracy (1990-1999)") +
+  theme_bw()
+
+```
+That is not bad, but we cannot read half of the label. Let's try again, with the `ggrepel` package. 
+
+```{r}
+ggplot(ajry_f1, aes(x = log_gdp_pc, y = freedom_house)) +
+  geom_point(size = 0.5) +
+  geom_text_repel(aes(label = code), size = 2) +
+  geom_smooth(method = "lm", color = "black", size = 0.5, alpha = 0.2) +
+  labs(x = "Log GDP per Capita (1990-1999)",
+       y = "FH Measure of Democracy (1990-1999)") +
+  theme_bw()
+
+rm(ajry_f1)
+```
+
+## Review of Plotting: Recreating Figure 2
+```{r}
+# read data for second figure
+ajry_f2 = read_xls("data/ajry.xls", 
+                   sheet = "F2") %>% 
+  rename(freedom_house_change = s5fhpolrigaug,
+         log_gdp_pc_change = s5lrgdpch)
+
+
+ggplot(ajry_f2, aes(x = log_gdp_pc_change, y = freedom_house_change)) +
+  geom_point(size = 0.5) + 
+  geom_smooth(method = "lm", size = 0.5, alpha = 0.2) +
+  geom_text_repel(aes(label = code), size = 2) +
+  labs(x = "Change in GDP per Capita (1970-1995)",
+       y = "Change in FH Measure of Democracy (1970-1995)") + 
+  theme_bw()
+```
+
+
+## Loading the data for estimation
+```{r}
+ajry_df = read_xls("data/ajry.xls", 
+                   sheet = 2) %>% 
+  arrange(code_numeric, year_numeric) %>% 
+  rename(log_gdp_pc = lrgdpch,
+         freedom_house = fhpolrigaug)
+
+# generate lagged variables
+ajry_df = ajry_df %>% 
+  group_by(code_numeric) %>% 
+  mutate(lag_log_gdp_pc = lag(log_gdp_pc, order_by = year_numeric),
+         lag_freedom_house = lag(freedom_house, order_by = year_numeric),
+         lag2_nsave = lag(nsave, 2, order_by = year_numeric),
+         lag_worldincome = lag(worldincome, order_by = year_numeric)) %>% 
+  filter(sample == 1)
+```
+
+## Pooled OLS with Time Effects
+```{r}
+# pooled ols with lm 
+pooled_est = lm(freedom_house ~ -1 + lag_freedom_house + lag_log_gdp_pc + 
+             factor(year_numeric), data = ajry_df)
+
+# standard errors clustered by country
+vcov_country <- cluster.vcov(pooled_est, ajry_df$code_numeric)
+coeftest(pooled_est, vcov_country)
+```
+
+## Fixed Effects with the `lm` function
+
+```{r}
+# pooled ols with lm 
+fe_est = lm(freedom_house ~ -1 + lag_freedom_house + lag_log_gdp_pc + 
+             factor(year_numeric) + factor(code_numeric), data = ajry_df)
+
+# standard errors clustered by country
+vcov_country <- cluster.vcov(fe_est, factor(ajry_df$code_numeric))
+coeftest(fe_est, vcov_country)
+```
+
+## Pooled OLS and FE with the `lfe` package
+```{r}
+# pooled OLS
+felm1 = felm(freedom_house ~ lag_freedom_house + lag_log_gdp_pc | year_numeric | 0 | code_numeric, 
+             data = ajry_df)
+
+# FE
+felm2 = felm(freedom_house ~ lag_freedom_house + lag_log_gdp_pc | year_numeric + code_numeric | 0 | 
+               code_numeric, data = ajry_df)
+stargazer(felm1, felm2, type = 'text')
+```
+Notice that this command automatically spits out cluster-robust standard errors and passes them to `stargazer`. That is absolutely fantastic, right? For robust standard errors we have to work a bit. 
+
+```{r}
+# function to recover robust standard errors 
+get_felm_robust_se = function(felm_result) {
+  felm_summary = summary(felm_result, robust = TRUE)
+  robust_se = felm_summary$coefficients[, 2]
+  }
+```
+
+## Review of IV
+
+```{r}
+# Second Stage with ivreg, normal standard errors
+iv_sav = ivreg(freedom_house ~ lag_freedom_house + lag_log_gdp_pc + factor(year_numeric) + 
+        factor(code_numeric) | lag_freedom_house + lag2_nsave + factor(year_numeric) + 
+        factor(code_numeric), data = ajry_df)
+summary(iv_sav) 
+```
+
+## IV with `felm`
+
+```{r}
+# note the difference in the instrumental variable list.
+summary(felm(freedom_house ~ lag_freedom_house | year_numeric + code_numeric | 
+               (lag_log_gdp_pc ~ lag2_nsave) | code_numeric, data = ajry_df))
+```

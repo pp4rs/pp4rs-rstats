@@ -1,0 +1,247 @@
+# Replicating ADH
+
+## Motivation
+
+TBD
+
+## US Aggregate Data
+
+We want to look for some aggregate facts about the US economy and its trade patterns to get a sense of how some macroeconomic indicators had evolved around China's WTO accession. In particular we will show that
+
+- Expansion of Chinese Trade. Essentially all of US trade growth since the 1990s is from the expansion of Chinese imports.
+- Fall in Real Interest Rates Around the time the Chinese trade expanded.
+- Expansion of the Trade Deficit during this time period.
+
+### Load Necessary Packages
+
+Install the ones you do not have yet.
+
+```{r, eval = FALSE}
+library("fredr")
+library("purrr")
+library("dplyr")
+library("readr")
+library("tidyr")
+library("ggplot2")
+library("magrittr")
+library("lubridate")
+library("PerformanceAnalytics")
+```
+
+### Get Data from Federal Reserve
+
+We need the following variables from FRED:
+
+
+```{r, eval = FALSE}
+codes = c("GDP", "IMP0015", "IMPCH", "EXP0015", "GS1", "CPILFESL")
+```
+
+We also need to tell FRED our API key to authenticate ourselves. For this course, you can use the following command:
+
+```{r, eval = FALSE}
+api_key = "YOUR KEY"
+fredr_set_key(api_key)
+```
+
+1. Use the `fredr_series_observations` command on a single variable to get the data for that variable
+2. Now, find the option to pull only data starting at `1990-01-01`. Make sure you format this number as a date.
+3. What happens if you use the previous command on `codes` instead of a single variable name?
+4. Solve it by applying the correct map function which returns a dataframe by row-binding. Save your dataset as `df_raw`
+
+### Data Transformations
+
+For the rest of this part, take `df_raw` and save the transformed output as `df`:
+
+5. Now split your data into columns
+6. Rename your newly created columns as such:
+    - `gdp` <- `GDP`,
+    - `imp_ch` <- `IMPCH`,
+    - `imp_all` <- `IMP0015`,
+    - `exp_all` <- `EXP0015`,
+    - `t_bill` <- `GS1`,
+    - `cpi` <- `CPILFESL`
+7. `cpi` is coded in billions of USD while exports and imports are in millions, multiply `cpi` by `1000` to have all values in millions
+8. create additional variables for our date using the `lubridate` module. We want columns `year`, `quarter`, `month`, `day` that only contain this part from the `date` column. Find the correct functions in `lubridate`  to achieve this
+9. Sort your data by `date`
+
+We see that gdp is coded quaterly while the imports and exports are per month. We need the data grouped annually and quarterly respectively for the next two parts:
+
+### Data Grouping
+
+10. Group `df` quarterly into a dataframe called `df_quarter`. In this dataset you want
+  - `start_date` as the minimum of date,
+  - `gdp`, `imp_all`, `imp_ch`, `exp_all` all aggregated as sums (how do you deal with NA's?)
+  - `cpi`, `t_bill` aggregated as averages
+11. Group `df` annually into a dataframe called `df_year. In this dataset you want
+  - `gdp`, `imp_all`, `imp_ch` aggregated as sums (how do you deal with NA's?)
+  
+### Fact 1: Increase of Imports from China and the Rest of the World
+
+For this exercise, we are going to use `df_year`
+
+1. drop data from 2020
+2. We want to create the following three variables:
+  - `global_share = 100 * imp_all / gdp`
+  - `china_share = 100 * imp_ch / gdp`
+  - `nonchina_share = global_share - china_share`
+3. Create the following graph
+  - years between `1991` and `2008`
+  - x-axis: years
+  - y-axis: `china_share` and `nonchina_share` (add to lines to your plot with different colors)
+  - a vertical line for `x == 2008`
+  
+### Fact 2: Increasing trade-deficit of the US
+
+For this we will work with `df_year` again.
+
+1. drop data from 2020
+2. We want to create a variable `trade_deficit` (imports - exports)
+3. And a variable `trade_deficit_share` for the share of the trade deficit compared to the gdp
+4. Plot `trade_deficit_share` over time
+5. Pick a nice color
+6. Add a vertical line to the plot for `year == 2008`
+
+### Fact 3: 400 basis point fall in real Interest rates leading into China Expansion
+
+For this we will work with `df_quarter` again.
+
+1. We need to calculate the inflation rate from the consumer price index (`cpi`) column
+    - find out how to calculate this
+    - look at the first lines of your dataset. What's the problem?
+    - ungroup the dataset first before you repeat the previous step.
+    - look at the first lines of your dataset again.
+    - you now have the quaterly inflation rate
+2. Try to apply the `Return.annualized` function from the `PerformanceAnalytics` package to the newly created `infl` column inside `mutate`
+    - what's the problem?
+3. We will solve this problem in two ways
+    1. Use the function inside `map_dbl` instead (not in a `mutate`)
+        - assing the output to a new column of `df_quarter` called `annum_return`
+    2. Use `Vectorize(Return.annualized)` inside `mutate` instead an save the output to `annum_return2`
+        - What does the function do?
+4. Create a new variable called `real_r` as the difference between `t_bill` and one of your `annum_return` columns
+5. Plot `real_r` against date
+6. Add a vetical line at the date `2002-01-01`
+      - Hint: You have to parse the date first as a `date` and then convert it into a `numerical` value
+
+## Descriptive Stats in ADH using Weighted Statistics
+
+We are now going to work the the 'micro' data directly from ADH. Luckily, some of our coding friends at NYU Stern have done a tonne of the heavy lifting for us and merged all of ADH's essential data together into one file.
+
+The trickiest thing to understand is the timing of the data and the variable names.
+
+Here is some info:
+
+### Details about timing is as follows.
+
+The start of the period is 1991 and then end is 2007. 
+This is then divided into two periods. 
+The first periods is 1991-2000, thus this is a 9 year time period. 
+They convert stuff into a "comparable decadal scale" see Footnote 22. 
+Thus, for values for this period, they multiply them by 10/9.
+The same issue arises for the second period which is 2000-2007. 
+The values for this are again converted to "decadal scales" so they are multiplied by 10/7.
+
+The Appendix Table 2, reports the income variable and the decadal adjustments. 
+In the summary statistics for the stuff that we care about, the ADH data is adjusted in this way described above.
+
+That is, variables starting with 'l' are in levels whereas variables starting with 'd' are the decadal equivalents.
+
+As necessary, we will tell you which variable to use, so that $*_somevariable$ means to choose the appropriate level or decadal equivalent. We leave you to figure out which of the $l$ or $d$ variables to use. Do ask us if you are confused.
+
+### Understanding the Essence of the Paper and What Comes Next.
+
+Read Section 1 of ADH, so that you build an understanding of there main measure 'IPW' and what the paper is about. This will help you understand the context behind the remaining exercises in this notebook and those to follow.
+
+Your first task will be to compute some descriptive statistics from the data. To be more precise, you will replicate some of the key numbers in Appendix Table 2 of ADH. (On a side note, at least one of us thinks this table should be in the main text!)
+
+### Load Necessary Packages
+
+Install the ones you do not have yet.
+
+```{r, eval = FALSE}
+library("readr")
+library("tibble")
+library("dplyr")
+library("Hmisc")
+```
+
+### Load Data
+
+Like always, we are going to load the data and save it as a tibble
+
+```{r, eval = FALSE}
+df = read_csv("data/adh_data.csv") %>% as_tibble()
+```
+
+### Compute Simple Grouped Mean
+
+1. Find which years (`yr`) are reflected in the data.
+2. Compute the average number of chinese imports per worker (`'l_tradeusch_pw` & `d_tradeusch_pw`) for each "year".
+
+### Computed Weighted Group Means and Standard Deviations
+
+For the rest of the exercise, weight the mean by population count per region instead (`l_popcount`) and compare it with the numbers in the table.
+
+3. Repeat step 2 with weights.
+4. Now also compute the weighted standard deviations for both variables. Hint: Use the `Hmisc` package and find the relevant function.
+5. Now compute the mean and standard deviation of the average household wage and salary (`l_avg_hhincwage_pc_pw`, `d_avg_hhincwage_pc_pw`)
+6. And once more for share not in labor force (`l_sh_nilf`, `d_sh_nilf`)
+
+How well do your numbers line up with those reported in the paper?
+
+## Regression Analysis
+
+Let's first load the necessary packages to read data and do fancy regressions:
+
+```{r, eval = FALSE}
+library("readr")
+library("tibble")
+library("sandwich")
+library("lmtest")
+```
+
+And let's load the data like we always do:
+
+```{r, eval = FALSE}
+df = read_csv("data/adh_data.csv")
+```
+
+### OLS regression
+
+The core of the paper is looking at what happened to laborer's when theres an increase in us imports from china. 
+Let's try and replicate part of Table 9 - namely the estimate from panel A column 2.
+
+Their y variable is `relchg_avg_hhincwage_pc_pw`. 
+The important x variable is decadal trade between the us and china `d_tradeusch_pw`.
+
+1. Run that simple regression
+2. Now add heteroskedasticity robust standard  (HC1). Hint: Use the `sandwich` and `lmtest` packages
+
+Now we will start to add extra x variables.
+
+3. Start by adding `t2` - a dummy variable for whether observation is in the second decade. 
+Fit again with HC1 robust standard errors.
+
+###  Clustering
+
+Let us now use clustertered standard errors instead. ADH cluster by `statefip`.
+Hint: use the `felm` package.
+
+1. Run the basic regression with clustering
+2. Add the following controls to your last regression:
+    - `l_shind_manuf_cbp`
+    - `l_sh_popedu_c`
+    - `l_sh_popfborn`
+    - `l_sh_empl_f`
+    - `l_sh_routine33`
+    - `l_task_outsource`
+
+3. Add region fixed effects to your regression.
+    - First find all variables in the dataset that start with `reg_`
+    - Add these to your last regression
+  
+### Instrument Variables
+
+1. Instrument `d_tradeusch_pw` with `d_tradeotch_pw_lag` in your last regression
+2. Weight your regression by `timepwt48`

@@ -1,0 +1,21 @@
+--- 
+title: "An Introduction to R for Economics and Business Research"
+author: 
+    - "Julian Langer"
+    - "Lachlan Deer"
+    - "Ulrich Bergmann"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+documentclass: book
+bibliography: [book.bib, packages.bib]
+biblio-style: apalike
+link-citations: yes
+description: "Lecture notes on R for Programming Practices in Research in Economics."
+---
+
+# Prerequisites {-}
+
+If you want to follow along with the code in the book, you will need access to some of the data sets we use. 
+You can download a zip archive of all the data [here]().
+Extract the contents of the zip archive and place them in a subdirectory `data`.
+Then the code should work as is.

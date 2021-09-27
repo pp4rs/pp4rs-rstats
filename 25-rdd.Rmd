@@ -1,0 +1,225 @@
+# Regression Discontinuity Designs (RDD)
+
+## Libraries
+
+```{r, warning = FALSE}
+library(dplyr)        # data manipulation
+library(tibble)       # cuter dataframes
+library(haven)        # read dta files
+library(rddensity)    # density tests
+library(rdrobust)     # rdd estimation
+library(ggplot2)      # plot graphs
+library(stargazer)    # nice tables
+library(stringr)      # to combine strings
+```
+
+## What is the paper about? 
+Well, let's look at the abstract: 
+
+"Does Islamic political control affect women’s empowerment? Several countries have recently experienced Islamic parties coming to power through democratic elections. Due to strong support among religious conservatives, constituencies with Islamic rule often tend to exhibit poor women’s rights. Whether this reflects a causal relationship or a spurious one has so far gone unexplored. I provide the first piece of evidence using a new and unique data set of Turkish municipalities. In 1994, an Islamic party won multiple municipal mayor seats across the country. Using a regression discontinuity (RD) design, I compare municipalities where this Islamic party barely won or lost elections. Despite negative raw correlations, the RD results reveal that, over a period of six years, Islamic rule increased female secular high school education. Corresponding effects for men are systematically smaller and less precise. In the longer run, the effect on female education remained persistent up to 17 years after, and also reduced adolescent marriages. An analysis of long-run political effects of Islamic rule shows increased female political participation and an overall decrease in Islamic political preferences.
+The results are consistent with an explanation that emphasizes the Islamic party’s effectiveness in overcoming barriers to female entry for the poor and pious."
+
+## Let's load the data. 
+
+```{r}
+empowerment = read_dta("data/meyersson/regdata0.dta")
+```
+ 
+## Select and rename variables
+```{r}
+empowerment = empowerment %>% 
+  select(vote_share_islam_1994 = vshr_islam1994,
+         islamic_mayor_1994 = i94,
+         log_pop_1994 = lpop1994,
+         no_of_parties_1994 = partycount,
+         share_women_hs_1520 = hischshr1520f,
+         share_men_hs_1520 = hischshr1520m,
+         pop_share_under_19 = ageshr19,
+         pop_share_over_60 = ageshr60,
+         sex_ratio_2000 = sexr,
+         win_margin_islam_1994 = iwm94,
+         household_size_2000 = shhs,
+         district_center = merkezi, 
+         province_center = merkezp,
+         metro_center = buyuk,
+         sub_metro_center = subbuyuk,
+         pd_1:pd_67, 
+         pcode = pcode)
+```
+
+## Create Sample
+```{r}
+empowerment = empowerment %>% 
+  filter(!is.na(share_women_hs_1520),
+         !is.na(vote_share_islam_1994),
+         !is.na(no_of_parties_1994),
+         !is.na(win_margin_islam_1994),
+         !is.na(islamic_mayor_1994),
+         !is.na(share_men_hs_1520),
+         !is.na(household_size_2000),
+         !is.na(log_pop_1994),
+         !is.na(pop_share_under_19),
+         !is.na(pop_share_over_60),
+         !is.na(sex_ratio_2000),
+         !is.na(district_center),
+         !is.na(province_center),
+         !is.na(metro_center),
+         !is.na(sub_metro_center))
+```
+
+
+
+## Create Vector of Control Variables
+```{r}
+Z = empowerment %>% 
+  select(vote_share_islam_1994,
+         no_of_parties_1994,
+         household_size_2000,
+         log_pop_1994,
+         pop_share_under_19,
+         pop_share_over_60,
+         sex_ratio_2000,
+         district_center,
+         province_center,
+         sub_metro_center,
+         metro_center)
+```
+
+## Summary Statistics
+
+## Histogram of Islamic Win Margin
+We first need to create a dataframe for which our outcome and explanatory variables are available. This is at least what Meyersson does. It is not so clear whether this is the best way of doing it. 
+
+```{r}
+ggplot(empowerment) + 
+  geom_histogram(aes(x = win_margin_islam_1994,
+                     y = ..count../sum(..count..)*100),
+                 binwidth = 0.02, color = "grey") +
+  labs(x = "Islamic Win Margin in 1994",
+       y = "Percent",
+       title = "Histogram of Islamic Win Margin") +
+  theme_bw()
+```
+
+```{r}
+out = rddensity(empowerment$win_margin_islam_1994)
+summary(out)
+```
+
+## Doing RDD by Hand
+
+```{r}
+
+empower_left = empowerment %>% 
+  filter(win_margin_islam_1994 < 0,
+         win_margin_islam_1994 >= -.24)
+empower_right = empowerment %>% 
+  filter(win_margin_islam_1994 > 0,
+         win_margin_islam_1994 <= .24)
+
+lm_left = lm(share_women_hs_1520 ~ win_margin_islam_1994, empower_left)
+lm_right = lm(share_women_hs_1520 ~ win_margin_islam_1994, empower_right)
+
+intercept_left = lm_left$coefficients[1]
+intercept_right = lm_right$coefficients[1]
+difference = intercept_right - intercept_left
+
+print(str_c("The RD estimator is ", difference, "."))
+```
+
+
+
+## `rdrobust` Package
+
+### RDD with and without controls
+```{r}
+# rdd with and without controls: women
+summary(rdrobust(empowerment$share_women_hs_1520, empowerment$win_margin_islam_1994, h = 0.240, cluster = empowerment$pcode))
+summary(rdrobust(empowerment$share_women_hs_1520, empowerment$win_margin_islam_1994, h = 0.240, covs = Z, cluster = empowerment$pcode))
+``` 
+```{r}
+# rdd with and without controls: men
+summary(rdrobust(empowerment$share_men_hs_1520, empowerment$win_margin_islam_1994, h = 0.323, cluster = empowerment$pcode))
+summary(rdrobust(empowerment$share_men_hs_1520, empowerment$win_margin_islam_1994, h = 0.323, covs = Z, cluster = empowerment$pcode))
+```
+### Different bandwidths
+
+```{r}
+# different bandwiths: women
+summary(rdrobust(empowerment$share_women_hs_1520, empowerment$win_margin_islam_1994, h = 0.120, covs = Z, cluster = empowerment$pcode))
+summary(rdrobust(empowerment$share_women_hs_1520, empowerment$win_margin_islam_1994, h = 0.480, covs = Z, cluster = empowerment$pcode))
+```
+
+
+```{r}
+# different bandwidths: men
+summary(rdrobust(empowerment$share_men_hs_1520, empowerment$win_margin_islam_1994, h = 0.161, covs = Z, cluster = empowerment$pcode))
+summary(rdrobust(empowerment$share_men_hs_1520, empowerment$win_margin_islam_1994, h = 0.646, covs = Z, cluster = empowerment$pcode))
+```
+
+### Different control functions
+```{r}
+# different control functions: women
+summary(rdrobust(empowerment$share_women_hs_1520, empowerment$win_margin_islam_1994, h = 0.240, covs = Z, cluster = empowerment$pcode, p = 2))
+summary(rdrobust(empowerment$share_women_hs_1520, empowerment$win_margin_islam_1994, h = 0.240, covs = Z, cluster = empowerment$pcode, p = 3))
+```
+
+```{r}
+# different control functions: men
+summary(rdrobust(empowerment$share_men_hs_1520, empowerment$win_margin_islam_1994, h = 0.323, covs = Z, cluster = empowerment$pcode, p = 2))
+summary(rdrobust(empowerment$share_men_hs_1520, empowerment$win_margin_islam_1994, h = 0.323, covs = Z, cluster = empowerment$pcode, p = 3))
+```
+
+## RDD Plots
+
+### Main Outcomes: Women
+
+```{r}
+rdplot(empowerment$share_women_hs_1520, empowerment$win_margin_islam_1994,
+       x.label = "Running Variable: Islamic Vote Share",
+       y.label = "Share of Women in Highschool (15-20)",
+       y.lim = c(0, .5))
+```
+```{r}
+rdplot(empowerment$share_women_hs_1520, empowerment$win_margin_islam_1994,
+       h = 0.240,
+       x.label = "Running Variable: Islamic Vote Share",
+       y.label = "Share of Women in Highschool (15-20)",
+       y.lim = c(0, .5))
+```
+
+```{r}
+empower_plot = empowerment %>% 
+  filter(win_margin_islam_1994 >= -0.240,
+         win_margin_islam_1994 <=  0.240)
+
+rdplot(empower_plot$share_women_hs_1520, empower_plot$win_margin_islam_1994,
+       h = 0.240,
+       x.label = "Running Variable: Islamic Vote Share",
+       y.label = "Share of Women in Highschool (15-20)",
+       y.lim = c(0, .25))
+```
+
+
+### Main Outcomes: Men
+
+```{r}
+rdplot(empowerment$share_men_hs_1520, empowerment$win_margin_islam_1994,
+       x.label = "Running Variable: Islamic Vote Share",
+       y.label = "Share of Men in Highschool (15-20)",
+       y.lim = c(0, .5))
+```
+```{r}
+rdplot(empowerment$share_men_hs_1520, empowerment$win_margin_islam_1994,
+       h = 0.240,
+       x.label = "Running Variable: Islamic Vote Share",
+       y.label = "Share of Men in Highschool (15-20)",
+       y.lim = c(0, .5))
+```
+```{r}
+rdplot(empower_plot$share_men_hs_1520, empower_plot$win_margin_islam_1994,
+       h = 0.240,
+       x.label = "Running Variable: Islamic Vote Share",
+       y.label = "Share of Men in Highschool (15-20)",
+       y.lim = c(0, .25))
+```

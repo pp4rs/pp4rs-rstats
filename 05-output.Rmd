@@ -1,0 +1,219 @@
+# Reading and Writing Data
+
+So far we have only used datasets from `R` packages or created toy tibbles. In this section, we will learn how to read in data from a variety of sources.  
+
+## Reading `csv` files with `readr`
+
+We will start with the `readr` packages which is useful to a) read in `csv` files and to b) correctly parsing data columns. Before we start, let's load some packages. 
+
+```{r, warning = FALSE, message = FALSE}
+library(readr)
+library(tibble)
+library(dplyr)
+```
+
+<!---
+### Working directory
+First steps first: To read in data from a specific location on our hard drive we should specify a working directory. You can get the current working directory with `getwd()` and set a new one with `setwd()`. In this case, I set the working directory to the `r_public` folder that I created before. 
+```{r}
+cat("Current working directory:")
+getwd()
+
+my_wd = "/Users/jlanger/Dropbox/uzh_programming/r_public"
+cat("New working directory: ", my_wd)
+#setwd(my_wd) # delete comment here when running code
+```
+
+--->
+
+### Reading in *-delimited data
+
+The `readr` package provides several functions to read in delimited data: 
+
+* `read_csv()`: comma delimited
+* `read_csv2()`: semicolon delimited
+* `read_tsv()`: tab delimited
+* `read_delim()`: any delimiter
+
+To see how they work, let's create some data and read them in. (I know, I know still no real data. Be patient!)
+
+```{r}
+my_csv = "a, b, c, d 
+          1, 2, 3, 4
+          5, 6, 7, 8"
+
+read_csv(my_csv)
+```
+
+As you can see, the function correctly interpreted the first line of our string as variable names and the remaining elements as comma-separated integers. The other functions work in a similar way. There is one exception though: `read_delim`. It allows for more general specifications.  
+
+```{r}
+my_csv = "a_ b_ c_ d
+          1_ 2_ Maria_ female
+          5_ 6_ Teresa_ female"
+
+read_delim(my_csv, delim = "_", trim_ws = TRUE)
+```
+In this case, we specified an underscore as the delimiter and told the function to trim leading and trailing whitespace. Sometimes the `csv` file includes lines which we want `readr` to ignore. To do this we use the `skip` argument. 
+
+```{r}
+my_csv = "Sometimes you can read some rubbish here
+          We don't want to import this 
+          name, age
+          Julian, 29"
+read_csv(my_csv, skip = 2)
+```
+At other times, the `csv` file does not provide variable names, we can provide them by passing a character vector as the `col_names` argument. 
+```{r}
+my_csv = "Julian, 29\nTeresa, 25"
+
+read_csv(my_csv, col_names = c("Name", "Age"))
+```
+There are more options and you can explore them by looking them up in the help file. For now, I will only show you one more useful option: You can use the `na` argument to specify the characters used in the `csv` file to indicate missing values. 
+```{r}
+my_csv = "Julian, 29
+          Teresa, 25
+          Jonas, . 
+          ., 64"
+read_csv(my_csv, col_names = c("Name", "Age"), na = ".")
+```
+
+## Parsing data correctly with the `parse` functions
+
+Sometimes columns are not correctly interpreted when they are read in. For these vectors, we can parse them differently using the `parse` functions. Each of these functions takes a vector and returns a vector. For example, assume in the following that I want to parse the `age` column not as an integer vector but as a character vector. I can use the `parse_character` function for this. 
+
+```{r}
+my_csv = "Julian, 29
+          Teresa, 25
+          Jonas, . 
+          ., 64"
+my_tibble = read_csv(my_csv, col_names = c("name", "age"), na = ".")
+head(my_tibble)
+str(parse_character(my_tibble$age))
+```
+There are a bunch of functions, each for a different kind of data type:  
+
+* `parse_logical`
+* `parse_number` (`parse_double`, `parse_integer`)
+* `parse_character`
+* `parse_datetime` (`parse_date`, `parse_datetime`)
+
+Let's look at some of them in the following. 
+
+### Parsing numbers
+The `parse_number` function is pretty amazing. It can recover number vectors from almost anything! Just look at the following example. 
+
+```{r}
+my_column = c("100$", "20%", "Something with a 100")
+parse_number(my_column)
+```
+You use the locale function to control for country-specific delimiters for the decimal point and grouping. 
+```{r}
+# comma instead of decimal point
+my_column = c("1,23", "1,23", "1,245")
+parse_number(my_column, locale = locale(decimal_mark = ","))
+```
+```{r}
+# ' to group numbers
+my_column = c("123'456'789")
+parse_number(my_column, locale = locale(grouping_mark = "'"))
+```
+
+### Parsing characters
+You would think parsing characters is pretty easy. There can be difficulties though because not everybody uses the same character encoding. To learn more about this topic, take a look at this website: http://www.w3.org/International/articles/definitions-characters/. We only need to know that different encodings exist and they can lead to problems. R usually assumes to 'UTF-8' encoding (and you should use it too!). See what happens if we read in characters with `Latin-1` encoding: 
+
+```{r}
+x1 = "El Ni\xf1o was particularly bad this year"
+parse_character(x1)
+```
+Well, that does not look nice. But luckily enough, we can use the `locale` function to tell `readr` that the string is encoded with `Latin-1`. 
+```{r}
+parse_character(x1, locale = locale(encoding = "Latin1"))
+```
+Now, this time the parsing is correct! You can also use `readr` to try to guess the encoding with the `guess_encoding` function. Look up its help file if you want to know more.  
+
+### Parsing dates
+```{r}
+# specify time zone maybe
+parse_datetime("2016-09-08T0708")
+parse_datetime("20160908T0708")
+```
+```{r}
+parse_date("2016-09-08")
+parse_date("2016/09/08")
+```
+
+```{r}
+library(hms)
+parse_time("01:10 am")
+```
+```{r}
+parse_date("27/05/1987", "%d/%m/%Y")
+```
+
+## Parsing and reading at the same time
+
+Each `parse` function has a corresponding `col` function. This allows you to use the `parse` function to find out how to correctly parse a column and then specify the correct parsing right at the beginning of the data processing using the corresponding `col` function. I usually read in data in three steps.
+
+1. First, I read in all columns as character vectors. This allows me to browse the data and determine the correct parsing. To read in every column as a character vector, you can use the `.default` argument in the `col_types` function. 
+```{r}
+challenge1 = read_csv(readr_example("challenge.csv"),  
+                      # there's an example dataset in the readr package called challenge.csv
+                     col_types = cols(
+                       .default = col_character()
+                     ))
+```
+
+2. I can try out different parsers using the `parse` functions. (Note that you can use the `parse` functions from the `readr` package together with other packages such as `readxl`). In this case, browsing and parsing will lead you to conclude that the correct parsers are `parse_double` and `parse_data`, respectively. 
+
+3. Finally, we specify the correct parsers directly at the beginning of the data processing stage using the `col` functions that correspond to the `parse` functions. 
+```{r}
+challenge2 = read_csv(readr_example("challenge.csv"),
+                      col_types = cols(
+                        x = col_double(),
+                        y = col_date()
+                      ))
+head(challenge2)
+```
+
+## Writing `csv` files
+You can use the `readr` package to write `csv` files as well. In this case, we want to save our cleaned up dataframe as a `csv` file in a `dataframes` sub-folder. For this, we first check whether the sub-folder already exists. If it does not, we create it. 
+```{r}
+if (!file.exists("dataframes")) {
+  dir.create("dataframes")
+}
+```
+Then, we write the `csv` file using the `write_csv` function. 
+```{r}
+write_csv(challenge2, "./dataframes/challenge2.csv")
+```
+You can check now in your working directory whether this worked. Note that a `csv` file does not store the information about the correct parsing of the data columns.
+```{r}
+read_csv("./dataframes/challenge2.csv")
+```
+We have to specify the correct parsing again! If you only work with `R` and the dataframe is not too big, you can store the dataframe as an `RDS` file instead.
+
+## Write and read `RDS` files with `readr`
+There is not much to say here apart from the fact that the `RDS` file 'remembers' the correct parsing. 
+```{r}
+write_rds(challenge2, "./dataframes/challenge2.rds")
+challenge_rds = read_rds("./dataframes/challenge2.rds")
+head(challenge_rds)
+```
+
+## Reading in Excel sheets and Stata data with `readxl` and `haven` 
+Many datasets are stored in Excel sheets. You can read them in using the `readxl` package. A similar package, `haven`, exists for Stata files. I will not use them here, but can look at the helpfiles for the commands `read_excel` and `read_dta`. 
+```{r}
+library(readxl)
+help(read_excel)
+```
+
+```{r, message = FALSE}
+library(haven)
+help(read_dta)
+```
+
+If you want to try them out, you can use the data files from the 'Baby-Wooldridge' here: http://www.cengage.com/aise/economics/wooldridge_3e_datasets/. 
+
+## Sources  {-}
+The exposition here is inspired by the notes for a new book on R data science by Garrett Grolemund and Hadley Wickham. You can find detailed outlines here: http://r4ds.had.co.nz. 

@@ -1,0 +1,15 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+# don't push local rendered files in master branch
+_book/
+_bookdown_files/
+docs/*
+libs/
+*.log
+**/*.bib
+**/*.html
+
+# ignore MacOS index files
+.DS_Store
